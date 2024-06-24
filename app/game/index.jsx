@@ -1,16 +1,13 @@
 // import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function Home() {
+export default function Controls() {
   return (
     <View style={styles.container}>
       <Text>Chess board</Text>
     </View>
   );
 }
-
-// below line 7
-/* <StatusBar style="auto" /> */
 
 const styles = StyleSheet.create({
   container: {
