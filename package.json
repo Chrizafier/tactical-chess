@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index",
   "scripts": {
+    "setup" : "npx expo install react-native-web react-dom @expo/metro-runtime",
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
