@@ -16,7 +16,6 @@ export const unstable_settings = {
 
 export default function AppLayout() {
   const router = useRouter();
-
   return (
     <Home />
 

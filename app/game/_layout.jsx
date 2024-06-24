@@ -9,7 +9,6 @@ import { Avatar } from 'react-native-paper';
 
 export default function AppLayout() {
     const router = useRouter();
-  
     return (
     <View style={styles.container}>
       <Avatar.Icon size={128} icon="chess-bishop" />
