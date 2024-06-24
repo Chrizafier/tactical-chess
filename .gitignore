@@ -34,6 +34,7 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-# local git config's
+# # local git config's
 .git/
 .gitconfig
+.git-credentials
