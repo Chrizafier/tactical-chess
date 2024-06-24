@@ -1,11 +1,10 @@
 // import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import { Avatar } from 'react-native-paper';
 
 export default function Home() {
   return (
     <View style={styles.container}>
-      <Avatar.Icon size={128} icon="home" />
+      <Text>Chess board</Text>
     </View>
   );
 }

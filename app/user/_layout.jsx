@@ -2,6 +2,7 @@
 import { useRouter } from "expo-router";
 // import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from 'react-native';
+import { Avatar } from 'react-native-paper';
 
 
 export default function AppLayout() {
@@ -9,7 +10,7 @@ export default function AppLayout() {
   
     return (
     <View style={styles.container}>
-        <Text>This is the user page!</Text>
+        <Avatar.Icon size={128} icon="account-cog" />
     </View>
     );
 }

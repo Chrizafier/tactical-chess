@@ -16,7 +16,7 @@ export default function AppLayout() {
                 <Appbar.Action icon='home' onPress={() => { }} />
 
                 <Appbar.Action icon='chess-bishop' onPress={() => { }} />
-                <Appbar.Action icon='account' onPress={() => { }} />
+                <Appbar.Action icon='account-cog' onPress={() => { }} />
                 <Appbar.Action icon='login' onPress={() => { }} />
             </Appbar.Header>
             <Slot />

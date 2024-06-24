@@ -12,7 +12,7 @@ export default function AppLayout() {
   
     return (
     <View style={styles.container}>
-      <Avatar.Icon size={128} icon="login-variant" />
+      <Avatar.Icon size={128} icon="chess-bishop" />
     </View>
     );
 }
