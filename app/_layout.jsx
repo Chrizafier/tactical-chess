@@ -11,13 +11,13 @@ export default function AppLayout() {
     return (
         <>
             <Appbar.Header>
-                <Appbar.BackAction onPress={() => { }} />
+                <Appbar.BackAction onPress={ () => router.back() } />
                 <Appbar.Content title='Tactical Chess' />
-                <Appbar.Action icon='home' onPress={() => { }} />
+                <Appbar.Action icon='home' onPress={() => router.push('/home')} />
 
-                <Appbar.Action icon='chess-bishop' onPress={() => { }} />
-                <Appbar.Action icon='account-cog' onPress={() => { }} />
-                <Appbar.Action icon='login' onPress={() => { }} />
+                <Appbar.Action icon='chess-bishop' onPress={() => router.push('/game')} />
+                <Appbar.Action icon='account-cog' onPress={() => router.push('/user')} />
+                <Appbar.Action icon='login' onPress={ () => router.push('/login') } />
             </Appbar.Header>
             <Slot />
         </>
