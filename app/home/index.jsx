@@ -12,7 +12,7 @@ const theme = {
 
 export default function Home() {
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView independent={true} contentContainerStyle={styles.container}>
       <Text style={styles.largeText}>Welcome to Tactical Chess!</Text>
       <Text style={[styles.smallText, styles.underline]}>
         How to play:
