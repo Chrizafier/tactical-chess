@@ -1,10 +1,18 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Text } from 'react-native-paper';
+import { View, ScrollView, StyleSheet } from 'react-native';
+import { Text, DataTable, DefaultTheme } from 'react-native-paper';
+
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    text: '#ffffff',
+  },
+};
 
 export default function Home() {
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.largeText}>Welcome to Tactical Chess!</Text>
       <Text style={[styles.smallText, styles.underline]}>
         How to play:
@@ -17,15 +25,45 @@ export default function Home() {
         {'\n'}
         The larger the attack points, the more damage a piece can deal on the enemy. The larger the health points, the more damage a piece can take.
         {'\n'}
-        Pawn: Attack (2 pts) Health (2 pts)
-        {'\n'}
-        Knight or Bishop: Attack (5 pts) Health (5 pts)
-        {'\n'}
-        Rook: Attack (7 pts) Health (7 pts)
-        {'\n'}
-        Queen: Attack (9 pts) Health (9 pts)
-        {'\n'}
-        King: Attack (9 pts) Health (11 pts)
+      </Text>
+      <DataTable theme={theme}>
+        <DataTable.Header>
+          <DataTable.Title><Text style={styles.tableText}>Piece</Text></DataTable.Title>
+          <DataTable.Title numeric><Text style={styles.tableText}>Attack Points</Text></DataTable.Title>
+          <DataTable.Title numeric><Text style={styles.tableText}>Health Points</Text></DataTable.Title>
+        </DataTable.Header>
+
+        <DataTable.Row>
+          <DataTable.Cell><Text style={styles.tableText}>Pawn</Text></DataTable.Cell>
+          <DataTable.Cell numeric><Text style={styles.tableText}>2</Text></DataTable.Cell>
+          <DataTable.Cell numeric><Text style={styles.tableText}>2</Text></DataTable.Cell>
+        </DataTable.Row>
+
+        <DataTable.Row>
+          <DataTable.Cell><Text style={styles.tableText}>Knight or Bishop</Text></DataTable.Cell>
+          <DataTable.Cell numeric><Text style={styles.tableText}>5</Text></DataTable.Cell>
+          <DataTable.Cell numeric><Text style={styles.tableText}>5</Text></DataTable.Cell>
+        </DataTable.Row>
+
+        <DataTable.Row>
+          <DataTable.Cell><Text style={styles.tableText}>Rook</Text></DataTable.Cell>
+          <DataTable.Cell numeric><Text style={styles.tableText}>7</Text></DataTable.Cell>
+          <DataTable.Cell numeric><Text style={styles.tableText}>7</Text></DataTable.Cell>
+        </DataTable.Row>
+
+        <DataTable.Row>
+          <DataTable.Cell><Text style={styles.tableText}>Queen</Text></DataTable.Cell>
+          <DataTable.Cell numeric><Text style={styles.tableText}>9</Text></DataTable.Cell>
+          <DataTable.Cell numeric><Text style={styles.tableText}>9</Text></DataTable.Cell>
+        </DataTable.Row>
+
+        <DataTable.Row>
+          <DataTable.Cell><Text style={styles.tableText}>King</Text></DataTable.Cell>
+          <DataTable.Cell numeric><Text style={styles.tableText}>4</Text></DataTable.Cell>
+          <DataTable.Cell numeric><Text style={styles.tableText}>11</Text></DataTable.Cell>
+        </DataTable.Row>
+      </DataTable>
+      <Text style={[styles.smallText]}>
         {'\n'}{'\n'}
         2. Attacks occur when you attempt to move a piece into a space occupied by one of your opponent’s pieces. The only exception to this is when one of your pieces is in position to check your opponent’s king.
         {'\n'}{'\n'}
@@ -42,13 +80,12 @@ export default function Home() {
         Leaderboard:
       </Text>
 
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#2C2D2D', // Light black background color
     alignItems: 'center-flex',
     justifyContent: 'center-flex',
@@ -71,5 +108,9 @@ const styles = StyleSheet.create({
   indentedText: {
     paddingLeft: 100, // Add left padding for indentation
   },
+  },
+  tableText: {
+    fontSize: 14, // Smaller font size for table
+    color: '#ffffff', // White font color for contrast
   },
 });
