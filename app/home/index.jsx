@@ -1,23 +1,25 @@
 import React from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
-import { Text, DataTable, DefaultTheme } from 'react-native-paper';
+import { Text, DataTable, DefaultTheme, List } from 'react-native-paper';
 
 const theme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
     text: '#ffffff',
+    backgroundColor: '#2C2D2D'
   },
 };
 
 export default function Home() {
   return (
-    <ScrollView independent={true} contentContainerStyle={styles.container}>
+    <ScrollView independent={true} contentContainerStyle={styles.container}  style={{ flex: 1 }}>
       <Text style={styles.largeText}>Welcome to Tactical Chess!</Text>
-      <Text style={[styles.smallText, styles.underline]}>
-        How to play:
-      </Text>
-      <Text style={[styles.smallText]}>
+        <List.Accordion
+          title="How to play"
+          titleStyle={styles.accordionTitle}
+        >
+        <Text style={[styles.smallText]}>
         {'\n'}
         The app follows the normal rules of chess, except for the following modifications below. 
         {'\n'}{'\n'}
@@ -74,12 +76,16 @@ export default function Home() {
         5. Castling is still allowed, and all pieces move in the same ways as in normal chess.
         {'\n'}{'\n'}
         6. Upon killing the opponent's king, the player wins and the game ends.
-      </Text>
-      <Text style={[styles.smallText, styles.underline]}>
         {'\n'}{'\n'}
-        Leaderboard:
       </Text>
+      </List.Accordion>
 
+      <List.Accordion
+        title="Leaderboard"
+        titleStyle={styles.accordionTitle}
+      >
+        {/* Insert leaderboard content here */}
+      </List.Accordion>
     </ScrollView>
   );
 }
