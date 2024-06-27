@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createClient } from "@supabase/supabase-js";
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, AppState} from 'react-native';
 
 export const supabase = createClient(
     "https://mdxtlljhnmhjtnekswpv.supabase.co",
@@ -50,40 +51,81 @@ const SignUp = () => {
     }
   }
 
+  const title = {
+    fontWeight: "bold",
+    fontSize:50,
+    color:"#fb5b5a",
+    marginBottom: 20,
+    alignItems: "center",
+    justifyContent: "center-flex"
+  };
 
+  const inputView = {
+    alignItems: 'center',
+    justifyContent: 'center-flex',
+    borderRadius: 4,
+    backgroundColor: "#ffffff",
+    color: '#fb5b5a',
+    height: 30,
+    width: "100%"
+  };
+
+  const buttonStyle = {
+    alignItems: 'center',
+    justifyContent: 'center-flex',
+    borderRadius: 4,
+    backgroundColor: "#fb5b5a",
+    color: 'fb5b5a',
+    height: 30,
+    border: "none",
+    width: "104%"
+  };
+
+  const container = {
+    justifyContent: 'center-flex',
+    alignItems: "center"
+  };
 
 
   return (
-    <div>
+    <View style={container}>
+        <h1 className='title' style={title}>Sign Up</h1>
       <form onSubmit={handleSubmit}>
-        <input 
-          placeholder='Fullname'
+        <input className='input_style'
+          placeholder='Username'
           name='fullName'
           onChange={handleChange}
+          style={inputView}
         />
-
-        <input 
+        <br /><br />
+        <input className='input_style'
           placeholder='Email'
           name='email'
           onChange={handleChange}
+          style={inputView}
         />
-
-        <input 
+        <br /><br />
+        <input className='input_style'
           placeholder='Password'
           name='password'
           type="password"
           onChange={handleChange}
+          style={inputView}
         />
-
-        <button type='submit'>
+        <br /><br />
+        <button type='submit' style={buttonStyle}>
           Submit
         </button>
-
-
+        <br /><br />
       </form>
-      Already have an account? <a href="/login">Login</a>
-    </div>
+      <Text>Already have an account? </Text>
+      <br />
+      <a href="/login">Login</a>
+    </View>
   )
 }
+
+
+
 
 export default SignUp

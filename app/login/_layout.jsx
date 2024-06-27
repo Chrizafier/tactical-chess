@@ -9,11 +9,10 @@ import { useState } from 'react'
 import { createClient } from "@supabase/supabase-js";
 import { Link, useNavigate} from 'react-router-dom';
 
-
 export const supabase = createClient(
     "https://mdxtlljhnmhjtnekswpv.supabase.co",
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1keHRsbGpobm1oanRuZWtzd3B2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTkyMDQxNjMsImV4cCI6MjAzNDc4MDE2M30.0_3wnZhu2-xXnwIIE9fc66pnJIyeSP7QdW10XRR20xU"
-  )
+)
   
   const Login = ({setToken}) => {
   
@@ -59,92 +58,74 @@ export const supabase = createClient(
       }
     }
   
+  const title = {
+    fontWeight: "bold",
+    fontSize:50,
+    color:"#fb5b5a",
+    marginBottom: 20,
+    alignItems: "center",
+    justifyContent: "center-flex"
+  };
+
+  const inputView = {
+    alignItems: 'center',
+    justifyContent: 'center-flex',
+    borderRadius: 4,
+    backgroundColor: "#ffffff",
+    color: '#fb5b5a',
+    width: "100%",
+    height: 30,
+  };
+
+  const buttonStyle = {
+    alignItems: 'center',
+    justifyContent: 'center-flex',
+    borderRadius: 4,
+    backgroundColor: "#fb5b5a",
+    color: 'fb5b5a',
+    width: "104%",
+    height: 30,
+    border: "none"
+  };
+
+  const container = {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
+
     return (
-      <View style={styles.container}>
+      <View style={container}>
+        <h1 className='title' style={title}>Login</h1>
         <form onSubmit={handleSubmit}>
-          <input 
-            className="inputField"
+          <input className='input_style'
             placeholder='Email'
             name='email'
             onChange={handleChange}
-            style={styles.inputText}
-          />
-  
-          <input 
-            className="inputField"
+            style={inputView}
+            type="text"
+          /><br /><br />
+          <input
             placeholder='Password'
             name='password'
             type="password"
             onChange={handleChange}
-            style={styles.inputText}
+            style={inputView}
           />
-  
-          <button className="button block primary" type='submit'>
-            Submit
-          </button>
-  
+  <br /><br />
+          <button style={buttonStyle} mode="contained" className="submit_button" type='submit'>
+            Sign In
+          </button><br /><br />
+
         </form>
-       Don't have an account? <a href="/signup">Sign Up</a>
-      </View>
-    // <View style={styles.container}>
-    //   <Text style={styles.title}> Login Screen</Text>
-    //   <View style={styles.inputView}>
-    //       <TextInput
-    //       style={styles.inputText}
-    //       placeholder='Email'
-    //       name='email'
-    //       onChange={handleChange}
-    //       />
-    //   </View>
-    //   <View style={styles.inputView}>
-    //       <TextInput
-    //       style={styles.inputText}
-    //       secureTextEntry
-    //       placeholder='Password'
-    //       name='password'
-    //       onChange={handleChange}
-    //       />
-    //   </View>
-    //   <View>
-    //     <Button mode="contained" onPress={handleSubmit}>
-    //       Login
-    //     </Button>
-    //   </View>
-    //   <View>
-    //     <TouchableOpacity>
-    //       <Text style={styles.forgot}>Don't have an account? <a href="/signup">Sign Up</a></Text>
-    //     </TouchableOpacity>
-    //   </View>
-    // </View>
-
-    )
+        
+       <Text>Don't have an account? </Text>
+       <br />
+       <Text><a href="/signup">Sign Up</a></Text>
+       </View>
+    );
   }
 
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontWeight: "bold",
-    fontSize:50,
-    color:"#fb5b5a",
-    marginBottom: 40,
-  },
-  inputView: {
-    width:"30%",
-    backgroundColor:"#3AB4BA",
-    borderRadius:25,
-    height:50,
-    marginBottom:20,
-    justifyContent:"center",
-    padding:20
-  },
-  forgot: {
-    padding: 20
-  }
-});
   
 export default Login
