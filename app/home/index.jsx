@@ -2,6 +2,7 @@ import React from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { Text, DataTable, DefaultTheme, List } from 'react-native-paper';
 
+
 const theme = {
   ...DefaultTheme,
   colors: {
@@ -81,11 +82,49 @@ export default function Home() {
       </List.Accordion>
 
       <List.Accordion
-        title="Leaderboard"
-        titleStyle={styles.accordionTitle}
-      >
-        {/* Insert leaderboard content here */}
-      </List.Accordion>
+  title="Leaderboard"
+  titleStyle={styles.accordionTitle}
+>
+  <DataTable theme={theme}>
+    <DataTable.Header style={{backgroundColor: '#3C3D3D'}}>
+      <DataTable.Title><Text style={{...styles.tableText, color: '#ffffff'}}>Rank</Text></DataTable.Title>
+      <DataTable.Title><Text style={{...styles.tableText, color: '#ffffff'}}>Player</Text></DataTable.Title>
+      <DataTable.Title><Text style={{...styles.tableText, color: '#ffffff'}}>Country</Text></DataTable.Title>
+      <DataTable.Title numeric><Text style={{...styles.tableText, color: '#ffffff'}}>Score</Text></DataTable.Title>
+    </DataTable.Header>
+
+    <DataTable.Row style={{backgroundColor: '#4C4D4D'}}>
+      <DataTable.Cell><Text style={{...styles.tableText, color: '#ffffff'}}>#1</Text></DataTable.Cell>
+      <DataTable.Cell><Text style={{...styles.tableText, color: '#ffffff'}}>Daniel Graham</Text></DataTable.Cell>
+      <DataTable.Cell><Text style={{...styles.tableText, color: '#ffffff'}}>United States</Text></DataTable.Cell>
+      <DataTable.Cell numeric><Text style={{...styles.tableText, color: '#ffffff'}}>9570</Text></DataTable.Cell>
+    </DataTable.Row>
+
+    <DataTable.Row style={{backgroundColor: '#4C4D4D'}}>
+      <DataTable.Cell><Text style={{...styles.tableText, color: '#ffffff'}}>#2</Text></DataTable.Cell>
+      <DataTable.Cell><Text style={{...styles.tableText, color: '#ffffff'}}>Napoleon Bonaparte</Text></DataTable.Cell>
+      <DataTable.Cell><Text style={{...styles.tableText, color: '#ffffff'}}>France</Text></DataTable.Cell>
+      <DataTable.Cell numeric><Text style={{...styles.tableText, color: '#ffffff'}}>9500</Text></DataTable.Cell>
+    </DataTable.Row>
+
+    <DataTable.Row style={{backgroundColor: '#4C4D4D'}}>
+      <DataTable.Cell><Text style={{...styles.tableText, color: '#ffffff'}}>#3</Text></DataTable.Cell>
+      <DataTable.Cell><Text style={{...styles.tableText, color: '#ffffff'}}>Albert Einstein</Text></DataTable.Cell>
+      <DataTable.Cell><Text style={{...styles.tableText, color: '#ffffff'}}>United States</Text></DataTable.Cell>
+      <DataTable.Cell numeric><Text style={{...styles.tableText, color: '#ffffff'}}>9000</Text></DataTable.Cell>
+    </DataTable.Row>
+
+    <DataTable.Row style={{backgroundColor: '#4C4D4D'}}>
+      <DataTable.Cell><Text style={{...styles.tableText, color: '#ffffff'}}>#4</Text></DataTable.Cell>
+      <DataTable.Cell><Text style={{...styles.tableText, color: '#ffffff'}}>Magnus Carlsen</Text></DataTable.Cell>
+      <DataTable.Cell><Text style={{...styles.tableText, color: '#ffffff'}}>Norway</Text></DataTable.Cell>
+      <DataTable.Cell numeric><Text style={{...styles.tableText, color: '#ffffff'}}>8500</Text></DataTable.Cell>
+    </DataTable.Row>
+
+    {/* Add more rows as needed */}
+  </DataTable>
+</List.Accordion>
+
     </ScrollView>
   );
 }
