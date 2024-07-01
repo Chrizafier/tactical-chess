@@ -13,10 +13,9 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, AppState} from 're
 // import { useAuth } from "../../context/auth";
 // import { NotesProvider } from "../../context/notes";
 
-export const supabase = createClient(
-  "https://mdxtlljhnmhjtnekswpv.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1keHRsbGpobm1oanRuZWtzd3B2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTkyMDQxNjMsImV4cCI6MjAzNDc4MDE2M30.0_3wnZhu2-xXnwIIE9fc66pnJIyeSP7QdW10XRR20xU"
-)
+export const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL
+export const supabaseKey = process.env.EXPO_PUBLIC_SUPABASE_KEY
+export const supabase = createClient(supabaseUrl, supabaseKey)
 
 // import Home from ".";
 
@@ -25,15 +24,27 @@ export const supabase = createClient(
 // };
 
 export default function AppLayout() {
-  const router = useRouter();
-  const [fullName,setFullName] = useState("")
-  const [email,setEmail] = useState("")  
+  const router = useRouter()
+  const [fullName,setFullName] = useState('')
+  const [email,setEmail] = useState('')
 
-  useEffect(() => {
+  useEffect(_ => {
     async function getProfile() {
       const { data, error } = await supabase.auth.getUser()
-      setFullName(data.user.user_metadata.full_name)
-      setEmail(data.user.user_metadata.email)
+      try {
+        setFullName(data.user.user_metadata.full_name)
+        setEmail(data.user.user_metadata.email)
+      }
+      catch {
+
+        setFullName(`Anonymous${[
+          `${Math.floor(Math.random() * 9)}`,
+          `${Math.floor(Math.random() * 9)}`,
+          `${Math.floor(Math.random() * 9)}`
+        ].join('')}`
+        )
+        setEmail('please.sign.in@email.com')
+      }      
     }
 
     getProfile()

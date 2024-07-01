@@ -3,10 +3,9 @@ import { Link } from 'react-router-dom';
 import { createClient } from "@supabase/supabase-js";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, AppState} from 'react-native';
 
-export const supabase = createClient(
-    "https://mdxtlljhnmhjtnekswpv.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1keHRsbGpobm1oanRuZWtzd3B2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTkyMDQxNjMsImV4cCI6MjAzNDc4MDE2M30.0_3wnZhu2-xXnwIIE9fc66pnJIyeSP7QdW10XRR20xU"
-  )
+export const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL
+export const supabaseKey = process.env.EXPO_PUBLIC_SUPABASE_KEY
+export const supabase = createClient(supabaseUrl, supabaseKey)
 
 const SignUp = () => {
 
