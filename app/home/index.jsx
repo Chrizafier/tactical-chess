@@ -15,7 +15,7 @@ const theme = {
 
 export default function Home() {
   return (
-    <ScrollView independent={true} contentContainerStyle={styles.container}  style={{ flex: 1 }}>
+    <ScrollView independent={true} contentContainerStyle={styles.container}  style={{ flex: 1, backgroundColor : '#2C2D2D' }}>
       <Text style={styles.largeText}>Welcome to Tactical Chess!</Text>
         <List.Accordion
           title="How to play"
