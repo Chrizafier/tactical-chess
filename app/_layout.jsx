@@ -19,4 +19,19 @@ export default function AppLayout() {
       </Drawer.Navigator>
     </NavigationContainer>
   );
+  /*
+  return (
+        <>
+            <Appbar.Header>
+                <Appbar.BackAction onPress={ () => router.back() } />
+                <Appbar.Content title='Tactical Chess' />
+                <Appbar.Action icon='home' onPress={() => router.push('/home')} />
+                <Appbar.Action icon='chess-bishop' onPress={() => router.push('/game')} />
+                <Appbar.Action icon='account-cog' onPress={() => router.push('/user')} />
+                <Appbar.Action icon='login' onPress={ () => router.push('/login') } />
+            </Appbar.Header>
+            <Slot />
+        </>
+  );
+  */
 }

@@ -1,0 +1,16 @@
+.input_style {
+    width:"30%";
+    border-radius: 25;
+    padding:20;
+    background-color:"#3AB4BA";
+    height:50;
+    margin-bottom:20;
+    justify-content:"center";
+  }
+
+.title {
+    font-weight: "bold";
+    font-size: 50;
+    color:"#f55a00";
+    margin-bottom: 40;
+}

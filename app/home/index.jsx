@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { Text, DataTable, DefaultTheme, List } from 'react-native-paper';
-
+// import { StyleSheet, Text, View } from 'react-native'
+// import { Avatar } from 'react-native-paper'
 
 const theme = {
   ...DefaultTheme,
