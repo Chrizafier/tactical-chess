@@ -115,7 +115,7 @@ const Login = ({ setToken }) => {
       </form>
 
       <Text>
-        Don't have an account? <a href="/signup">Sign Up</a>
+        Don't have an account? 
       </Text>
     </View>
   )
