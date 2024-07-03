@@ -15,6 +15,6 @@ export const supabase = createClient(
 export default function AppLayout() {
     const router = useRouter();
     return (
-
+        <View></View>
     );
 }

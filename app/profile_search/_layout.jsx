@@ -83,22 +83,37 @@ export default function AppLayout() {
         }
     }
 
-const addFriend = async (friend_email) => {
+// const addFriend = async (friend_email) => {
+//     try {
+//         const { data, error } = await supabase.rpc('append_to_array', { email_param: userEmail, friend_email_param: friend_email });
+//         if (error) {
+//             throw new Error('Failed to add friend');
+//         }
+//         console.log('Friend added successfully');
+//         console.log(data)
+//         console.log("email_param")
+//         console.log(userEmail)
+//         console.log("friend_email_param")
+//         console.log(friend_email)
+//     } catch (error) {
+//         console.error('Error adding friend:', error.message);
+//     }
+// };
+
+const addFriendRequest = async (friend_email) => {
     try {
-        const { data, error } = await supabase.rpc('append_to_array', { email_param: userEmail, friend_email_param: friend_email });
-        if (error) {
-            throw new Error('Failed to add friend');
-        }
-        console.log('Friend added successfully');
-        console.log(data)
-        console.log("email_param")
+        const { data, error } = await supabase
+            .from('friend_requests')
+            .insert({ sender_email: userEmail, receiver_email: friend_email })
+        console.log("sender_email")
         console.log(userEmail)
-        console.log("friend_email_param")
+        console.log("receiver_email")
         console.log(friend_email)
     } catch (error) {
         console.error('Error adding friend:', error.message);
     }
 };
+
         return (
             <><SafeAreaView style={{ flex: 1, marginHorizontal: 20 }}>
                 <TextInput
@@ -120,7 +135,7 @@ const addFriend = async (friend_email) => {
                                 <HorizontalLayout>
                                     <DataTable.Cell>{item.username}</DataTable.Cell>
                                     <DataTable.Cell>Rank #{item.rank}</DataTable.Cell>
-                                    <Button onPress={()=>addFriend(item.email)}>Add Friend</Button>
+                                    <Button onPress={()=>addFriendRequest(item.email)}>Add Friend</Button>
                                 </HorizontalLayout>
                             </Card.Content> 
                         </Card>
