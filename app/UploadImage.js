@@ -39,7 +39,7 @@ export default function UploadImage() {
         console.log("happens")
       }
   };
-  const  checkForCameraRollPermission=async()=>{
+  const checkForCameraRollPermission=async()=>{ // popup message for asking for camera access permission
     const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
       alert("Please grant camera roll permissions inside your system's settings");
@@ -48,7 +48,7 @@ export default function UploadImage() {
     }
   };
 
-  const getUser = async () => {
+  const getUser = async () => { // getting user information, setting
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (user !== null) {
@@ -59,8 +59,7 @@ export default function UploadImage() {
     }
   };
 
-  async function getMedia() {
-
+  async function getMedia() { // getting media information, setting 
     const { data, error } = await supabase.storage.from('uploads').list(userId + '/', {
       limit: 1
     });

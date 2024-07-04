@@ -36,7 +36,8 @@ export default function AppLayout() {
                 <Appbar.Content title='Tactical Chess' />
                 <Appbar.Action icon='home' onPress={() => router.push('/home')} />
                 <Appbar.Action icon='chess-bishop' onPress={() => router.push('/game')} />
-                <Appbar.Action icon='account-cog' onPress={ () => router.push('/user') } />
+                <Appbar.Action icon='account-cog' onPress={ () => router.push('/user_settings') } />
+                <Appbar.Action icon='bell' onPress={ () => router.push('/notifications') } />
                 <Appbar.Action icon='login' onPress={ handleSignOut } />
             </Appbar.Header>
             <Slot />

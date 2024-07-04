@@ -9,7 +9,6 @@ function UserSettings() {
         <Text style={{marginVertical:20,fontSize:16}}>Welcome, FuzzySid</Text>
         <UploadImage />
        </View>
-
        </>
     );
 }

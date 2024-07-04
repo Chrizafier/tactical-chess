@@ -1,0 +1,12 @@
+CREATE 
+or REPLACE FUNCTION update_friends_array (sender_email TEXT, receiver_email TEXT) RETURNS void AS $$
+BEGIN
+    UPDATE user_profiles
+    SET friends = array_append(friends, sender_email)
+    WHERE email = receiver_email;
+
+    UPDATE user_profiles
+    SET friends = array_append(friends, receiver_email)
+    WHERE email = sender_email;
+END;
+$$ LANGUAGE plpgsql;

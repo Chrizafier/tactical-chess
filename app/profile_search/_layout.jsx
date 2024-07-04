@@ -1,15 +1,10 @@
-import { useRouter, Slot } from "expo-router";
 import * as React from 'react';
-import { Appbar, Avatar } from 'react-native-paper';
-import { createClient, SupabaseClient } from "@supabase/supabase-js";
-import { DataTable, Card, LeftContent, Button, Text} from 'react-native-paper';
+import { createClient } from "@supabase/supabase-js";
+import { DataTable, Card, Button } from 'react-native-paper';
 import { useState, useEffect } from 'react'
-import { ThemeSupa, darkThemes } from "@supabase/auth-ui-shared";
-import { SearchBar } from 'react-native-elements';
 import { SafeAreaView, TextInput, FlatList, View } from "react-native";
 import filter from "lodash.filter"
 import { HorizontalLayout } from "react-vaadin-components";
-import { inline } from "react-native-web/dist/cjs/exports/StyleSheet/compiler";
 
 export const supabase = createClient(
     "https://mdxtlljhnmhjtnekswpv.supabase.co",
@@ -17,12 +12,16 @@ export const supabase = createClient(
 )
 
 export default function AppLayout() {
-    const [fetchError, setFetchError] = useState(null)
     const [profiles, setProfiles] = useState([])
     const [searchQuery, setSearchQuery] = useState('')
     const [displayData, setDisplayData] = useState(null)
-    const [currentUser, setCurrentUser] = useState(null)
     const [userEmail, setUserEmail] = useState('');
+    const [disabledButtons, setDisabledButtons] = useState();
+
+    useEffect(() => {
+        getUserEmail()
+        fetchProfiles()
+    }, []);
     
     const updateSearch = (search) => {
         setSearchQuery(search)
@@ -52,11 +51,6 @@ export default function AppLayout() {
         return false;
     }
 
-    useEffect(() => {
-        getUserEmail()
-        fetchProfiles()
-    }, []);
-
     const getUserEmail = async () => {
         try {
           const { data: { user } } = await supabase.auth.getUser()
@@ -83,23 +77,6 @@ export default function AppLayout() {
         }
     }
 
-// const addFriend = async (friend_email) => {
-//     try {
-//         const { data, error } = await supabase.rpc('append_to_array', { email_param: userEmail, friend_email_param: friend_email });
-//         if (error) {
-//             throw new Error('Failed to add friend');
-//         }
-//         console.log('Friend added successfully');
-//         console.log(data)
-//         console.log("email_param")
-//         console.log(userEmail)
-//         console.log("friend_email_param")
-//         console.log(friend_email)
-//     } catch (error) {
-//         console.error('Error adding friend:', error.message);
-//     }
-// };
-
 const addFriendRequest = async (friend_email) => {
     try {
         const { data, error } = await supabase
@@ -112,6 +89,59 @@ const addFriendRequest = async (friend_email) => {
     } catch (error) {
         console.error('Error adding friend:', error.message);
     }
+};
+
+const handleDisable = async (sender_email, receiver_email) => {
+    return true
+    // try {
+    //     console.log("handling disable")
+    //     console.log("user email", sender_email)
+    //     console.log("receiver email", receiver_email)
+    //     var { data, error } = await supabase
+    //         .from('user_profiles')
+    //         .select('friends')
+    //         .eq('email', sender_email) //bhavyalboddu@gmail.com
+
+    //     console.log("data", data)
+        
+    //     data.forEach((item, index) => {
+    //         if (item == receiver_email) {
+    //             console.log("p")
+    //             return true
+    //         }
+    //     })
+
+    //     // console.log("handling disable 2")
+    //     // console.log("check1")
+    //     // console.log("user email", userEmail)
+    //     // console.log("check2")
+    //     // console.log("receiver_email", receiver_email)
+        
+    //     data, error = await supabase
+    //         .from('friend_requests')
+    //         .select('*')
+    //         .eq('sender_email', 'bhavyalboddu@gmail.com') //bhavyalboddu@gmail.com
+    //         .eq('receiver_email', 'blah@gmail.com')
+        
+    //     // console.log("handling disable 3")
+    //     // console.log("check3")
+    //     // console.log("user email", userEmail)
+    //     // console.log("check4")
+    //     // console.log("receiver_email", receiver_email)
+        
+    //     // console.log("data 2")
+    //     // console.log(data)
+        
+    //     // if (data !== null && data != []) {
+    //     //     console.log('b')
+    //     //     return true
+    //     // }
+
+    //     //return true
+
+    // } catch (error) {
+    //     console.error('Error accepting friend request:', error.message);
+    // }
 };
 
         return (
@@ -135,12 +165,11 @@ const addFriendRequest = async (friend_email) => {
                                 <HorizontalLayout>
                                     <DataTable.Cell>{item.username}</DataTable.Cell>
                                     <DataTable.Cell>Rank #{item.rank}</DataTable.Cell>
-                                    <Button onPress={()=>addFriendRequest(item.email)}>Add Friend</Button>
+                                    <Button onPress={()=>addFriendRequest(userEmail, item.email)}>Add Friend</Button>
                                 </HorizontalLayout>
                             </Card.Content> 
                         </Card>
                     </View>
-
                 )}
             /></>
         );
