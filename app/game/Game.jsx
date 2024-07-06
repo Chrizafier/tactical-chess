@@ -1,6 +1,7 @@
-// import React, { useEffect } from 'react'
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
-// import { Chessboard2 } from 'chessboard2'
+// import React, { useEffect } from 'react'
+
+// BEGIN SCUFFED BOARD IMPLEMENTATION
 
 import React, { useState } from 'react'
 import { Chess } from 'chess.js'
@@ -114,8 +115,9 @@ export default Game = () => {
     </div>
   )
 }
+// END SCUFFED BOARD IMPLEMENTATION
 
-
+// BEGIN ALTERNATIVE BOARD (ChatGPT's take ???)
 // import React, { useState } from 'react'
 // import { Chessboard } from 'react-chessboard'
 // import { Chess } from 'chess.js'
@@ -157,16 +159,16 @@ export default Game = () => {
 
 //   return <Chessboard id='chester' position={game.fen()} onPieceDrop={onDrop} />
 // }
+// END ALTERNATIVE BOARD (ChatGPT's take ???)
 
+// BEGIN ALTERNATIVE BOARD (RANDOM ADPATED TRANSPILED)
+// transpiled documentation example from Storyboard docs
+// still needs a lot of work to function at doing the bare minimum ...
+// 
+//
 // import React, { useState, setState } from 'react'
 // import { Chessboard } from 'react-chessboard'
 // import { Chess, DEFAULT_POSITION as DEFAULT_FEN } from 'chess.js'
-
-
-// transpiled documentation example from Storyboard docs
-// still needs a lot of work to function ...
-// 
-// 
 // export default Game = () => {
 //   // DEFAULT_POSITION as FEN -> 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 //   const chess = new Chess()
@@ -407,3 +409,4 @@ export default Game = () => {
 //     </div>
 //   )
 // }
+// END ALTERNATIVE BOARD (RANDOM ADPATED TRANSPILED)
