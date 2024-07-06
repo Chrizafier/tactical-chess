@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "tactical-chess",
-    "slug" : "expo-router",
-    "scheme" : "eschec",
+    "slug": "expo.tactical.chess",
+    "scheme": "eschec",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -19,7 +19,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.anonymous.expo.tactical.chess"
     },
     "web": {
       "favicon": "./assets/favicon.png"

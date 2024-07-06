@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "main": "index",
   "scripts": {
-    "setup" : "npm install",
-    "start": "expo start --tunnel",
-    "go" : "expo start --go --tunnel",
-    "android": "expo start --android --tunnel",
-    "ios": "expo start --ios --tunnel",
-    "web": "expo start --web --tunnel"
+    "setup"   : "npm install",
+    "start"   : "npx expo start --tunnel",
+    "go"      : "npx expo start --go --tunnel",
+    "android" : "npx expo start --android --tunnel",
+    "ios"     : "npx expo start --ios --tunnel",
+    "web"     : "npx expo start --web --tunnel",
+    "build"   : "npm install && npx expo run:android"
   },
   "dependencies": {
     "@expo/metro-runtime": "~3.2.1",
