@@ -1,6 +1,9 @@
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
 // import React, { useEffect } from 'react'
 
+// ^ Health
+// _ Attack
+
 // BEGIN SCUFFED BOARD IMPLEMENTATION
 
 import React, { useState } from 'react'
