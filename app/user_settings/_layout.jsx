@@ -8,6 +8,7 @@ function UserSettings() {
         <h1>User Settings</h1>
         <Text style={{marginVertical:20,fontSize:16}}>Welcome, FuzzySid</Text>
         <UploadImage />
+        <Image></Image>
        </View>
        </>
     );

@@ -5,6 +5,8 @@ import { useRouter, Slot } from "expo-router";
 import * as React from 'react';
 import { Appbar, Avatar } from 'react-native-paper';
 import { createClient } from "@supabase/supabase-js";
+import { useState, useEffect } from 'react'
+
 
 export const supabase = createClient(
     "https://mdxtlljhnmhjtnekswpv.supabase.co",
@@ -13,12 +15,32 @@ export const supabase = createClient(
 
 export default function AppLayout() {
     const router = useRouter();
+    const [userEmail, setUserEmail] = useState('');
+
+      useEffect(() => {
+        getUserEmail()
+      }, []);
+
+      const getUserEmail = async () => {
+        try {
+          const { data: { user } } = await supabase.auth.getUser()
+          if (user !== null) {
+            setUserEmail(user.email)
+          }
+        } catch (e) {}
+    }
 
     async function handleSignOut(e){
         e.preventDefault()
+        const newData = { active: false};
     
         try {
-          const { error } = await supabase.auth.signOut()
+          const {data, error} = await supabase
+          .from('active_statuses')
+          .update(newData)
+          .eq('email', userEmail)
+
+          await supabase.auth.signOut()
     
           if (error) throw error
     

@@ -11,7 +11,7 @@ export const supabase = createClient(
 const SignUp = () => {
 
   const [formData,setFormData] = useState({
-    fullName:'',email:'',password:''
+    username:'',email:'',password:''
   })
 
   console.log(formData)
@@ -37,7 +37,7 @@ const SignUp = () => {
           password: formData.password,
           options: {
             data: {
-              full_name: formData.fullName,
+              username: formData.username,
             }
           }
         }
@@ -45,10 +45,21 @@ const SignUp = () => {
       if (error) throw error
       alert('Check your email for verification link')
 
-      
+      await updateActiveStatus()
+
     } catch (error) {
       alert(error)
     }
+  }
+
+  async function updateActiveStatus() {
+    await supabase
+      .from('user_profiles')
+      .insert({ username: formData.username, rank: 0, friend_email, email: formData.email})
+
+    await supabase
+      .from('active_statuses')
+      .insert({ email: formData.email, active: true })
   }
 
   const title = {
@@ -91,9 +102,10 @@ const SignUp = () => {
     <View style={container}>
         <h1 className='title' style={title}>Sign Up</h1>
       <form onSubmit={handleSubmit}>
+        <br /><br />
         <input className='input_style'
           placeholder='Username'
-          name='fullName'
+          name='username'
           onChange={handleChange}
           style={inputView}
         />

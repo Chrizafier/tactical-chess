@@ -5,7 +5,7 @@ import * as React from 'react';
 import { Avatar, Button } from 'react-native-paper';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { Auth, Form } from '@supabase/auth-ui-react';
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createClient } from "@supabase/supabase-js";
 import { Link, useNavigate} from 'react-router-dom';
 
@@ -14,7 +14,7 @@ export const supabase = createClient(
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1keHRsbGpobm1oanRuZWtzd3B2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTkyMDQxNjMsImV4cCI6MjAzNDc4MDE2M30.0_3wnZhu2-xXnwIIE9fc66pnJIyeSP7QdW10XRR20xU"
 )
   
-  const Login = ({setToken}) => {
+  const Login = () => {
   
     const [formData,setFormData] = useState({
           email:'',password:''
@@ -46,16 +46,29 @@ export const supabase = createClient(
   
         if (error) throw error
         console.log(data)
-        //setToken(data)
+        updateActiveStatus()
         router.push('/home')
-  
-  
-      //   alert('Check your email for verification link')
-  
         
       } catch (error) {
         alert(error)
       }
+    }
+
+    async function updateActiveStatus() {
+      try {
+        const newData = { active: true};
+  
+        const {data, error} = await supabase
+          .from('active_statuses')
+          .update(newData)
+          .eq('email', formData.email)
+
+        if (error) throw error
+      } catch (error) {
+        alert(error)
+      }
+
+
     }
   
   const title = {

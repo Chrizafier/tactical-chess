@@ -1,26 +1,70 @@
 import React, { useState, useEffect } from 'react';
-import { Image, View, Platform, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { Image, View, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { createClient } from "@supabase/supabase-js";
-import { v4 as uuidv4 } from 'uuid'
-//SOURCE: https://www.waldo.com/blog/add-an-image-picker-react-native-app
+import { v4 as uuidv4 } from 'uuid';
+import { _Image } from 'react-native';
+import { decode } from 'base64-arraybuffer'
 
-export const supabase = createClient(
-  "https://mdxtlljhnmhjtnekswpv.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1keHRsbGpobm1oanRuZWtzd3B2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTkyMDQxNjMsImV4cCI6MjAzNDc4MDE2M30.0_3wnZhu2-xXnwIIE9fc66pnJIyeSP7QdW10XRR20xU"
-)
+
+// Initialize Supabase client
+const supabaseUrl = "https://mdxtlljhnmhjtnekswpv.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1keHRsbGpobm1oanRuZWtzd3B2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTkyMDQxNjMsImV4cCI6MjAzNDc4MDE2M30.0_3wnZhu2-xXnwIIE9fc66pnJIyeSP7QdW10XRR20xU";
+
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default function UploadImage() {
-  const [image, setImage] = useState(null);
+  const [imageURI, setImageURI] = useState(null);
+  const [base64String, setBase64String] = useState(null);
   const [userId, setUserId] = useState('');
   const [media, setMedia] = useState([]);
 
   useEffect(() => {
-    checkForCameraRollPermission()
-    getUser()
-    getMedia()
+    checkForCameraRollPermission();
+    getUser();
+    getMedia();
   }, []);
+
+  const checkForCameraRollPermission = async () => {
+    const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert("Permission Required", "Please grant camera roll permissions in your device settings.");
+    } else {
+      console.log('Media Permissions are granted');
+    }
+  };
+
+  const getUser = async () => {
+    try {
+      const { data: user, error } = await supabase.auth.getUser();
+      if (user) {
+        setUserId(user.id);
+      }
+    } catch (error) {
+      console.error("Error fetching user:", error.message);
+    }
+  };
+
+  const getMedia = async () => {
+    try {
+      // Replace 'your_bucket_name' and 'your_image_name.png' with actual values
+      const fileName = `${userId}/${uuidv4()}.png`;
+      const { publicURL, error } = supabase.storage
+        .from('user_profile_pics')
+        .getPublicUrl(fileName);
+
+      if (error) {
+        console.error('Error fetching image:', error.message);
+        Alert.alert('Error', 'Failed to fetch image. Please try again later.');
+      } else {
+        setImage(publicURL);
+      }
+    } catch (error) {
+      console.error('Error fetching image:', error.message);
+      Alert.alert('Error', 'Failed to fetch image. Please try again later.');
+    }
+  };
 
   const addImage = async () => {
     let _image = await ImagePicker.launchImageLibraryAsync({
@@ -28,103 +72,88 @@ export default function UploadImage() {
       allowsEditing: true,
       aspect: [4,3],
       quality: 1,
+      base64: true,
     });
-    console.log(_image)
-    console.log(_image.canceled);
+    console.log("image apple: ", JSON.stringify(_image));
+    console.log("image base64: ", _image.assets[0].base64);
     if (!_image.canceled) {
-        setImage(_image.assets[0].uri);
-        uploadImage(_image.assets[0].uri)
-        console.log("here is the uri")
-        console.log(_image.uri)
-        console.log("happens")
-      }
-  };
-  const checkForCameraRollPermission=async()=>{ // popup message for asking for camera access permission
-    const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      alert("Please grant camera roll permissions inside your system's settings");
-    }else{
-      console.log('Media Permissions are granted')
+      console.log("reaches here")
+      setImage(_image.assets[0]);
+      uploadImage(_image.assets[0])
+      console.log("image_uri: ", _image.assets[0])
     }
   };
-
-  const getUser = async () => { // getting user information, setting
+  const uploadImage = async (uri) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user !== null) {
-        setUserId(user.id)
-      }
-      console.log(user)
-    } catch (e) {
-    }
-  };
+      const fileName = `${userId}/${uuidv4()}.png`; // Example: userId/123e4567-e89b-12d3-a456-426614174000.png
 
-  async function getMedia() { // getting media information, setting 
-    const { data, error } = await supabase.storage.from('uploads').list(userId + '/', {
-      limit: 1
-    });
+      console.log("reached 1")
 
-    if (data) {
-      setMedia(data);
-    } else {
-      console.log(error);
-    }
-  }
+      const response = await fetch(uri);
 
-  const uploadImage = async (imageUri) => {
-    try {
-      const fileName = `${userId}/${uuidv4()}`;
-      const { data, error } = await supabase.storage.from('User Profile Pictures').upload(fileName, imageUri);
-      
+      console.log("response: ", response)
+      const blob = await response.blob();
+      console.log("blob: ", blob)
+
+      // const { data, error } = await supabase
+      //   .storage
+      //   .from('user_profile_pics')
+      //   .upload(fileName, decode('base64FileData'), {
+      //     contentType: 'image/png'
+      //   })
+
+
       if (error) {
         console.error("Error uploading image:", error.message);
-        alert("Upload Failed", "Failed to upload image. Please try again later.");
+        Alert.alert("Upload Failed", "Failed to upload image. Please try again later.");
       } else {
         console.log("Image uploaded successfully:", data.Key);
-        alert("Upload Success", "Image uploaded successfully!");
+        Alert.alert("Upload Success", "Image uploaded successfully!");
+        // Optionally update state or perform other actions upon successful upload
       }
     } catch (error) {
       console.error("Error uploading image:", error.message);
-      alert("Upload Failed", "Failed to upload image. Please try again later.");
+      Alert.alert("Upload Failed", "Failed to upload image. Please try again later.");
     }
   };
 
   return (
-            <View style={imageUploaderStyles.container}>
-                {
-                    image  && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
-                }
-                    <View style={imageUploaderStyles.uploadBtnContainer}>
-                        <TouchableOpacity onPress={addImage} style={imageUploaderStyles.uploadBtn} >
-                            <Text>{image ? 'Edit' : 'Upload'} Image</Text>
-                            <AntDesign name="camera" size={20} color="black" />
-                        </TouchableOpacity>
-                    </View>
-            </View>
+    <View style={imageUploaderStyles.container}>
+      {
+        image  && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
+      }
+      <View style={imageUploaderStyles.uploadBtnContainer}>
+        <TouchableOpacity onPress={addImage} style={imageUploaderStyles.uploadBtn} >
+          <Text>{image ? 'Edit' : 'Upload'} Image</Text>
+          <AntDesign name="camera" size={20} color="black" />
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 }
-const imageUploaderStyles=StyleSheet.create({
-    container:{
-        elevation:2,
-        height:200,
-        width:200,
-        backgroundColor:'#efefef',
-        position:'relative',
-        borderRadius:999,
-        overflow:'hidden',
-    },
-    uploadBtnContainer:{
-        opacity:0.7,
-        position:'absolute',
-        right:0,
-        bottom:0,
-        backgroundColor:'lightgrey',
-        width:'100%',
-        height:'25%',
-    },
-    uploadBtn:{
-        display:'flex',
-        alignItems:"center",
-        justifyContent:'center'
-    }
-})
+
+const imageUploaderStyles = StyleSheet.create({
+  container: {
+    elevation: 2,
+    height: 200,
+    width: 200,
+    backgroundColor: '#efefef',
+    position: 'relative',
+    borderRadius: 999,
+    overflow: 'hidden',
+  },
+  uploadBtnContainer: {
+    opacity: 0.7,
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'lightgrey',
+    width: '100%',
+    height: '25%',
+  },
+  uploadBtn: {
+    display: 'flex',
+    alignItems: "center",
+    justifyContent: 'center'
+  }
+});
