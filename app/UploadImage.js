@@ -3,10 +3,7 @@ import { Image, View, TouchableOpacity, Text, StyleSheet, Alert } from 'react-na
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { createClient } from "@supabase/supabase-js";
-import { v4 as uuidv4 } from 'uuid';
-import { _Image } from 'react-native';
-import { decode } from 'base64-arraybuffer'
-
+import { decode } from 'base64-arraybuffer';
 
 // Initialize Supabase client
 const supabaseUrl = "https://mdxtlljhnmhjtnekswpv.supabase.co";
@@ -14,15 +11,15 @@ const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+
+var userEmail = null
 export default function UploadImage() {
   const [imageURI, setImageURI] = useState(null);
   const [base64String, setBase64String] = useState(null);
-  const [userId, setUserId] = useState('');
-  const [media, setMedia] = useState([]);
+  const [userID, setUserID] = useState('');
 
   useEffect(() => {
     checkForCameraRollPermission();
-    getUser();
     getMedia();
   }, []);
 
@@ -37,32 +34,48 @@ export default function UploadImage() {
 
   const getUser = async () => {
     try {
-      const { data: user, error } = await supabase.auth.getUser();
+      const { data: {user}, error } = await supabase.auth.getUser();
       if (user) {
-        setUserId(user.id);
+        setUserID(user.id);
+        userEmail = user.email
+        console.log("User info: ", user);
       }
     } catch (error) {
       console.error("Error fetching user:", error.message);
     }
   };
 
+  // const getMedia = async () => {
+  //   try {
+  //     const fileName = `${userID}/${userID}${Date.now()}.png`;
+  //     const { data, error } = await supabase.storage
+  //       .from('avatars')
+  //       .getPublicUrl(fileName);
+
+  //     if (error) {
+  //       console.error('Error fetching image:', error.message);
+  //       Alert.alert('Error', 'Failed to fetch image. Please try again later.');
+  //     } else {
+  //       setImageURI(data.publicURL);
+  //       console.log("Public URL:", data.publicURL);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching image:', error.message);
+  //     Alert.alert('Error', 'Failed to fetch image. Please try again later.');
+  //   }
+  // };
+
   const getMedia = async () => {
     try {
-      // Replace 'your_bucket_name' and 'your_image_name.png' with actual values
-      const fileName = `${userId}/${uuidv4()}.png`;
-      const { publicURL, error } = supabase.storage
-        .from('user_profile_pics')
-        .getPublicUrl(fileName);
-
-      if (error) {
-        console.error('Error fetching image:', error.message);
-        Alert.alert('Error', 'Failed to fetch image. Please try again later.');
-      } else {
-        setImage(publicURL);
-      }
+      await getUser()
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .select("profileURL")
+        .eq('email', userEmail);
+      console.log("Date URL hopefully: ", data)
+      setImageURI(data[0].profileURL)
     } catch (error) {
-      console.error('Error fetching image:', error.message);
-      Alert.alert('Error', 'Failed to fetch image. Please try again later.');
+
     }
   };
 
@@ -74,34 +87,104 @@ export default function UploadImage() {
       quality: 1,
       base64: true,
     });
-    console.log("image apple: ", JSON.stringify(_image));
-    console.log("image base64: ", _image.assets[0].base64);
-    if (!_image.canceled) {
-      console.log("reaches here")
-      setImage(_image.assets[0]);
-      uploadImage(_image.assets[0])
-      console.log("image_uri: ", _image.assets[0])
+
+    if (!_image.cancelled) {
+      console.log("Image picked:", _image.assets[0].uri);
+      setBase64String(_image.assets[0].base64);
+      await uploadImage(_image.assets[0].base64);
+      await getMedia();
     }
   };
-  const uploadImage = async (uri) => {
+
+  const deleteFolder = async (folderPath) => {
+
+    console.log(
+      "does try to delete files"
+    )
     try {
-      const fileName = `${userId}/${uuidv4()}.png`; // Example: userId/123e4567-e89b-12d3-a456-426614174000.png
+      const { data: files, error } = await supabase
+        .storage
+        .from('avatars')
+        .list(folderPath);
 
-      console.log("reached 1")
+      if (error) {
+        console.error('Error listing files:', error.message);
+        return;
+      }
 
-      const response = await fetch(uri);
+      const deleteOperations = files.map(async (file) => {
+        console.log(file)
+        const { error: deleteError } = await supabase
+          .storage
+          .from('avatars')
+          .remove([file.name]);
 
-      console.log("response: ", response)
-      const blob = await response.blob();
-      console.log("blob: ", blob)
+        if (deleteError) {
+          console.error(`Error deleting file ${file.name}:`, deleteError.message);
+        } else {
+          console.log(`Deleted file ${file.name} successfully.`);
+        }
+      });
 
-      // const { data, error } = await supabase
-      //   .storage
-      //   .from('user_profile_pics')
-      //   .upload(fileName, decode('base64FileData'), {
-      //     contentType: 'image/png'
-      //   })
+      await Promise.all(deleteOperations);
 
+      console.log(`Deleted all files in folder ${folderPath}.`);
+    } catch (error) {
+      console.error('Error deleting folder:', error.message);
+    }
+  };
+
+  const checkIfFolderExists = async (folderPath) => {
+    const { data: files, error } = await supabase
+      .storage
+      .from('avatars')
+      .list(folderPath);
+    if (!files || files.length === 0 ) {
+      return false
+    }
+    else {
+      return true
+    }
+  } 
+
+  const uploadImage = async (base64FileData) => {
+    const date = Date.now()
+    const folderPath = `${userID}`
+    try {
+      const fileName = `${userID}/${userID}${date}.png`;
+      console.log("Uploading image:", fileName);
+      
+      if (checkIfFolderExists(folderPath)) {
+        await deleteFolder(folderPath);
+      }
+
+      console.log("Delete operations testing")
+      const { data: files } = await supabase
+        .storage
+        .from('avatars')
+        .list(folderPath);
+
+      const deleteOperations = files.map(async (file) => {
+          console.log("file: ", file)
+      });     
+
+      await supabase
+        .storage
+        .from('avatars')
+        .upload(fileName, decode(base64FileData), {
+          contentType: 'image/png'
+        });
+
+      const { data, error } = await supabase.storage
+        .from('avatars')
+        .getPublicUrl(fileName);
+
+      const newData = { profileURL: data.publicUrl};
+      await supabase
+        .from('user_profiles')
+        .update(newData)
+        .eq('email', userEmail)
+      
 
       if (error) {
         console.error("Error uploading image:", error.message);
@@ -109,7 +192,7 @@ export default function UploadImage() {
       } else {
         console.log("Image uploaded successfully:", data.Key);
         Alert.alert("Upload Success", "Image uploaded successfully!");
-        // Optionally update state or perform other actions upon successful upload
+        setImageURI(data.publicURL); // Update image URI after successful upload
       }
     } catch (error) {
       console.error("Error uploading image:", error.message);
@@ -120,11 +203,11 @@ export default function UploadImage() {
   return (
     <View style={imageUploaderStyles.container}>
       {
-        image  && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
+        imageURI && <Image source={{ uri: imageURI }} style={{ width: 200, height: 200 }} />
       }
       <View style={imageUploaderStyles.uploadBtnContainer}>
         <TouchableOpacity onPress={addImage} style={imageUploaderStyles.uploadBtn} >
-          <Text>{image ? 'Edit' : 'Upload'} Image</Text>
+          <Text>{imageURI ? 'Edit' : 'Upload'} Image</Text>
           <AntDesign name="camera" size={20} color="black" />
         </TouchableOpacity>
       </View>
