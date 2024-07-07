@@ -36,8 +36,7 @@ import * as React from 'react'
 
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { Chessboard } from 'react-chessboard'
-// old file import
-import Board from '.'
+
 // current file for chessboard UI
 // There is some tightly coupled control widgets
 // Namely `reset` and `undo` buttons
