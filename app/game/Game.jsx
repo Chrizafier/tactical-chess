@@ -1,4 +1,4 @@
-import { Dimensions, StyleSheet, Text, View } from 'react-native'
+import { Dimensions, StyleSheet, Text, Button, View } from 'react-native'
 // import React, { useEffect } from 'react'
 
 // ^ Health
@@ -23,7 +23,7 @@ export default Game = () => {
     // let moves = FFEN(game)
     // console.info(moves)
     console.info(`move ${move} : `, game)
-    
+
     modify(game)
     console.info(`move ${move} : `, game)
     setGame(new Chess(game.fen()))
@@ -36,7 +36,16 @@ export default Game = () => {
     const possibleMoves = game.moves()
 
     // exit if the game is over
-    if (game.isGameOver() || game.isDraw() || possibleMoves.length === 0) return
+    if (game.isGameOver() || game.isDraw() || possibleMoves.length === 0) {
+      console.log(
+        game.isDraw()
+        ? "It's Draw!"
+        : possibleMoves.length === 0
+        ? 'No Possible Moves Detected ...'
+        : 'Game Over'
+      )
+      return
+    }
 
     const randomIndex = Math.floor(Math.random() * possibleMoves.length)
     safeGameMutate((game) => {
@@ -66,26 +75,15 @@ export default Game = () => {
 
   // function fetchAllFEN(game)
   // const FFEN = g => g.history().map(m => m.fen())
-
-  const boardWrapper = {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    marginTop: '20px',
-  }
-
-  const buttonStyle = {
-    marginTop: '10px',
-    padding: '10px 20px',
-    fontSize: '16px',
-    cursor: 'pointer',
-  }
-
+  
   return (
-    <div style={boardWrapper}>
+    <View style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    }}>
       <Chessboard
         id='chester'
-        data-example-variant='PlayVsRandom'
         position={game.fen()}
         onPieceDrop={onDrop}
         customBoardStyle={{
@@ -93,29 +91,37 @@ export default Game = () => {
           boxShadow: '0 2px 10px rgba(0, 0, 0, 0.5)',
         }}
       />
-      <button
-        style={buttonStyle}
-        onClick={() => {
-          safeGameMutate((game) => {
-            game.reset()
-          })
-          clearTimeout(currentTimeout)
-        }}
-      >
-        reset
-      </button>
-      <button
-        style={buttonStyle}
-        onClick={() => {
-          safeGameMutate((game) => {
-            game.undo()
-          })
-          clearTimeout(currentTimeout)
-        }}
-      >
-        undo
-      </button>
-    </div>
+      <View>
+        <Button
+          style={{
+            flex: 1 / 2,
+            alignSelf: 'center-flex',
+            // marginTop: '10px',
+            // padding: '10px 20px',
+            // fontSize: '16px',
+            // cursor: 'pointer',        
+          }}
+          title='reset'
+          onPress={() => {
+            safeGameMutate((game) => {
+              game.reset()
+            })
+            clearTimeout(currentTimeout)
+          }}
+        />
+        {/* undo button is currently out of order */}
+        {/* <Button
+          style={{ flex: 1 / 2, alignSelf: 'center-flex' }}
+          title='undo'
+          onPress={() => {
+            safeGameMutate((game) => {
+              game.undo()
+            })
+            clearTimeout(currentTimeout)
+          }}
+        /> */}
+      </View>
+    </View>
   )
 }
 // END SCUFFED BOARD IMPLEMENTATION

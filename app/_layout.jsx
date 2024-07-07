@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
-import HomeScreen from './home/index'; // Import your screen components
-import GameScreen from './game/index';
+// Import your screen components
+import HomeScreen from './home/index'; 
+import GameScreen from './game/_layout';
 import UserScreen from './user/[uid]';
 import LoginScreen from './login/_layout';
 
