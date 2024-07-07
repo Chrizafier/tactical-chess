@@ -15,6 +15,7 @@ export const supabase = createClient(
 )
   
   const Login = () => {
+    const router = useRouter();
   
     const [formData,setFormData] = useState({
           email:'',password:''
@@ -22,18 +23,18 @@ export const supabase = createClient(
   
     console.log(formData)
   
-    function handleChange(event){
-      setFormData((prevFormData)=>{
-        return{
-          ...prevFormData,
-          [event.target.name]:event.target.value
-        }
-  
-      })
-  
-    }
-  
-    const router = useRouter();
+    // function handleChange(event){
+    //   setFormData((prevFormData)=>{
+    //     return{
+    //       ...prevFormData,
+    //       [event.target.name]:event.target.value
+    //     }
+    //   })
+    // }
+
+    const handleChange = (name, value) => {
+      setFormData({ ...formData, [name]: value });
+    };
 
     async function handleSubmit(e){
       e.preventDefault()
@@ -69,73 +70,6 @@ export const supabase = createClient(
       }
     }
   
-  // const title = {
-  //   fontWeight: "bold",
-  //   fontSize:50,
-  //   color:"#fb5b5a",
-  //   marginBottom: 20,
-  //   alignItems: "center",
-  //   justifyContent: "center-flex"
-  // };
-
-  // const inputView = {
-  //   alignItems: 'center',
-  //   justifyContent: 'center-flex',
-  //   borderRadius: 4,
-  //   backgroundColor: "#ffffff",
-  //   color: '#fb5b5a',
-  //   width: "100%",
-  //   height: 30,
-  // };
-
-  // const buttonStyle = {
-  //   alignItems: 'center',
-  //   justifyContent: 'center-flex',
-  //   borderRadius: 4,
-  //   backgroundColor: "#fb5b5a",
-  //   color: 'fb5b5a',
-  //   width: "104%",
-  //   height: 30,
-  //   border: "none"
-  // };
-
-  // const container = {
-  //   flex: 1,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  // }
-
-  //   return (
-  //     <View style={container}>
-  //       <h1 className='title' style={title}>Login</h1>
-  //       <form onSubmit={handleSubmit}>
-  //         <input className='input_style'
-  //           placeholder='Email'
-  //           name='email'
-  //           onChange={handleChange}
-  //           style={inputView}
-  //           type="text"
-  //         /><br /><br />
-  //         <input
-  //           placeholder='Password'
-  //           name='password'
-  //           type="password"
-  //           onChange={handleChange}
-  //           style={inputView}
-  //         />
-  // <br /><br />
-  //         <button style={buttonStyle} mode="contained" className="submit_button" type='submit'>
-  //           Sign In
-  //         </button><br /><br />
-
-  //       </form>
-        
-  //      <Text>Don't have an account? </Text>
-  //      <br />
-  //      <Text><a href="/signup">Sign Up</a></Text>
-  //      </View>
-  //   );
-  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
@@ -143,8 +77,8 @@ export const supabase = createClient(
         <TextInput
           style={styles.input}
           placeholder='Email'
-          name='email'
-          onChangeText={handleChange}
+          //name='email'
+          onChangeText={(text) => handleChange('email', text)}
           value={formData.email}
         />
       </View>
@@ -152,8 +86,8 @@ export const supabase = createClient(
         <TextInput
           style={styles.input}
           placeholder='Password'
-          name='password'
-          onChangeText={handleChange}
+          //name='password'
+          onChangeText={(text) => handleChange('password', text)}
           value={formData.password}
           secureTextEntry
         />
@@ -162,7 +96,7 @@ export const supabase = createClient(
         <Text style={styles.buttonText}>Sign In</Text>
       </TouchableOpacity>
       <Text>Don't have an account? </Text>
-      <Text><Text style={styles.signupLink}>Sign Up</Text></Text>
+      <Text><Text style={styles.signupLink} onPress={()=>router.push('/signup')}>Sign Up</Text></Text>
     </View>
   );
 }

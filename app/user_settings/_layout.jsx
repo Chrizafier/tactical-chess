@@ -5,7 +5,7 @@ function UserSettings() {
     return (
        <>
        <View style={styles.container}>
-        <h1>User Settings</h1>
+        <Text>User Settings</Text>
         <UploadImage />
         <Image></Image>
        </View>

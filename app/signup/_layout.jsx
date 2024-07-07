@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useRouter } from "expo-router";
+import { useState } from 'react';
 import { createClient } from "@supabase/supabase-js";
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, AppState} from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity} from 'react-native';
+import * as React from 'react';
+
 
 export const supabase = createClient(
     "https://mdxtlljhnmhjtnekswpv.supabase.co",
@@ -9,6 +11,7 @@ export const supabase = createClient(
   )
 
 const SignUp = () => {
+  const router = useRouter();
 
   const [formData,setFormData] = useState({
     username:'',email:'',password:''
@@ -16,16 +19,16 @@ const SignUp = () => {
 
   console.log(formData)
 
-  function handleChange(event){
-    setFormData((prevFormData)=>{
-      return{
-        ...prevFormData,
-        [event.target.name]:event.target.value
-      }
+  // function handleChange(event){
+  //   setFormData((prevFormData)=>{
+  //     return{
+  //       ...prevFormData,
+  //       [event.target.name]:event.target.value
+  //     }
 
-    })
+  //   })
 
-  }
+  // }
 
   async function handleSubmit(e){
     e.preventDefault()
@@ -62,80 +65,6 @@ const SignUp = () => {
       .insert({ email: formData.email, active: true })
   }
 
-  // const title = {
-  //   fontWeight: "bold",
-  //   fontSize:50,
-  //   color:"#fb5b5a",
-  //   marginBottom: 20,
-  //   alignItems: "center",
-  //   justifyContent: "center-flex"
-  // };
-
-  // const inputView = {
-  //   alignItems: 'center',
-  //   justifyContent: 'center-flex',
-  //   borderRadius: 4,
-  //   backgroundColor: "#ffffff",
-  //   color: '#fb5b5a',
-  //   height: 30,
-  //   width: "100%"
-  // };
-
-  // const buttonStyle = {
-  //   alignItems: 'center',
-  //   justifyContent: 'center-flex',
-  //   borderRadius: 4,
-  //   backgroundColor: "#fb5b5a",
-  //   color: 'fb5b5a',
-  //   height: 30,
-  //   border: "none",
-  //   width: "104%"
-  // };
-
-  // const container = {
-  //   justifyContent: 'center-flex',
-  //   alignItems: "center"
-  // };
-
-
-  // return (
-  //   <View style={container}>
-  //       <h1 className='title' style={title}>Sign Up</h1>
-  //     <form onSubmit={handleSubmit}>
-  //       <br /><br />
-  //       <input className='input_style'
-  //         placeholder='Username'
-  //         name='username'
-  //         onChange={handleChange}
-  //         style={inputView}
-  //       />
-  //       <br /><br />
-  //       <input className='input_style'
-  //         placeholder='Email'
-  //         name='email'
-  //         onChange={handleChange}
-  //         style={inputView}
-  //       />
-  //       <br /><br />
-  //       <input className='input_style'
-  //         placeholder='Password'
-  //         name='password'
-  //         type="password"
-  //         onChange={handleChange}
-  //         style={inputView}
-  //       />
-  //       <br /><br />
-  //       <button type='submit' style={buttonStyle}>
-  //         Submit
-  //       </button>
-  //       <br /><br />
-  //     </form>
-  //     <Text>Already have an account? </Text>
-  //     <br />
-  //     <a href="/login">Login</a>
-  //   </View>
-  // )
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sign Up</Text>
@@ -171,7 +100,7 @@ const SignUp = () => {
         <Text style={styles.buttonText}>Submit</Text>
       </TouchableOpacity>
       <Text>Already have an account? </Text>
-      <Text style={styles.loginLink}>Login</Text>
+      <Text style={styles.loginLink} onPress={()=>router.push('/login')}>Login</Text>
     </View>
   );
 }
