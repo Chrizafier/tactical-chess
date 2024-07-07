@@ -2,6 +2,8 @@
 
 # dependencies
 node_modules/
+# it already gets auto generated
+package-lock.json
 
 # Expo
 .expo/
