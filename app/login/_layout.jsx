@@ -67,78 +67,151 @@ export const supabase = createClient(
       } catch (error) {
         alert(error)
       }
-
-
     }
   
-  const title = {
-    fontWeight: "bold",
-    fontSize:50,
-    color:"#fb5b5a",
-    marginBottom: 20,
-    alignItems: "center",
-    justifyContent: "center-flex"
-  };
+  // const title = {
+  //   fontWeight: "bold",
+  //   fontSize:50,
+  //   color:"#fb5b5a",
+  //   marginBottom: 20,
+  //   alignItems: "center",
+  //   justifyContent: "center-flex"
+  // };
 
-  const inputView = {
-    alignItems: 'center',
-    justifyContent: 'center-flex',
-    borderRadius: 4,
-    backgroundColor: "#ffffff",
-    color: '#fb5b5a',
-    width: "100%",
-    height: 30,
-  };
+  // const inputView = {
+  //   alignItems: 'center',
+  //   justifyContent: 'center-flex',
+  //   borderRadius: 4,
+  //   backgroundColor: "#ffffff",
+  //   color: '#fb5b5a',
+  //   width: "100%",
+  //   height: 30,
+  // };
 
-  const buttonStyle = {
-    alignItems: 'center',
-    justifyContent: 'center-flex',
-    borderRadius: 4,
-    backgroundColor: "#fb5b5a",
-    color: 'fb5b5a',
-    width: "104%",
-    height: 30,
-    border: "none"
-  };
+  // const buttonStyle = {
+  //   alignItems: 'center',
+  //   justifyContent: 'center-flex',
+  //   borderRadius: 4,
+  //   backgroundColor: "#fb5b5a",
+  //   color: 'fb5b5a',
+  //   width: "104%",
+  //   height: 30,
+  //   border: "none"
+  // };
 
-  const container = {
+  // const container = {
+  //   flex: 1,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  // }
+
+  //   return (
+  //     <View style={container}>
+  //       <h1 className='title' style={title}>Login</h1>
+  //       <form onSubmit={handleSubmit}>
+  //         <input className='input_style'
+  //           placeholder='Email'
+  //           name='email'
+  //           onChange={handleChange}
+  //           style={inputView}
+  //           type="text"
+  //         /><br /><br />
+  //         <input
+  //           placeholder='Password'
+  //           name='password'
+  //           type="password"
+  //           onChange={handleChange}
+  //           style={inputView}
+  //         />
+  // <br /><br />
+  //         <button style={buttonStyle} mode="contained" className="submit_button" type='submit'>
+  //           Sign In
+  //         </button><br /><br />
+
+  //       </form>
+        
+  //      <Text>Don't have an account? </Text>
+  //      <br />
+  //      <Text><a href="/signup">Sign Up</a></Text>
+  //      </View>
+  //   );
+  
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Login</Text>
+      <View style={styles.inputView}>
+        <TextInput
+          style={styles.input}
+          placeholder='Email'
+          name='email'
+          onChangeText={handleChange}
+          value={formData.email}
+        />
+      </View>
+      <View style={styles.inputView}>
+        <TextInput
+          style={styles.input}
+          placeholder='Password'
+          name='password'
+          onChangeText={handleChange}
+          value={formData.password}
+          secureTextEntry
+        />
+      </View>
+      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+        <Text style={styles.buttonText}>Sign In</Text>
+      </TouchableOpacity>
+      <Text>Don't have an account? </Text>
+      <Text><Text style={styles.signupLink}>Sign Up</Text></Text>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  }
-
-    return (
-      <View style={container}>
-        <h1 className='title' style={title}>Login</h1>
-        <form onSubmit={handleSubmit}>
-          <input className='input_style'
-            placeholder='Email'
-            name='email'
-            onChange={handleChange}
-            style={inputView}
-            type="text"
-          /><br /><br />
-          <input
-            placeholder='Password'
-            name='password'
-            type="password"
-            onChange={handleChange}
-            style={inputView}
-          />
-  <br /><br />
-          <button style={buttonStyle} mode="contained" className="submit_button" type='submit'>
-            Sign In
-          </button><br /><br />
-
-        </form>
-        
-       <Text>Don't have an account? </Text>
-       <br />
-       <Text><a href="/signup">Sign Up</a></Text>
-       </View>
-    );
-  }
-
-
+    backgroundColor: '#fff', // Example background color
+  },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 50,
+    color: '#fb5b5a',
+    marginBottom: 20,
+  },
+  inputView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 4,
+    backgroundColor: '#ffffff',
+    width: '100%',
+    height: 30,
+    marginBottom: 20,
+  },
+  input: {
+    width: '100%',
+    height: '100%',
+    paddingHorizontal: 10,
+    color: '#fb5b5a',
+  },
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 4,
+    backgroundColor: '#fb5b5a',
+    width: '100%',
+    height: 30,
+    marginBottom: 20,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  signupLink: {
+    color: '#007bff', // Example color for link
+    textDecorationLine: 'underline',
+  },
+});
   
 export default Login

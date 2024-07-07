@@ -62,81 +62,169 @@ const SignUp = () => {
       .insert({ email: formData.email, active: true })
   }
 
-  const title = {
-    fontWeight: "bold",
-    fontSize:50,
-    color:"#fb5b5a",
-    marginBottom: 20,
-    alignItems: "center",
-    justifyContent: "center-flex"
-  };
+  // const title = {
+  //   fontWeight: "bold",
+  //   fontSize:50,
+  //   color:"#fb5b5a",
+  //   marginBottom: 20,
+  //   alignItems: "center",
+  //   justifyContent: "center-flex"
+  // };
 
-  const inputView = {
-    alignItems: 'center',
-    justifyContent: 'center-flex',
-    borderRadius: 4,
-    backgroundColor: "#ffffff",
-    color: '#fb5b5a',
-    height: 30,
-    width: "100%"
-  };
+  // const inputView = {
+  //   alignItems: 'center',
+  //   justifyContent: 'center-flex',
+  //   borderRadius: 4,
+  //   backgroundColor: "#ffffff",
+  //   color: '#fb5b5a',
+  //   height: 30,
+  //   width: "100%"
+  // };
 
-  const buttonStyle = {
-    alignItems: 'center',
-    justifyContent: 'center-flex',
-    borderRadius: 4,
-    backgroundColor: "#fb5b5a",
-    color: 'fb5b5a',
-    height: 30,
-    border: "none",
-    width: "104%"
-  };
+  // const buttonStyle = {
+  //   alignItems: 'center',
+  //   justifyContent: 'center-flex',
+  //   borderRadius: 4,
+  //   backgroundColor: "#fb5b5a",
+  //   color: 'fb5b5a',
+  //   height: 30,
+  //   border: "none",
+  //   width: "104%"
+  // };
 
-  const container = {
-    justifyContent: 'center-flex',
-    alignItems: "center"
-  };
+  // const container = {
+  //   justifyContent: 'center-flex',
+  //   alignItems: "center"
+  // };
 
+
+  // return (
+  //   <View style={container}>
+  //       <h1 className='title' style={title}>Sign Up</h1>
+  //     <form onSubmit={handleSubmit}>
+  //       <br /><br />
+  //       <input className='input_style'
+  //         placeholder='Username'
+  //         name='username'
+  //         onChange={handleChange}
+  //         style={inputView}
+  //       />
+  //       <br /><br />
+  //       <input className='input_style'
+  //         placeholder='Email'
+  //         name='email'
+  //         onChange={handleChange}
+  //         style={inputView}
+  //       />
+  //       <br /><br />
+  //       <input className='input_style'
+  //         placeholder='Password'
+  //         name='password'
+  //         type="password"
+  //         onChange={handleChange}
+  //         style={inputView}
+  //       />
+  //       <br /><br />
+  //       <button type='submit' style={buttonStyle}>
+  //         Submit
+  //       </button>
+  //       <br /><br />
+  //     </form>
+  //     <Text>Already have an account? </Text>
+  //     <br />
+  //     <a href="/login">Login</a>
+  //   </View>
+  // )
 
   return (
-    <View style={container}>
-        <h1 className='title' style={title}>Sign Up</h1>
-      <form onSubmit={handleSubmit}>
-        <br /><br />
-        <input className='input_style'
+    <View style={styles.container}>
+      <Text style={styles.title}>Sign Up</Text>
+      <View style={styles.inputView}>
+        <TextInput
+          style={styles.input}
           placeholder='Username'
           name='username'
-          onChange={handleChange}
-          style={inputView}
+          onChangeText={(text) => handleChange('username', text)}
+          value={formData.username}
         />
-        <br /><br />
-        <input className='input_style'
+      </View>
+      <View style={styles.inputView}>
+        <TextInput
+          style={styles.input}
           placeholder='Email'
           name='email'
-          onChange={handleChange}
-          style={inputView}
+          onChangeText={(text) => handleChange('email', text)}
+          value={formData.email}
         />
-        <br /><br />
-        <input className='input_style'
+      </View>
+      <View style={styles.inputView}>
+        <TextInput
+          style={styles.input}
           placeholder='Password'
           name='password'
-          type="password"
-          onChange={handleChange}
-          style={inputView}
+          onChangeText={(text) => handleChange('password', text)}
+          value={formData.password}
+          secureTextEntry
         />
-        <br /><br />
-        <button type='submit' style={buttonStyle}>
-          Submit
-        </button>
-        <br /><br />
-      </form>
+      </View>
+      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+        <Text style={styles.buttonText}>Submit</Text>
+      </TouchableOpacity>
       <Text>Already have an account? </Text>
-      <br />
-      <a href="/login">Login</a>
+      <Text style={styles.loginLink}>Login</Text>
     </View>
-  )
+  );
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff', // Example background color
+  },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 50,
+    color: '#fb5b5a',
+    marginBottom: 20,
+  },
+  inputView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 4,
+    backgroundColor: '#ffffff',
+    color: '#fb5b5a',
+    height: 30,
+    width: '100%',
+    marginBottom: 20,
+  },
+  input: {
+    width: '100%',
+    height: '100%',
+    paddingHorizontal: 10,
+    color: '#fb5b5a',
+  },
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 4,
+    backgroundColor: '#fb5b5a',
+    color: '#fff',
+    height: 30,
+    width: '104%',
+    border: 'none',
+    marginBottom: 20,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  loginLink: {
+    color: '#007bff', // Example color for link
+    textDecorationLine: 'underline',
+  },
+});
 
 
 
