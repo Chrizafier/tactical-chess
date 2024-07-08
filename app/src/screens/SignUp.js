@@ -1,9 +1,8 @@
 import { useRouter } from "expo-router";
 import { useState } from 'react';
-import { createClient } from "@supabase/supabase-js";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity} from 'react-native';
 import * as React from 'react';
-import { supabase } from "../App";
+import { supabase } from '../../App';
 
 
 // export const supabase = createClient(

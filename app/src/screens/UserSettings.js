@@ -27,8 +27,8 @@ import { Image, View, TouchableOpacity, Text, StyleSheet, Alert } from 'react-na
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { decode } from 'base64-arraybuffer';
-import { supabase } from "../App";
-import CustomHeader from '../src/components/CustomHeader';
+import { supabase } from '../../App';
+import CustomHeader from '../components/CustomHeader';
 
 
 export default function UserSettings() {

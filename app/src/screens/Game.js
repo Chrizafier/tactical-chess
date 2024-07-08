@@ -3,7 +3,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import * as React from 'react';
 import { Avatar } from 'react-native-paper';
-import CustomHeader from '../src/components/CustomHeader';
+import CustomHeader from '../components/CustomHeader';
 
 
 

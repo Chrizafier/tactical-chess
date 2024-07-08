@@ -2,11 +2,8 @@ import { useRouter } from "expo-router";
 // import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, AppState} from 'react-native';
 import * as React from 'react';
-import { Avatar, Button } from 'react-native-paper';
-import { ThemeSupa } from '@supabase/auth-ui-shared';
-import { Auth, Form } from '@supabase/auth-ui-react';
 import { useState, useEffect } from 'react'
-import { supabase } from "../App";
+import { supabase } from '../../App';
   
   export default function Login(){
     const router = useRouter();

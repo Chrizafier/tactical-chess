@@ -3,11 +3,10 @@ import { FlatList, View, Text, StyleSheet } from "react-native";
 import * as React from 'react';
 import { useState, useEffect } from 'react'
 import { Card, Button } from 'react-native-paper';
-import { HorizontalLayout } from "react-vaadin-components";
-import { supabase } from "../App";
+import { supabase } from '../../App';
 import { ScrollView, TouchableOpacity } from "react-native-web";
 import filter from "lodash.filter"
-import CustomHeader from "../src/components/CustomHeader";
+import CustomHeader from '../components/CustomHeader';
 
 
 export default function Notifications() {

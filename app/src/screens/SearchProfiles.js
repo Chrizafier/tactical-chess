@@ -1,13 +1,11 @@
 import * as React from 'react';
-import { createClient } from "@supabase/supabase-js";
 import { DataTable, Card, Button } from 'react-native-paper';
 import { useState, useEffect } from 'react'
 import { SafeAreaView, TextInput, View, StyleSheet, ScrollView, Text, Image, Pressable} from "react-native";
 import filter from "lodash.filter"
-import { HorizontalLayout } from "react-vaadin-components";
-import { supabase } from "../App";
+import { supabase } from '../../App';
 import { TouchableOpacity } from 'react-native-web';
-import CustomHeader from '../src/components/CustomHeader';
+import CustomHeader from '../components/CustomHeader';
 
 // reference used: https://github.com/aniledev/react-searchable-people-directory/blob/main/src/App.tsx
 

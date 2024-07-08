@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, Text, View, Image, StyleSheet } from 'react-native';
-import { supabase } from "../App";
 import { ScrollView } from 'react-native-web';
 import { HorizontalLayout } from 'react-vaadin-components';
-import CustomHeader from '../src/components/CustomHeader';
-
+import CustomHeader from '../components/CustomHeader';
+import { supabase } from '../../App';
 
 // export default function AppLayout() {
 //   const [userEmail, setUserEmail] = useState('');
