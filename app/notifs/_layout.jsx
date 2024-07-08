@@ -1,24 +1,29 @@
 import { useRouter } from "expo-router";
 import { FlatList, View, Text } from "react-native";
 import * as React from 'react';
-import { createClient } from "@supabase/supabase-js";
 import { useState, useEffect } from 'react'
 import { Card, Button } from 'react-native-paper';
 import { HorizontalLayout } from "react-vaadin-components";
-export const supabase = createClient(
-    "https://mdxtlljhnmhjtnekswpv.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1keHRsbGpobm1oanRuZWtzd3B2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTkyMDQxNjMsImV4cCI6MjAzNDc4MDE2M30.0_3wnZhu2-xXnwIIE9fc66pnJIyeSP7QdW10XRR20xU"
-  )
+import { supabase } from "../index";
 
-  var userEmail = "";
+// var userEmail = "";
   
 export default function AppLayout() {
-    
-    //const [userEmail, setUserEmail] = useState(null);
+    const router = useRouter()
+    const [userEmail, setUserEmail] = useState(null);
     const [displayData, setDisplayData] = useState(null)
 
     useEffect(() => {
-        getUserEmail()
+        async function getProfile() {
+            try {
+              const { data, error } = await supabase.auth.getUser()
+              console.log("user data: ", data)
+              setUserEmail(data.user.user_metadata.email)
+            } catch {error}
+          }
+        getProfile()
+        //findActiveFriends()
+        //getUserEmail()
     }, []);
 
     const fetchRequests = async(email) => {
@@ -33,12 +38,12 @@ export default function AppLayout() {
 
     const getUserEmail = async () => {
         try {
-          const { data: { user } } = await supabase.auth.getUser()
-          if (user !== null) {
+          //const { data: { user } } = await supabase.auth.getUser()
+          if (userID !== null) {
             //setUserEmail(user.email)
-            userEmail = user.email
-            console.log("bhavya")
-            console.log(userEmail)
+            // userEmail = user.email
+            // console.log("bhavya")
+            // console.log(userEmail)
             const fetchedData = await fetchRequests(userEmail)
             setDisplayData(fetchedData)
             console.log(fetchedData)

@@ -6,13 +6,7 @@ import { Avatar, Button } from 'react-native-paper';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { Auth, Form } from '@supabase/auth-ui-react';
 import { useState, useEffect } from 'react'
-import { createClient } from "@supabase/supabase-js";
-import { Link, useNavigate} from 'react-router-dom';
-
-export const supabase = createClient(
-    "https://mdxtlljhnmhjtnekswpv.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1keHRsbGpobm1oanRuZWtzd3B2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTkyMDQxNjMsImV4cCI6MjAzNDc4MDE2M30.0_3wnZhu2-xXnwIIE9fc66pnJIyeSP7QdW10XRR20xU"
-)
+import { supabase } from "../index";
   
   const Login = () => {
     const router = useRouter();
@@ -22,15 +16,6 @@ export const supabase = createClient(
     })
   
     console.log(formData)
-  
-    // function handleChange(event){
-    //   setFormData((prevFormData)=>{
-    //     return{
-    //       ...prevFormData,
-    //       [event.target.name]:event.target.value
-    //     }
-    //   })
-    // }
 
     const handleChange = (name, value) => {
       setFormData({ ...formData, [name]: value });
@@ -44,9 +29,10 @@ export const supabase = createClient(
               email: formData.email,
               password: formData.password,
             })
-  
+            
         if (error) throw error
-        console.log(data)
+        console.log("here is the data!!!!!!!!!!!!!!!!!!!!!", data)
+        getUserEmail()
         updateActiveStatus()
         router.push('/home')
         
@@ -69,6 +55,23 @@ export const supabase = createClient(
         alert(error)
       }
     }
+
+
+    const getUserEmail = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
+          console.log("gets user email")
+          console.log(user.email)
+          //setUserEmail(user.email);
+        }
+        else {
+          console.log("doesn't get user")
+        }
+      } catch (error) {
+        console.error('Error fetching user email:', error.message);
+      }
+    };
   
   return (
     <View style={styles.container}>
@@ -96,7 +99,7 @@ export const supabase = createClient(
         <Text style={styles.buttonText}>Sign In</Text>
       </TouchableOpacity>
       <Text>Don't have an account? </Text>
-      <Text><Text style={styles.signupLink} onPress={()=>router.push('/signup')}>Sign Up</Text></Text>
+      <Text style={styles.signupLink} onPress={()=>router.push('/signup')}>Sign Up</Text>
     </View>
   );
 }
