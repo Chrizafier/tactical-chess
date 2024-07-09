@@ -1,38 +1,39 @@
 import { useRouter } from "expo-router";
 import { useState } from 'react';
-import { createClient } from "@supabase/supabase-js";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity} from 'react-native';
 import * as React from 'react';
 import { supabase } from "../App";
+import { useNavigation } from "@react-navigation/native";
 
-
-// export const supabase = createClient(
-//     "https://mdxtlljhnmhjtnekswpv.supabase.co",
-//     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1keHRsbGpobm1oanRuZWtzd3B2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTkyMDQxNjMsImV4cCI6MjAzNDc4MDE2M30.0_3wnZhu2-xXnwIIE9fc66pnJIyeSP7QdW10XRR20xU"
-//   )
 
   export default function SignUp(){
-  const router = useRouter();
+  const navigation = useNavigation();
 
   const [formData,setFormData] = useState({
     username:'',email:'',password:''
   })
 
+
   console.log(formData)
 
-  // function handleChange(event){
-  //   setFormData((prevFormData)=>{
-  //     return{
-  //       ...prevFormData,
-  //       [event.target.name]:event.target.value
-  //     }
 
-  //   })
+  function handleChange(event){
+    setFormData((prevFormData)=>{
+      return{
+        ...prevFormData,
+        [event.target.name]:event.target.value
+      }
 
-  // }
+
+    })
+
+
+  }
+
 
   async function handleSubmit(e){
     e.preventDefault()
+
 
     try {
       const { data, error } = await supabase.auth.signUp(
@@ -49,22 +50,29 @@ import { supabase } from "../App";
       if (error) throw error
       alert('Check your email for verification link')
 
+
       await updateActiveStatus()
+
+      navigation.navigate("Home")
+
 
     } catch (error) {
       alert(error)
     }
   }
 
+
   async function updateActiveStatus() {
     await supabase
       .from('user_profiles')
-      .insert({ username: formData.username, rank: 0, friend_email, email: formData.email})
+      .insert({ username: formData.username, rank: 0, friend_email, email: formData.email, })
+
 
     await supabase
       .from('active_statuses')
       .insert({ email: formData.email, active: true })
   }
+
 
   return (
     <View style={styles.container}>
@@ -101,10 +109,11 @@ import { supabase } from "../App";
         <Text style={styles.buttonText}>Submit</Text>
       </TouchableOpacity>
       <Text>Already have an account? </Text>
-      <Text style={styles.loginLink} onPress={()=>router.push('/login')}>Login</Text>
+      <Text style={styles.loginLink} onPress={()=>navigation.navigate("Login")}>Login</Text>
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -155,3 +164,4 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
 });
+

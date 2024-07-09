@@ -1,20 +1,16 @@
 import { useNavigation } from '@react-navigation/native'; // Assuming you're using react-navigation
-import { FlatList, View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image, SafeAreaView } from "react-native";
 import * as React from 'react';
 import { useState, useEffect } from 'react'
-import { Card, Button } from 'react-native-paper';
-import { HorizontalLayout } from "react-vaadin-components";
+import { Button } from 'react-native-paper';
 import { supabase } from "../App";
 import { ScrollView, TouchableOpacity } from "react-native-web";
-import filter from "lodash.filter"
-import CustomHeader from "../src/components/CustomHeader";
 
-
-export default function Notifications() {
-  const navigation = useNavigation();
+export default function NotificationsScreen() {
 
   const [userEmail, setUserEmail] = useState('')
   const [displayData, setDisplayData] = useState([])
+
 
   useEffect(() => {
     async function getProfile() {
@@ -29,6 +25,7 @@ export default function Notifications() {
     changeDisplay()
   }, [userEmail, displayData])
 
+
   const fetchRequests = async(email) => {
     console.log('bhavya2')
     console.log(email)
@@ -40,16 +37,18 @@ export default function Notifications() {
         throw error;
     }
     if (data !== null) {
-      console.log("data after filtering for requests received: ", data) 
+      console.log("data after filtering for requests received: ", data)
       const requestedList = data.map((element) => element.sender_email)
       console.log("requested listtttt: ", requestedList)
       const profileData = await getSenderProfiles(requestedList)
       console.log("profile pics data: ", profileData)
       setDisplayData(profileData);
       console.log("DISPLAY DATA: ", displayData)
+      return profileData
     }
-    return data || []
+    return []    
   }
+
 
   async function getSenderProfiles(requestedList) {
     console.log('enters getSenderProfiles()')
@@ -58,16 +57,24 @@ export default function Notifications() {
         .from('user_profiles')
         .select('*')
         .in('email', requestedList)
+      console.log("DATA SENDER: ", data)
+      console.log("data length: ", data.length)
+      // let arr = []
+      // for (let i = 0; i < data.length; i++) {
+      //   arr.concat(data[i].email)
+      // } 
 
-      if (error) {
-        throw error;
-      }
-      return data;
+      // if (error) {
+      //   throw error;
+      // }
+      // return arr;
+      return data
     } catch (error) {
       console.error('Error fetching active status data:', error.message);
       return [];
     }
   }
+
 
   const changeDisplay = async () => {
     console.log("reaches changeDisplay")
@@ -81,6 +88,7 @@ export default function Notifications() {
     } catch (e) {}
   };
 
+
   const acceptFriendRequest = async (sender_email) => {
     try {
         console.log("sender_email")
@@ -92,17 +100,20 @@ export default function Notifications() {
             .delete()
             .eq('sender_email', sender_email)
             .eq('receiver_email', userEmail)
-        
+       
         await supabase.rpc('update_friends_array', { sender_email: sender_email, receiver_email: userEmail});
+
 
         const fetchedData = await fetchRequests(userEmail)
         setDisplayData(fetchedData)
         console.log(fetchedData)
 
+
     } catch (error) {
         console.error('Error accepting friend request:', error.message);
     }
   };
+
 
   const declineFriendRequest = async (sender_email) => {
       try {
@@ -111,10 +122,11 @@ export default function Notifications() {
               .delete()
               .eq('sender_email', sender_email)
               .eq('receiver_email', userEmail)
-          
+         
           const fetchedData = await fetchRequests(userEmail)
           setDisplayData(fetchedData)
           console.log(fetchedData)
+
 
       } catch (error) {
           console.error('Error accepting friend request:', error.message);
@@ -122,9 +134,10 @@ export default function Notifications() {
   };
 
 
+
+
   return (
-    <>
-    <CustomHeader showBackButton={true}></CustomHeader>
+    <SafeAreaView style={styles.container}>
     <Text style={styles.textFriends}>Notifications</Text>
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
     {displayData.map((item) => (
@@ -133,12 +146,12 @@ export default function Notifications() {
         style={styles.profileContainer}
         activeOpacity={0.7}
       >
-        {/* <Image
+        <Image
           source={{ uri: item.profileURL }}
           style={styles.profileImage}
-        /> */}
+        />
         <View style={styles.profileInfo}>
-          <Text style={styles.profileRank}>You have a friend request from {item.id}</Text>
+          <Text style={styles.profileRank}>You have a friend request from {item.username}</Text>
         </View>
         <Button
           onPress={() => acceptFriendRequest(item.email)}
@@ -157,9 +170,10 @@ export default function Notifications() {
       </TouchableOpacity>
     ))}
     </ScrollView>
-    </>
+    </SafeAreaView>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -198,7 +212,7 @@ const styles = StyleSheet.create({
       shadowOpacity: 0.25,
       shadowRadius: 3.84,
       elevation: 5,
-      
+     
   },
   profileImage: {
       width: 50,
@@ -223,8 +237,10 @@ const styles = StyleSheet.create({
   addButton: {
       backgroundColor: '#de4e45',
       borderRadius: 5,
+      marginLeft: 10
   },
   buttonLabel: {
       color: '#fff',
   },
 });
+

@@ -7,23 +7,24 @@ import filter from "lodash.filter"
 import { HorizontalLayout } from "react-vaadin-components";
 import { supabase } from "../App";
 import { TouchableOpacity } from 'react-native-web';
-import CustomHeader from '../src/components/CustomHeader';
+
 
 // reference used: https://github.com/aniledev/react-searchable-people-directory/blob/main/src/App.tsx
 
-export default function SearchProfiles() {
+
+export default function SearchProfilesScreen() {
     const [profiles, setProfiles] = useState([])
     const [searchQuery, setSearchQuery] = useState('')
     const [displayData, setDisplayData] = useState([])
     const [userEmail, setUserEmail] = useState('');
-    const [disabledButtons, setDisabledButtons] = useState();
+
 
     useEffect(() => {
         getUserEmail()
         fetchProfiles()
         console.log("akdljfskaadasfjdakfjlajflajfljaljdflajlfjalfjlajdlfaljldajfla")
     }, []);
-    
+   
     const updateSearch = async (search) => {
         setSearchQuery(search)
         const formattedQuery = search.toLowerCase();
@@ -41,6 +42,7 @@ export default function SearchProfiles() {
         console.log('userEmail', userEmail)
     };
 
+
     const contains = (profile, query) => {
         console.log("profileeeeeeee")
         console.log(profile)
@@ -54,6 +56,7 @@ export default function SearchProfiles() {
         return false;
     }
 
+
     const getUserEmail = async () => {
         try {
           const { data: { user } } = await supabase.auth.getUser()
@@ -63,6 +66,7 @@ export default function SearchProfiles() {
         } catch (e) {
     }
     };
+
 
     const fetchProfiles = async() => {
         try {
@@ -80,6 +84,7 @@ export default function SearchProfiles() {
         }
     }
 
+
 const addFriendRequest = async (friend_email) => {
     try {
         const { data, error } = await supabase
@@ -93,40 +98,9 @@ const addFriendRequest = async (friend_email) => {
         console.error('Error adding friend:', error.message);
     }
 };
-        // return (
-        //     <><SafeAreaView style={{ flex: 1, marginHorizontal: 20 }}>
-        //         <TextInput
-        //             placeholder='Search by username...'
-        //             clearButtonMode='always'
-        //             autoCapitalize='none'
-        //             autoCorrect={false}
-        //             value={searchQuery}
-        //             onChangeText={(query) => updateSearch(query)}
-        //             style={{ paddingHorizontal: 20, paddingVertical: 10, borderColor: '#ccc', borderWidth: 1, borderRadius: 8 }} />
-        //     </SafeAreaView>
-        //     <ScrollView>
-        //     <Text style={styles.textFriends}>Friends</Text>
-        //     {
-        //         displayData.map((item) => {
-        //             return (
-        //                 <View key={item.id} style={styles.itemContainer}>
-        //                     <Image
-        //                         source={{ uri: item.profileURL }}
-        //                         style={styles.image}
-        //                     />
-        //                     <View>
-        //                         <Text style={styles.textName}>{item.username}</Text>
-        //                         <Text style={styles.textEmail}>Rank #{item.rank}</Text>
-        //                     </View>
-        //                 </View>
-        //             )
-        //         })
-        //     }
-        //     </ScrollView>
-        //     </>
-        // );
+       
 return (
-        <><CustomHeader showBackButton={true}></CustomHeader><SafeAreaView style={styles.container}>
+        <><SafeAreaView style={styles.container}>
         <TextInput
             placeholder='Search by username...'
             clearButtonMode='always'
@@ -141,7 +115,6 @@ return (
                 <TouchableOpacity
                     key={item.id}
                     style={styles.profileContainer}
-                    // onPress={() => addFriendRequest(item.email)}
                     activeOpacity={0.7}
                 >
                     <Image
@@ -164,6 +137,7 @@ return (
     </SafeAreaView></>
     );
 }
+
 
 const styles = StyleSheet.create({
     container: {
@@ -202,7 +176,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
-        
+       
     },
     profileImage: {
         width: 50,
@@ -232,3 +206,4 @@ const styles = StyleSheet.create({
         color: '#fff',
     },
 });
+

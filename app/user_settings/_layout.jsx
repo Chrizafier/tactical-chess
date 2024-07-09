@@ -1,277 +1,136 @@
-// import UploadImage from "../UploadImage";
-// import { Image, View, Platform, TouchableOpacity, Text, StyleSheet } from 'react-native';
-
-// function UserSettings() {
-//     return (
-//        <View style={styles.container}>
-//         <Text>User Settings</Text>
-//         <UploadImage />
-//         <Image></Image>
-//        </View>
-//     );
-// }
-
-// const styles = StyleSheet.create({
-//     container: {
-//       padding:50,
-//       backgroundColor: '#fff',
-//       alignItems: 'center',
-//       justifyContent: 'center',
-//     },
-// });
-
-// export default UserSettings;
-
 import React, { useState, useEffect } from 'react';
-import { Image, View, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
-import * as ImagePicker from 'expo-image-picker';
-import { decode } from 'base64-arraybuffer';
-import { supabase } from "../App";
-import CustomHeader from '../src/components/CustomHeader';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import UploadProfilePic from './ProfilePic';
+import { supabase } from '../App';
 
+// resource used: https://www.rnexamples.com/react-native-examples/b6/Simple-edit-profile-view
 
-export default function UserSettings() {
-  const [imageURI, setImageURI] = useState('');
-  const [base64String, setBase64String] = useState('');
-  const [userID, setUserID] = useState('');
+const ProfileSettingsScreen = () => {
+
+  const [username, setUsername] = useState('');
+  const [bio, setBio] = useState('');
   const [userEmail, setUserEmail] = useState('');
 
   useEffect(() => {
-    console.log("hello")
-    async function getProfile() {
-      try {
-        const { data, error } = await supabase.auth.getUser()
-        console.log("user data upload image: ", data)
-        setUserEmail(data.user.user_metadata.email)
-        setUserID(data.user.id)
-        
-        
-      } catch {
-        console.log("oh no!!")
-      }
-    }
     getProfile()
-    getUser()
-    checkForCameraRollPermission();
-    getMedia();
-  }, [imageURI, base64String, userID, userEmail]);
+    getProfileInformation()
+  }, [username, bio, userEmail]);
 
-  const checkForCameraRollPermission = async () => {
-    const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert("Permission Required", "Please grant camera roll permissions in your device settings.");
-    } else {
-      console.log('Media Permissions are granted');
-    }
-  };
-
-  const getUser = async() => {
+  async function getProfile() {
     try {
       const { data, error } = await supabase.auth.getUser()
-      console.log("user data upload image: ", data)
+      console.log("user data upload imagsssse: ", data)
       setUserEmail(data.user.user_metadata.email)
-      setUserID(data.user.id)
-      console.log("data.user.user_metadata.email: ", data.user.user_metadata.email)
-      console.log("data.user.id: ", data.user.id)
+    } catch {
+      console.log("oh no!!")
+    }
+  }
+  async function getProfileInformation() {
+    console.log("user emaillllll: ", userEmail)
+    try {
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .select("*")
+        .eq('email', userEmail)
+      console.log("getProfileInformation DATA: ", data)
+      setBio(data[0].bio)
+      setUsername(data[0].username)
     } catch {
       console.log("oh no!!")
     }
   }
 
-  const getMedia = async () => {
+  const handleSubmit = async () => {
     try {
-      // await getUser()
-      // console.log("getMedia user email: ", userEmail)
-      // console.log("getMedia user id: ", userID)
-      // await getUser()
-      // console.log("user email: ", userEmail)
-      // console.log("user id: ", userID)
-      const { data, error } = await supabase
-        .from('user_profiles')
-        .select("profileURL")
-        .eq('email', userEmail);
-      console.log("Data URL hopefully: ", data)
-      setImageURI(data[0].profileURL)
-    } catch (error) {
-
-    }
-  };
-
-  const addImage = async () => {
-    let _image = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4,3],
-      quality: 1,
-      base64: true,
-    });
-
-    if (!_image.cancelled) {
-      console.log("Image picked:", _image.assets[0].uri);
-      setBase64String(_image.assets[0].base64);
-      await uploadImage(_image.assets[0].base64);
-      await getMedia();
-    }
-  };
-
-  // const deleteFolder = async (folderPath) => {
-
-  //   console.log(
-  //     "does try to delete files"
-  //   )
-  //   try {
-  //     const { data: files, error } = await supabase
-  //       .storage
-  //       .from('avatars')
-  //       .list(folderPath);
-
-  //     if (error) {
-  //       console.error('Error listing files:', error.message);
-  //       return;
-  //     }
-
-  //     const deleteOperations = files.map(async (file) => {
-  //       console.log(file)
-  //       const { error: deleteError } = await supabase
-  //         .storage
-  //         .from('avatars')
-  //         .remove([file.name]);
-
-  //       if (deleteError) {
-  //         console.error(`Error deleting file ${file.name}:`, deleteError.message);
-  //       } else {
-  //         console.log(`Deleted file ${file.name} successfully.`);
-  //       }
-  //     });
-
-  //     await Promise.all(deleteOperations);
-
-  //     console.log(`Deleted all files in folder ${folderPath}.`);
-  //   } catch (error) {
-  //     console.error('Error deleting folder:', error.message);
-  //   }
-  // };
-
-  // const checkIfFolderExists = async (folderPath) => {
-  //   const { data: files, error } = await supabase
-  //     .storage
-  //     .from('avatars')
-  //     .list(folderPath);
-  //   if (!files || files.length === 0 ) {
-  //     return false
-  //   }
-  //   else {
-  //     return true
-  //   }
-  // } 
-
-  const uploadImage = async (base64FileData) => {
-    const date = Date.now()
-    //const folderPath = `${userID}`
-    try {
-      const fileName = `${userID}/${userID}${date}.png`;
-      console.log("Uploading image:", fileName);
-      
-      // if (checkIfFolderExists(folderPath)) {
-      //   await deleteFolder(folderPath);
-      // }
-
-      // console.log("Delete operations testing")
-      // const { data: files } = await supabase
-      //   .storage
-      //   .from('avatars')
-      //   .list(folderPath);
-
-      // const deleteOperations = files.map(async (file) => {
-      //     console.log("file: ", file)
-      // });     
+      const newData = { username: username, bio: bio};
 
       await supabase
-        .storage
-        .from('avatars')
-        .upload(fileName, decode(base64FileData), {
-          contentType: 'image/png'
-        });
-
-      const { data, error } = await supabase.storage
-        .from('avatars')
-        .getPublicUrl(fileName);
-
-      const newData = { profileURL: data.publicUrl};
-      await supabase
-        .from('user_profiles')
+        .from('active_statuses')
         .update(newData)
         .eq('email', userEmail)
-      
-        setImageURI(data.publicURL);
 
-      // if (error) {
-      //   console.error("Error uploading image:", error.message);
-      //   Alert.alert("Upload Failed", "Failed to upload image. Please try again later.");
-      // } else {
-      //   console.log("Image uploaded successfully:", data.Key);
-      //   Alert.alert("Upload Success", "Image uploaded successfully!");
-      //   setImageURI(data.publicURL); // Update image URI after successful upload
-      // }
+
+      if (error) throw error
     } catch (error) {
-      console.error("Error uploading image:", error.message);
-      Alert.alert("Upload Failed", "Failed to upload image. Please try again later.");
+      alert(error)
     }
-  };
+  }
 
   return (
-    // <View style={imageUploaderStyles.container}>
-    //   {
-    //     imageURI && <Image source={{ uri: imageURI }} style={{ width: 200, height: 200 }} />
-    //   }
-    //   <View style={imageUploaderStyles.uploadBtnContainer}>
-    //     <TouchableOpacity onPress={addImage} style={imageUploaderStyles.uploadBtn} >
-    //       <View>
-    //         <Text>{imageURI ? 'Edit' : 'Upload'} Image</Text>
-    //       </View>
-    //       <AntDesign name="camera" size={20} color="black" />
-    //     </TouchableOpacity>
-    //   </View>
-    // </View>
-    <><CustomHeader showBackButton={true}></CustomHeader>
-      <View style={imageUploaderStyles.container}>
-        {imageURI && <Image source={{ uri: imageURI }} style={{ width: 200, height: 200 }} />}
-        <View style={imageUploaderStyles.uploadBtnContainer}>
-          <TouchableOpacity onPress={addImage} style={imageUploaderStyles.uploadBtn}>
-            <View>
-              <Text>{imageURI ? 'Edit' : 'Upload'} Image</Text>
-            </View>
-            <AntDesign name="camera" size={20} color="black" />
-          </TouchableOpacity>
-        </View>
-      </View>   
-      </>
-  );
-}
+    <View style={styles.container}>
+      <View style={styles.avatarContainer}>
+      <UploadProfilePic />
+      </View>
+      <View style={styles.form}>
+        <Text style={styles.label}>Username</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter username..."
+          value={username}
+          onChangeText={setUsername}
+        />
+        <Text style={styles.label}>Bio</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter bio..."
+          value={bio}
+          onChangeText={setBio}
+        />
+        <TouchableOpacity style={styles.button} onPress={() => handleSubmit({username, bio})}>
+          <Text style={styles.buttonText}>Submit</Text>
+        </TouchableOpacity>
+      </View>
 
-const imageUploaderStyles = StyleSheet.create({
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
   container: {
-    elevation: 2,
-    height: 200,
-    width: 200,
-    backgroundColor: '#efefef',
-    position: 'relative',
-    borderRadius: 999,
-    overflow: 'hidden',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  uploadBtnContainer: {
-    opacity: 0.7,
-    position: 'absolute',
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'lightgrey',
-    width: '100%',
-    height: '25%',
+  form: {
+    width: '80%',
   },
-  uploadBtn: {
-    display: 'flex',
-    alignItems: "center",
-    justifyContent: 'center'
-  }
+  label: {
+    marginTop: 20,
+  },
+  input: {
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 10,
+    fontSize: 18,
+  },
+  button: {
+    marginTop: 20,
+    backgroundColor: '#de4e45',
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+  },
+  avatarContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+  },
+  changeAvatarButton: {
+    marginTop: 10,
+  },
+  changeAvatarButtonText: {
+    color: '#1E90FF',
+    fontSize: 18,
+  },
 });
+
+export default ProfileSettingsScreen;

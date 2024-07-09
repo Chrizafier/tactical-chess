@@ -1,60 +1,63 @@
-import { useRouter } from "expo-router";
-// import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, AppState} from 'react-native';
 import * as React from 'react';
-import { Avatar, Button } from 'react-native-paper';
-import { ThemeSupa } from '@supabase/auth-ui-shared';
-import { Auth, Form } from '@supabase/auth-ui-react';
 import { useState, useEffect } from 'react'
 import { supabase } from "../App";
-  
+import { useNavigation } from "@react-navigation/native";
+ 
   export default function Login(){
-    const router = useRouter();
-  
+    const navigation = useNavigation();
+ 
     const [formData,setFormData] = useState({
           email:'',password:''
     })
-  
+ 
     console.log(formData)
+
 
     const handleChange = (name, value) => {
       setFormData({ ...formData, [name]: value });
     };
 
+
     async function handleSubmit(e){
       e.preventDefault()
-  
+ 
       try {
           const { data, error } = await supabase.auth.signInWithPassword({
               email: formData.email,
               password: formData.password,
             })
-            
+           
         if (error) throw error
         console.log("here is the data!!!!!!!!!!!!!!!!!!!!!", data)
         getUserEmail()
         updateActiveStatus()
-        router.push('/home')
-        
+
+        navigation.navigate("Home");
+       
       } catch (error) {
         alert(error)
       }
     }
 
+
     async function updateActiveStatus() {
       try {
         const newData = { active: true};
-  
+ 
         const {data, error} = await supabase
           .from('active_statuses')
           .update(newData)
           .eq('email', formData.email)
 
+
         if (error) throw error
       } catch (error) {
         alert(error)
       }
     }
+
+
 
 
     const getUserEmail = async () => {
@@ -72,7 +75,7 @@ import { supabase } from "../App";
         console.error('Error fetching user email:', error.message);
       }
     };
-  
+ 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
@@ -99,10 +102,11 @@ import { supabase } from "../App";
         <Text style={styles.buttonText}>Sign In</Text>
       </TouchableOpacity>
       <Text>Don't have an account? </Text>
-      <Text style={styles.signupLink} onPress={()=>router.push('/signup')}>Sign Up</Text>
+      <Text style={styles.signupLink} onPress={()=>navigation.navigate("SignUp")}>Sign Up</Text>
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -150,3 +154,4 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
 });
+
