@@ -1,0 +1,178 @@
+
+
+    // //check 8 directions + knights locations
+    // //straight up (-1, 0) --> goes from row 0 to (row of king-1)
+    // let piece = currBoardState[king_pos[0]][king_pos[1]]
+    // let myColor = piece[0]
+    // let row = king_pos[0]-1
+    // let col = king_pos[1]
+    // while (row >= 0) {
+    //   if (currBoardState[row][col] !== null) {
+    //     //queen, rook, pawn
+    //     if (currBoardState[row][col][0][0] == myColor) {
+    //       break;
+    //     }
+    //     else {
+    //       if (currBoardState[row][col][0][1] == 'q' ||
+    //         currBoardState[row][col][0][1] == 'r') {
+    //           newBoardState[king_pos[0]][king_pos[1]][2] -=  currBoardState[row][col][1]
+    //         }
+    //     }
+    //   }
+    //   row = row - 1
+    // }
+    // //straight down (1, 0) --> goes from (row of king+1) to row 7
+    // row = king_pos[0]+1
+    // col = king_pos[1]
+    // while (row <= 7) {
+    //   if (currBoardState[row][col] !== null) {
+    //     //queen, rook, pawn
+    //     if (currBoardState[row][col][0][0] == myColor) {
+    //       break;
+    //     }
+    //     else {
+    //       if (currBoardState[row][col][0][1] == 'q' ||
+    //         currBoardState[row][col][0][1] == 'r') {
+    //           newBoardState[king_pos[0]][king_pos[1]][2] -=  currBoardState[row][col][1]
+    //         }
+    //     }
+    //   }
+    //   row = row + 1
+    // }
+    // //straight right (0, 1) --> goes from (col of king+1) to col 7
+    // row = king_pos[0]
+    // col = king_pos[1]+1
+    // while (col <= 7) {
+    //   if (currBoardState[row][col] !== null) {
+    //     //queen, rook
+    //     if (currBoardState[row][col][0][0] == myColor) {
+    //       break;
+    //     }
+    //     else {
+    //       if (currBoardState[row][col][0][1] == 'q' ||
+    //         currBoardState[row][col][0][1] == 'r') {
+    //           newBoardState[king_pos[0]][king_pos[1]][2] -=  currBoardState[row][col][1]
+    //         }
+    //     }
+    //   }
+    //   col = col + 1
+    // }
+    // //straight left (0, -1) --> goes from (col of king-1) to col 0
+    // row = king_pos[0]
+    // col = king_pos[1]-1
+    // while (col >= 0) {
+    //   if (currBoardState[row][col] !== null) {
+    //     //queen, rook
+    //     if (currBoardState[row][col][0][0] == myColor) {
+    //       break;
+    //     }
+    //     else {
+    //       if (currBoardState[row][col][0][1] == 'q' ||
+    //         currBoardState[row][col][0][1] == 'r') {
+    //           newBoardState[king_pos[0]][king_pos[1]][2] -=  currBoardState[row][col][1]
+    //         }
+    //     }
+    //   }
+    //   col = col - 1
+    // }
+    // // diagonal upright (-1, 1)
+    // row = king_pos[0]-1
+    // col = king_pos[1]+1
+    // while (row  >= 0 && col <= 7) {
+    //   if (currBoardState[row][col] !== null) {
+    //     //queen, bishop
+    //     if (currBoardState[row][col][0][0] == myColor) {
+    //       break;
+    //     }
+    //     else {
+    //       if (currBoardState[row][col][0][1] == 'q' ||
+    //         currBoardState[row][col][0][1] == 'b' ||
+    //         (currBoarddtate[row][col][0][1] == 'p' && myColor == 'w' && Math.abs(king_pos[0]-row) == 1)) {
+    //           newBoardState[king_pos[0]][king_pos[1]][2] -=  currBoardState[row][col][1]
+    //         }
+    //     }
+    //   }
+    //   row = row - 1
+    //   col = col + 1
+    // }
+
+    // // diagonal upleft (-1, -1)
+
+    // row = king_pos[0]-1
+    // col = king_pos[1]-1
+    // while (row  >= 0 && col >= 0) {
+    //   if (currBoardState[row][col] !== null) {
+    //     //queen, bishop
+    //     if (currBoardState[row][col][0][0] == myColor) {
+    //       break;
+    //     }
+    //     else {
+    //       if (currBoardState[row][col][0][1] == 'q' ||
+    //         currBoardState[row][col][0][1] == 'b' ||
+    //         (currBoarddtate[row][col][0][1] == 'p' && myColor == 'w' && Math.abs(king_pos[0]-row) == 1)) {
+    //           newBoardState[king_pos[0]][king_pos[1]][2] -=  currBoardState[row][col][1]
+    //         }
+    //     }
+    //   }
+    //   row = row - 1
+    //   col = col - 1
+    // }
+
+    // // diagonal downright (1, 1)
+
+    // row = king_pos[0]+1
+    // col = king_pos[1]+1
+    // while (row <= 7 && col <= 7) {
+    //   if (currBoardState[row][col] !== null) {
+    //     //queen, bishop
+    //     if (currBoardState[row][col][0][0] == myColor) {
+    //       break;
+    //     }
+    //     else {
+    //       if (currBoardState[row][col][0][1] == 'q' ||
+    //         currBoardState[row][col][0][1] == 'b' ||
+    //         (currBoardState[row][col][0][1] == 'p' && myColor == 'b' && Math.abs(king_pos[0]-row) == 1)) {
+    //           newBoardState[king_pos[0]][king_pos[1]][2] -=  currBoardState[row][col][1]
+    //         }
+    //     }
+    //   }
+    //   row = row + 1
+    //   col = col + 1
+    // }
+
+    // // diagonal downleft (1, -1)
+
+    // row = king_pos[0]+1
+    // col = king_pos[1]-1
+    // while (row <= 7 && col >= 0) {
+    //   if (currBoardState[row][col] !== null) {
+    //     //queen, bishop
+    //     if (currBoardState[row][col][0][0] == myColor) {
+    //       break;
+    //     }
+    //     else {
+    //       if (currBoardState[row][col][0][1] == 'q' ||
+    //         currBoardState[row][col][0][1] == 'b' ||
+    //         (currBoardState[row][col][0][1] == 'p' && myColor == 'b' && Math.abs(king_pos[0]-row) == 1)) {
+    //           newBoardState[king_pos[0]][king_pos[1]][2] -=  currBoardState[row][col][1]
+    //         }
+    //     }
+    //   }
+    //   row = row + 1
+    //   col = col - 1
+    // }
+
+    // // handle knights behavior
+    // row = king_pos[0]
+    // col = king_pos[1]
+    // let possible_dirs = [[1, 2], [2, 1], [1, -2], [2, -1], [-1, 2], [-2, 1], [-2, -1], [-1, -2]]
+    // for (let i = 0; i < possible_dirs.length; i++) {
+    //   let position = [row + possible_dirs[i][0], col + possible_dirs[i][1]]
+    //   if (position[0] >= 0 && position[0] <= 7 && position[1] >= 0 && posiion[1] <= 7) {
+    //     if (currBoardState[position[0]][position[1]][0][0] != myColor) {
+    //       newBoardState[king_pos[0]][king_pos[1]][2] -=  currBoardState[position[0]][position[1]][1]
+    //     }
+    //   }
+    // }
+    // // UNSURE IF WE NEED THIS, WE WILL CHECK LATER
+    // // setCurrBoardState(newBoardState) 

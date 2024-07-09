@@ -3,19 +3,19 @@ import { View, StyleSheet, TextInput, Text } from 'react-native';
 import Chessboard from './ChessBoard';
 import { useState, useEffect } from 'react'
 
+const KING_DIRECTIONS = [[1, 1], [1, 0], [1, -1], [0, 1], [0, -1], [-1, 1], [-1, 0], [-1, -1]]
+const QUEEN_DIRECTIONS = [[1, 1], [1, 0], [1, -1], [0, 1], [0, -1], [-1, 1], [-1, 0], [-1, -1]]
+const BISHOP_DIRECTIONS = [[1, 1], [1, -1], [-1, 1], [-1, -1]]
+const ROOK_DIRECTIONS = [[1, 0], [-1, 0], [0, 1], [0, -1]]
+const KNIGHT_DIRECTIONS = [[1, 2], [2, 1], [1, -2], [2, -1], [-1, 2], [-2, 1], [-2, -1], [-1, -2]]
+const PAWN_DIRECTIONS = [[-1, 0], [-2, 0], [-1, 1], [-1, -1]]
+
 const GameScreen = () => {
+  const [whiteKing, setWhiteKing] = useState([7,4])
+  const [blackKing, setBlackKing] = useState([0,4])
   const [startPosition, setStartPosition] = useState('');
   const [endPosition, setEndPosition] = useState('');
-  // let currBoardState = [
-  //   [['br', 7, 7], ['bn', 5, 5], ['bb', 5, 5], ['bq', 9, 9], ['bk', 4, 11], ['bb', 5, 5], ['bn', 5, 5], ['br', 7, 7]],
-  //   [['bp', 2, 2], ['bp', 2, 2], ['bp', 2, 2], ['bp', 2, 2], ['bp', 2, 2], ['bp', 2, 2], ['bp', 2, 2], ['bp', 2, 2]],
-  //   [null,null,null,null,null,null,null,null],
-  //   [null,null,null,null,null,null,null,null],
-  //   [null,null,null,null,null,null,null,null],
-  //   [null,null,null,null,null,null,null,null],
-  //   [['wp', 2, 2], ['wp', 2, 2], ['wp', 2, 2], ['wp', 2, 2], ['wp', 2, 2], ['wp', 2, 2], ['wp', 2, 2], ['wp', 2, 2]],
-  //   [['wr', 7, 7], ['wn', 5, 5], ['wb', 5, 5], ['wq', 9, 9], ['wk', 4, 11], ['wb', 5, 5], ['wn', 5, 5], ['wr', 7, 7]]
-  // ]
+  const [winner, setWinner] = useState('');
   const [currBoardState, setCurrBoardState] = useState(
     [
       [['br', 7, 7], ['bn', 5, 5], ['bb', 5, 5], ['bq', 9, 9], ['bk', 4, 11], ['bb', 5, 5], ['bn', 5, 5], ['br', 7, 7]],
@@ -29,30 +29,15 @@ const GameScreen = () => {
     ]
   )
 
-  //STILL NEED TO DO THE FOLLOWING:
-  //CREATE RANDOM BLACK MOVES
-  //UPDATE THE WHITEKING AND BLACKKING USESTATE FIELDS
-  //FIX LONGASS METHODS
-  const [whiteKing, setWhiteKing] = useState([7,4])
-  const [blackKing, setBlackKing] = useState([0,4])
-  const KING_DIRECTIONS = [[1, 1], [1, 0], [1, -1], [0, 1], [0, -1], [-1, 1], [-1, 0], [-1, -1]]
-  const QUEEN_DIRECTIONS = [[1, 1], [1, 0], [1, -1], [0, 1], [0, -1], [-1, 1], [-1, 0], [-1, -1]]
-  const BISHOP_DIRECTIONS = [[1, 1], [1, -1], [-1, 1], [-1, -1]]
-  const ROOK_DIRECTIONS = [[1, 0], [-1, 0]]
-  const KNIGHT_DIRECTIONS = [[1, 2], [2, 1], [1, -2], [2, -1], [-1, 2], [-2, 1], [-2, -1], [-1, -2]]
-  const PAWN_DIRECTIONS = [[-1, 0], [-2, 0], [-1, 1], [-1, -1]]
-
   const handleSubmit = () => {
-    // Logic to handle move submission based on startPosition and endPosition
     console.log(`Move from ${startPosition} to ${endPosition}`);
-    //isValidWhitePawnMove(convertSymbolToPair(startPosition), convertSymbolToPair(endPosition))
     //implement health points logic
     let startPos = convertSymbolToPair(startPosition)
     let endPos = convertSymbolToPair(endPosition)
     let piece = [...currBoardState[startPos[0]][startPos[1]]]
-    let pieceColor = piece[0][0]
     let pieceType = piece[0][1]
     let validMove = false
+
     switch (pieceType) {
       case 'r': validMove = isValidRookMove(startPos, endPos); break;
       case 'n': validMove = isValidKnightMove(startPos, endPos); break;
@@ -63,211 +48,73 @@ const GameScreen = () => {
     }
     let newBoardState = currBoardState.map(innerBS => [...innerBS])
     if (validMove) {
-      //let newBoardState = JSON.parse(JSON.stringify(currBoardState)) //this does deep copy hopefully
-      if (currBoardState[endPos[0]][endPos[1]] === null ) {
-        newBoardState[startPos[0]][startPos[1]] = null
-        newBoardState[endPos[0]][endPos[1]] = [...piece]
-      }
-      else {
-        //rules for health points
-        if (currBoardState[endPos[0]][endPos[1]] !== null ) { //there is a piece there
-          let finalPiece = [...currBoardState[endPos[0]][endPos[1]]]
-          if (finalPiece[0][0] !== piece[0][0]) {
-            if (piece[1] >= finalPiece[2]) {
-              newBoardState[startPos[0]][startPos[1]] = null
-              piece[2] = piece[2] + parseInt(finalPiece[2]/2)
-              newBoardState[endPos[0]][endPos[1]] = [...piece]
-            }
-            else {
-              finalPiece[2] = finalPiece[2] - piece[1]
-              newBoardState[endPos[0]][endPos[1]] = [...finalPiece]
-            }
-          }
-        }
-      }
+      newBoardState = playMoves(startPos, endPos)
       newBoardState = checkForChecks(whiteKing, newBoardState)
       newBoardState = checkForChecks(blackKing, newBoardState)
       setCurrBoardState(newBoardState)
+      if (gameOver()) {
+        return;
+      }
+    }
+
+    newBoardState = makeRandomBlackMoves(newBoardState)
+    newBoardState = checkForChecks(whiteKing, newBoardState)
+    newBoardState = checkForChecks(blackKing, newBoardState)
+    setCurrBoardState(newBoardState)
+    if (gameOver()) {
+      return;
     }
   };
 
+  const gameOver = () => {
+    if (currBoardState[whiteKing[0]][whiteKing[1]][2] <= 0) {
+      setWinner('The computer won this board!')
+      return true
+    }
+    if (currBoardState[blackKing[0]][blackKing[1]][2] <= 0) {
+      setWinner('The user won this board!')
+      return true
+    }  
+    return false
+  }
+
   const checkForChecks = (king_pos, newBoardState) => {
-    //check 8 directions + knights locations
-    //straight up (-1, 0) --> goes from row 0 to (row of king-1)
-    let piece = currBoardState[king_pos[0]][king_pos[1]]
+    let piece = newBoardState[king_pos[0]][king_pos[1]]
     let myColor = piece[0]
-    let row = king_pos[0]-1
-    let col = king_pos[1]
-    while (row >= 0) {
-      if (currBoardState[row][col] !== null) {
-        //queen, rook, pawn
-        if (currBoardState[row][col][0][0] == myColor) {
-          break;
-        }
-        else {
-          if (currBoardState[row][col][0][1] == 'q' ||
-            currBoardState[row][col][0][1] == 'r') {
-              newBoardState[king_pos[0]][king_pos[1]][2] -=  currBoardState[row][col][1]
+    let oppColor = myColor == 'w' ? 'b' : 'w'
+    for (let row = 0; row < 8; row++) {
+      for (let col = 0; col < 8; col++) {
+        if (newBoardState[row][col] !== null && newBoardState[row][col][0][0] == oppColor) {
+          if (newBoardState[row][col][0][1] == 'q' && isValidQueenMove([row, col], king_pos)) {
+            newBoardState[king_pos[0]][king_pos[1]][0][2] -= currBoardState[row][col][1]
+          }
+          else if (newBoardState[row][col][0][1] == 'k' && isValidKnightMove([row, col], king_pos)) {
+            newBoardState[king_pos[0]][king_pos[1]][0][2] -= currBoardState[row][col][1]
+          }
+          else if (newBoardState[row][col][0][1] == 'b' && isValidBishopMove([row, col], king_pos)) {
+            newBoardState[king_pos[0]][king_pos[1]][0][2] -= currBoardState[row][col][1]
+          }
+          else if (newBoardState[row][col][0][1] == 'r' && isValidRookMove([row, col], king_pos)) {
+            newBoardState[king_pos[0]][king_pos[1]][0][2] -= currBoardState[row][col][1]
+          }
+          else if (newBoardState[row][col][0][1] == 'p') {
+            if (newBoardState[row][col][0][0] == 'w') { //white piece
+              if ((row-king_pos[0]) == 1 && ((col-king_pos[1]) == 1 || (col-king_pos[1]) == -1)) {
+                newBoardState[king_pos[0]][king_pos[1]][0][2] -= currBoardState[row][col][1]
+              }
             }
+            else { // black piece
+              if ((row-king_pos[0]) == -1 && ((col-king_pos[1]) == 1 || (col-king_pos[1]) == -1)) {
+                newBoardState[king_pos[0]][king_pos[1]][0][2] -= currBoardState[row][col][1]
+              }
+            }
+          }
+          else {}
         }
       }
-      row = row - 1
-    }
-    //straight down (1, 0) --> goes from (row of king+1) to row 7
-    row = king_pos[0]+1
-    col = king_pos[1]
-    while (row <= 7) {
-      if (currBoardState[row][col] !== null) {
-        //queen, rook, pawn
-        if (currBoardState[row][col][0][0] == myColor) {
-          break;
-        }
-        else {
-          if (currBoardState[row][col][0][1] == 'q' ||
-            currBoardState[row][col][0][1] == 'r') {
-              newBoardState[king_pos[0]][king_pos[1]][2] -=  currBoardState[row][col][1]
-            }
-        }
-      }
-      row = row + 1
-    }
-    //straight right (0, 1) --> goes from (col of king+1) to col 7
-    row = king_pos[0]
-    col = king_pos[1]+1
-    while (col <= 7) {
-      if (currBoardState[row][col] !== null) {
-        //queen, rook
-        if (currBoardState[row][col][0][0] == myColor) {
-          break;
-        }
-        else {
-          if (currBoardState[row][col][0][1] == 'q' ||
-            currBoardState[row][col][0][1] == 'r') {
-              newBoardState[king_pos[0]][king_pos[1]][2] -=  currBoardState[row][col][1]
-            }
-        }
-      }
-      col = col + 1
-    }
-    //straight left (0, -1) --> goes from (col of king-1) to col 0
-    row = king_pos[0]
-    col = king_pos[1]-1
-    while (col >= 0) {
-      if (currBoardState[row][col] !== null) {
-        //queen, rook
-        if (currBoardState[row][col][0][0] == myColor) {
-          break;
-        }
-        else {
-          if (currBoardState[row][col][0][1] == 'q' ||
-            currBoardState[row][col][0][1] == 'r') {
-              newBoardState[king_pos[0]][king_pos[1]][2] -=  currBoardState[row][col][1]
-            }
-        }
-      }
-      col = col - 1
-    }
-    // diagonal upright (-1, 1)
-    row = king_pos[0]-1
-    col = king_pos[1]+1
-    while (row  >= 0 && col <= 7) {
-      if (currBoardState[row][col] !== null) {
-        //queen, bishop
-        if (currBoardState[row][col][0][0] == myColor) {
-          break;
-        }
-        else {
-          if (currBoardState[row][col][0][1] == 'q' ||
-            currBoardState[row][col][0][1] == 'b' ||
-            (currBoarddtate[row][col][0][1] == 'p' && myColor == 'w' && Math.abs(king_pos[0]-row) == 1)) {
-              newBoardState[king_pos[0]][king_pos[1]][2] -=  currBoardState[row][col][1]
-            }
-        }
-      }
-      row = row - 1
-      col = col + 1
     }
 
-    // diagonal upleft (-1, -1)
-
-    row = king_pos[0]-1
-    col = king_pos[1]-1
-    while (row  >= 0 && col >= 0) {
-      if (currBoardState[row][col] !== null) {
-        //queen, bishop
-        if (currBoardState[row][col][0][0] == myColor) {
-          break;
-        }
-        else {
-          if (currBoardState[row][col][0][1] == 'q' ||
-            currBoardState[row][col][0][1] == 'b' ||
-            (currBoarddtate[row][col][0][1] == 'p' && myColor == 'w' && Math.abs(king_pos[0]-row) == 1)) {
-              newBoardState[king_pos[0]][king_pos[1]][2] -=  currBoardState[row][col][1]
-            }
-        }
-      }
-      row = row - 1
-      col = col - 1
-    }
-
-    // diagonal downright (1, 1)
-
-    row = king_pos[0]+1
-    col = king_pos[1]+1
-    while (row <= 7 && col <= 7) {
-      if (currBoardState[row][col] !== null) {
-        //queen, bishop
-        if (currBoardState[row][col][0][0] == myColor) {
-          break;
-        }
-        else {
-          if (currBoardState[row][col][0][1] == 'q' ||
-            currBoardState[row][col][0][1] == 'b' ||
-            (currBoardState[row][col][0][1] == 'p' && myColor == 'b' && Math.abs(king_pos[0]-row) == 1)) {
-              newBoardState[king_pos[0]][king_pos[1]][2] -=  currBoardState[row][col][1]
-            }
-        }
-      }
-      row = row + 1
-      col = col + 1
-    }
-
-    // diagonal downleft (1, -1)
-
-    row = king_pos[0]+1
-    col = king_pos[1]-1
-    while (row <= 7 && col >= 0) {
-      if (currBoardState[row][col] !== null) {
-        //queen, bishop
-        if (currBoardState[row][col][0][0] == myColor) {
-          break;
-        }
-        else {
-          if (currBoardState[row][col][0][1] == 'q' ||
-            currBoardState[row][col][0][1] == 'b' ||
-            (currBoardState[row][col][0][1] == 'p' && myColor == 'b' && Math.abs(king_pos[0]-row) == 1)) {
-              newBoardState[king_pos[0]][king_pos[1]][2] -=  currBoardState[row][col][1]
-            }
-        }
-      }
-      row = row + 1
-      col = col - 1
-    }
-
-    // handle knights behavior
-    row = king_pos[0]
-    col = king_pos[1]
-    let possible_dirs = [[1, 2], [2, 1], [1, -2], [2, -1], [-1, 2], [-2, 1], [-2, -1], [-1, -2]]
-    for (let i = 0; i < possible_dirs.length; i++) {
-      let position = [row + possible_dirs[i][0], col + possible_dirs[i][1]]
-      if (position[0] >= 0 && position[0] <= 7 && position[1] >= 0 && posiion[1] <= 7) {
-        if (currBoardState[position[0]][position[1]][0][0] != myColor) {
-          newBoardState[king_pos[0]][king_pos[1]][2] -=  currBoardState[position[0]][position[1]][1]
-        }
-      }
-    }
-    // UNSURE IF WE NEED THIS, WE WILL CHECK LATER
-    // setCurrBoardState(newBoardState) 
+    return newBoardState
   }
 
   const isValidWhitePawnMove = (start, end) => {
@@ -371,41 +218,42 @@ const GameScreen = () => {
   }
 
   const isValidRookMove = (start, end) => {
+    let delta = [end[0]-start[0], end[1]-start[1]]
     console.log("this method runs")
     console.log("start: ", start)
     console.log("end: ", end)
-    let delta = [end[0]-start[0], end[1]-start[1]]
-    let possible_dirs = [[1, 0], [-1, 0]]
+    console.log(delta)
     //check boundary conditions:
     if (end[0] < 0 || end[0] > 7 || end[1] < 0 || end[1] > 7) {
       return false
     }
-    if (delta[1] != 0) {
-      return false
+    if (delta[0] == 0 && delta[1] == 0) {
+      return true
     }
-    let mod_start = 0
-    let mod_end = 0
-    if (start[0] < end[0]) {
-      mod_start = start[0]
-      mod_end = end[0]
-      console.log("option 1")
-    }
-    else {
-      mod_start = end[0]
-      mod_end = start[0]
-      console.log("option 2")
-      console.log("mode_start: ", mod_start)
-      console.log("mode_end: ", mod_end)
-    }
-
-    for (let i = mod_start+1; i < mod_end; i++) {
-      console.log("CBS:" , currBoardState[i][start[1]])
-      if (currBoardState[i][start[1]] !== null) {
-        console.log("FALSE RETURNED")
-        return false
+    let delta_constant = delta[0] == 0 ? delta[1]: delta[0]
+    delta_constant = Math.abs(delta_constant)
+    let new_delta = [delta[0]/delta_constant, delta[1]/delta_constant]
+    //check if new_delta is even in the list of possible directions
+    let validDirection = false
+    for (let i = 0; i < ROOK_DIRECTIONS.length; i++) {
+      if (new_delta[0] == ROOK_DIRECTIONS[i][0] && new_delta[1] == ROOK_DIRECTIONS[i][1]) {
+        validDirection = true
       }
     }
+    let new_start = [start[0]+new_delta[0], start[1]+new_delta[1]]
+    if (validDirection) {
+      while ((new_start[0] != end[0]) || (new_start[1] != end[1])) {
+        if (currBoardState[new_start[0]][new_start[1]] !== null) {
+          console.log("FALSE RETURNED")
+          return false
+        }
+        new_start = [new_start[0]+new_delta[0], new_start[1]+new_delta[1]]
+      }
+      console.log("TRUE RETURNED")
       return true
+    }
+    console.log("FALSE RETURNED")
+    return false
   }
 
   const isValidBishopMove = (start, end) => {
@@ -427,14 +275,14 @@ const GameScreen = () => {
     let new_delta = [delta[0]/delta_constant, delta[1]/delta_constant]
     //check if new_delta is even in the list of possible directions
     console.log("new delta: ", new_delta)
-    for (let i = 0; i < possible_dirs.length; i++) {
-      if (new_delta[0] == possible_dirs[i][0] && new_delta[1] == possible_dirs[i][1]) {
+    for (let i = 0; i < BISHOP_DIRECTIONS.length; i++) {
+      if (new_delta[0] == BISHOP_DIRECTIONS[i][0] && new_delta[1] == BISHOP_DIRECTIONS[i][1]) {
         validDirection = true
       }
     }
     let new_start = [start[0]+new_delta[0], start[1]+new_delta[1]]
     if (validDirection) {
-      while (new_start[0] != end[0]) {
+      while ((new_start[0] != end[0] )|| (new_start[1] != end[1])) {
         if (currBoardState[new_start[0]][new_start[1]] !== null) {
           console.log("FALSE RETURNED")
           return false
@@ -451,7 +299,6 @@ const GameScreen = () => {
 
   const isValidQueenMove = (start, end) => {
     let delta = [end[0]-start[0], end[1]-start[1]]
-    let possible_dirs = [[1, 1], [1, 0], [1, -1], [0, 1], [0, -1], [-1, 1], [-1, 0], [-1, -1]]
     console.log("this method runs")
     console.log("start: ", start)
     console.log("end: ", end)
@@ -468,14 +315,14 @@ const GameScreen = () => {
     let new_delta = [delta[0]/delta_constant, delta[1]/delta_constant]
     //check if new_delta is even in the list of possible directions
     let validDirection = false
-    for (let i = 0; i < possible_dirs.length; i++) {
-      if (new_delta[0] == possible_dirs[i][0] && new_delta[1] == possible_dirs[i][1]) {
+    for (let i = 0; i < QUEEN_DIRECTIONS.length; i++) {
+      if (new_delta[0] == QUEEN_DIRECTIONS[i][0] && new_delta[1] == QUEEN_DIRECTIONS[i][1]) {
         validDirection = true
       }
     }
     let new_start = [start[0]+new_delta[0], start[1]+new_delta[1]]
     if (validDirection) {
-      while (new_start[0] != end[0]) {
+      while ((new_start[0] != end[0]) || (new_start[1] != end[1])) {
         if (currBoardState[new_start[0]][new_start[1]] !== null) {
           console.log("FALSE RETURNED")
           return false
@@ -491,7 +338,6 @@ const GameScreen = () => {
 
   const isValidKingMove = (start, end) => {
     let delta = [end[0]-start[0], end[1]-start[1]]
-    let possible_dirs = [[1, 1], [1, 0], [1, -1], [0, 1], [0, -1], [-1, 1], [-1, 0], [-1, -1]]
     console.log("this method runs")
     console.log("start: ", start)
     console.log("end: ", end)
@@ -525,60 +371,220 @@ const GameScreen = () => {
     return [parseInt(val/8),val%8]
   }
 
-  const makeRandomBlackMoves = () => {
-    //randomize which piece
-    //randomize direction
-    //randomize how many spaces it moves
-    let locations = listBlackPieceLocations()
-    let randomIndex = Math.floor(Math.random() * array.length)
-    let randomLocation = locations[randomIndex]
+  const makeRandomBlackMoves = (newBoardState) => {
+    let locations = listBlackPieceLocations(newBoardState)
+    randomOrderLocations = shuffleArray(locations)
+    for (let i = 0; i < locations.length; i++) {
+      let moves = findPossibleMoves(locations[0], newBoardState)
+      if (moves.length != 0) {
+        const randomIndex = Math.floor(Math.random() * moves.length);
+        const randomMove = array[randomIndex];
+        playMoves(locations[0], randomMove)
+        return newBoardState;
+      }
+    }
+    return newBoardState;
   }
 
-  const findPossibleMoves = (start) => {
-    let piece = currBoardState[startPos[0]][startPos[1]]
-    let pieceColor = piece[0][0]
+  const playMoves = (startPos, endPos, newBoardState) => {
+    if (currBoardState[endPos[0]][endPos[1]] === null ) {
+      newBoardState[startPos[0]][startPos[1]] = null
+      newBoardState[endPos[0]][endPos[1]] = [...piece]
+    }
+    else {
+      if (currBoardState[endPos[0]][endPos[1]] !== null ) { //there is a piece there
+        let piece = [...currBoardState[startPos[0]][startPos[1]]]
+        let finalPiece = [...currBoardState[endPos[0]][endPos[1]]]
+        if (finalPiece[0][0] !== piece[0][0]) {
+          if (piece[1] >= finalPiece[2]) {
+            newBoardState[startPos[0]][startPos[1]] = null
+            piece[2] = piece[2] + parseInt(finalPiece[2]/2)
+            newBoardState[endPos[0]][endPos[1]] = [...piece]
+            if (piece == 'bk') {
+              setBlackKing([endPos[0], endPos[1]])
+            }
+            if (piece == 'wk') {
+              setWhiteKing([endPos[0], endPos[1]])
+            }          
+          } else {
+            finalPiece[2] = finalPiece[2] - piece[1]
+            newBoardState[endPos[0]][endPos[1]] = [...finalPiece]
+          }
+        }
+      }
+    }
+    return newBoardState
+  }
+
+  function shuffleArray(array) {
+    // Make a copy of the original array
+    const shuffledArray = array.slice();
+    
+    // Fisher-Yates shuffle algorithm
+    for (let i = shuffledArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+    }
+    
+    return shuffledArray;
+  }
+
+  const findPossibleMoves = (start, newBoardState) => {
+    let piece = newBoardState[start[0]][start[1]] // locations from method above
     let pieceType = piece[0][1]
-    let validMove = false
+    let moves = []
     switch (pieceType) {
-      case 'r': validMove = isValidRookMove(startPos, endPos); break;
-      case 'n': validMove = isValidKnightMove(startPos, endPos); break;
-      case 'b': validMove = isValidBishopMove(startPos, endPos); break;
-      case 'q': validMove = isValidQueenMove(startPos, endPos); break;
-      case 'k': validMove = isValidKingMove(startPos, endPos); break;
-      case 'p': validMove = isValidWhitePawnMove(startPos, endPos); break; //may have to redo for black pieces
+      case 'r': moves = findPossibleRookMoves(start, newBoardState); break;
+      case 'n': moves = findPossibleKnightMoves(start, newBoardState); break;
+      case 'b': moves = findPossibleBishopMoves(start, newBoardState); break;
+      case 'q': moves = findPossibleQueenMoves(start, newBoardState); break;
+      case 'k': moves = findPossibleKingMoves(start, newBoardState); break;
+      case 'p': moves = findPossibleBlackPawnMoves(start, newBoardState); break; //may have to redo for black pieces
     }
   }
 
-  const findPossibleBlackPawnMoves = (start) => {
-    
+  const findPossibleBlackPawnMoves = (start, newBoardState) => {
+    let moves = []
+    let row = start[0]
+    let col = start[1]
+
+    if (row == 1 && newBoardState[row+1][col] === null && newBoardState[row+2][col] === null) {
+      moves.concat([row+1, col])
+      moves.concat([row+2, col])
+    }
+    else if (row < 7 && newBoardState[row+1][col] === null) {
+      moves.concat([row+1, col])
+    }
+    else {
+      if (row < 7 && col > 0 && newBoardState[row+1][col-1] === null && newBoardState[row+1][col-1][0][0] === 'w') {
+        moves.concat([row+1, col-1])
+      }
+      else if (row < 7 && col < 7 && newBoardState[row+1][col+1] === null && newBoardState[row+1][col-1][0][0] === 'w') {
+        moves.concat([row+1, col+1])
+      }
+    }
+    return moves
   }
 
-  const findPossibleRookMoves = (start) => {
+  const findPossibleRookMoves = (start, newBoardState) => {
+    let moves = []
+    let row = start[0]
+    let col = start[1]
 
-
+    for (let i = 0; i < ROOK_DIRECTIONS.length; i++) {
+      row = row + ROOK_DIRECTIONS[i][0]
+      col = col + ROOK_DIRECTIONS[i][1]
+      while ( row >= 0) {
+        if (currBoardState[row][col] === null) {
+          moves.concat([row, col])
+        }
+        else if (currBoardState[row][col][0][0] == 'w') {
+          moves.concat([row, col])
+          break;
+        }
+        else {
+          break;
+        }
+        row = row + ROOK_DIRECTIONS[i][0]
+        col = col + ROOK_DIRECTIONS[i][1]
+      }
+      row = start[0]
+      col = start[1]
+    }    
   }
 
-  const findPossibleKnightMoves = (start) => {
-
-
+  const findPossibleKnightMoves = (start, newBoardState) => {
+    let moves = []
+    let row = start[0]
+    let col = start[1]
+    for (let i = 0; i < KNIGHT_DIRECTIONS; i++) {
+      let newLoc = [row + KNIGHT_DIRECTIONS[i][0], col + KNIGHT_DIRECTIONS[i][1]]
+      if (validLocation(newLoc)) {
+        if (newBoardState[newLoc[0]][newLoc[1]] === null || newBoardState[newLoc[0]][newLoc[1]][0][0] === 'w') {
+          moves.concat(newLoc)
+        }
+      }
+    }
+    return moves
   }
 
-  const findPossibleBishopMoves = (start) => {
+  const findPossibleBishopMoves = (start, newBoardState) => {
+    let moves = []
+    let row = start[0]
+    let col = start[1]
 
-
+    for (let i = 0; i < BISHOP_DIRECTIONS.length; i++) {
+      row = row + BISHOP_DIRECTIONS[i][0]
+      col = col + BISHOP_DIRECTIONS[i][1]
+      while ( row >= 0) {
+        if (currBoardState[row][col] === null) {
+          moves.concat([row, col])
+        }
+        else if (currBoardState[row][col][0][0] == 'w') {
+          moves.concat([row, col])
+          break;
+        }
+        else {
+          break;
+        }
+        row = row + BISHOP_DIRECTIONS[i][0]
+        col = col + BISHOP_DIRECTIONS[i][1]
+      }
+      row = start[0]
+      col = start[1]
+    }
   }
 
-  const findPossibleQueenMoves = (start) => {
+  const findPossibleQueenMoves = (start, newBoardState) => {
+    let moves = []
+    let row = start[0]
+    let col = start[1]
 
-
+    for (let i = 0; i < QUEEN_DIRECTIONS.length; i++) {
+      row = row + QUEEN_DIRECTIONS[i][0]
+      col = col + QUEEN_DIRECTIONS[i][1]
+      while ( row >= 0) {
+        if (currBoardState[row][col] === null) {
+          moves.concat([row, col])
+        }
+        else if (currBoardState[row][col][0][0] == 'w') {
+          moves.concat([row, col])
+          break;
+        }
+        else {
+          break;
+        }
+        row = row + QUEEN_DIRECTIONS[i][0]
+        col = col + QUEEN_DIRECTIONS[i][1]
+      }
+      row = start[0]
+      col = start[1]
+    }
   }
 
-  const findPossibleKingMoves = (start) => {
-
-
+  const findPossibleKingMoves = (start, newBoardState) => {
+    let moves = []
+    let row = start[0]
+    let col = start[1]
+    for (let i = 0; i < KING_DIRECTIONS; i++) {
+      let newLoc = [row + KING_DIRECTIONS[i][0], col + KING_DIRECTIONS[i][1]]
+      if (validLocation(newLoc)) {
+        if (newBoardState[newLoc[0]][newLoc[1]] === null || newBoardState[newLoc[0]][newLoc[1]][0][0] === 'w') {
+          moves.concat(newLoc)
+        }
+      }
+    }
+    return moves
   }
 
-
+  const validLocation = (location) => {
+    let row = location[0]
+    let col = location[1]
+    if (row >= 0 && row <= 7 && col >= 0 && col <= 0) {
+      return true
+    }
+    return false
+  }
 
   const listBlackPieceLocations = () => {
     let locations = []
@@ -644,6 +650,5 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
 });
-
 
 export default GameScreen;
