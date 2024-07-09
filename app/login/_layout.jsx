@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, AppState} from 'react-native';
 import * as React from 'react';
 import { useState, useEffect } from 'react'
-import { supabase } from "../App";
+import { supabase } from "../_layout";
 import { useNavigation } from "@react-navigation/native";
  
   export default function Login(){

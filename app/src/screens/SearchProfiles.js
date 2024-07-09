@@ -3,7 +3,7 @@ import { DataTable, Card, Button } from 'react-native-paper';
 import { useState, useEffect } from 'react'
 import { SafeAreaView, TextInput, View, StyleSheet, ScrollView, Text, Image, Pressable} from "react-native";
 import filter from "lodash.filter"
-import { supabase } from '../../App';
+import { supabase } from '../../_layout';
 import { TouchableOpacity } from 'react-native-web';
 import CustomHeader from '../components/CustomHeader';
 

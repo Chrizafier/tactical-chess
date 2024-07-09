@@ -3,7 +3,7 @@ import { FlatList, Text, View, Image, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-web';
 import { HorizontalLayout } from 'react-vaadin-components';
 import CustomHeader from '../components/CustomHeader';
-import { supabase } from '../../App';
+import { supabase } from '../../_layout';
 
 // export default function AppLayout() {
 //   const [userEmail, setUserEmail] = useState('');

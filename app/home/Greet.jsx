@@ -2,7 +2,7 @@
 import { useRouter } from 'expo-router'
 import { useState, useEffect } from 'react'
 import { Button, Card } from 'react-native-paper'
-import { supabase } from '../App'
+import { supabase } from '../_layout'
 
 export default function Greet() {
   const router = useRouter()

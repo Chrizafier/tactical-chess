@@ -27,7 +27,7 @@ import { Image, View, TouchableOpacity, Text, StyleSheet, Alert } from 'react-na
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { decode } from 'base64-arraybuffer';
-import { supabase } from '../../App';
+import { supabase } from '../../_layout';
 import CustomHeader from '../components/CustomHeader';
 
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import UploadProfilePic from './ProfilePic';
-import { supabase } from '../App';
+import { supabase } from '../_layout';
 
 // resource used: https://www.rnexamples.com/react-native-examples/b6/Simple-edit-profile-view
 

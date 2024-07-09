@@ -11,6 +11,11 @@ import ProfileSettingsScreen from './user_settings/_layout';
 import NotificationsScreen from './working_notifications/_layout';
 import SignOutScreen from './signout/_layout';
 
+export const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL
+export const supabaseKey = process.env.EXPO_PUBLIC_SUPABASE_KEY
+export const supabase = createClient(supabaseUrl, supabaseKey)
+const Stack = createStackNavigator();
+
 const Drawer = createDrawerNavigator();
 
 export default function AppLayout() {

@@ -1,9 +1,9 @@
 import { useRouter } from "expo-router";
-// import { StatusBar } from "expo-status-bar";
+import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, AppState} from 'react-native';
 import * as React from 'react';
 import { useState, useEffect } from 'react'
-import { supabase } from '../../App';
+import { supabase } from '../../_layout';
   
   export default function Login(){
     const router = useRouter();

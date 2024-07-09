@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, SafeAreaView } from "react-native";
 import * as React from 'react';
 import { useState, useEffect } from 'react'
 import { Button } from 'react-native-paper';
-import { supabase } from "../App";
+import { supabase } from "../_layout";
 import { ScrollView, TouchableOpacity } from "react-native-web";
 
 export default function NotificationsScreen() {

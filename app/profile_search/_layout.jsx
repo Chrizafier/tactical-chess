@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import { SafeAreaView, TextInput, View, StyleSheet, ScrollView, Text, Image, Pressable} from "react-native";
 import filter from "lodash.filter"
 import { HorizontalLayout } from "react-vaadin-components";
-import { supabase } from "../App";
+import { supabase } from "../_layout";
 import { TouchableOpacity } from 'react-native-web';
 
 

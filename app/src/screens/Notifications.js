@@ -3,7 +3,7 @@ import { FlatList, View, Text, StyleSheet } from "react-native";
 import * as React from 'react';
 import { useState, useEffect } from 'react'
 import { Card, Button } from 'react-native-paper';
-import { supabase } from '../../App';
+import { supabase } from '../../_layout';
 import { ScrollView, TouchableOpacity } from "react-native-web";
 import filter from "lodash.filter"
 import CustomHeader from '../components/CustomHeader';
