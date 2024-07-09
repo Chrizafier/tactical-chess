@@ -15,7 +15,9 @@ export default function ActiveStatusBar() {
         const { data, error } = await supabase.auth.getUser()
         console.log("user data: ", data)
         setUserEmail(data.user.user_metadata.email)
-      } catch {error}
+      } catch (error) {
+        
+      }
     }
     getProfile()
     findActiveFriends()

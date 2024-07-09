@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import HomeScreen from './home/index'; // Import your screen components
-import GameScreen from './game/index';
+import GameScreen from './game/_layout';
 import UserScreen from './user_settings/_layout';
 import LoginScreen from './login/_layout';
 import SignUpScreen from './signup/_layout';
