@@ -55,7 +55,7 @@ const Chessboard = ({boardState}) => {
 
   return (
     <>
-    <HorizontalLayout style={styles.horLabel}>
+    {/* <HorizontalLayout style={styles.horLabel}>
       <View style={styles.label}>A</View>
       <View style={styles.label}>B</View>
       <View style={styles.label}>C</View>
@@ -64,11 +64,11 @@ const Chessboard = ({boardState}) => {
       <View style={styles.label}>F</View>
       <View style={styles.label}>G</View>
       <View style={styles.label}>H</View>
-    </HorizontalLayout>
+    </HorizontalLayout> */}
     <View style={styles.board}>
       {renderSquares()}
     </View>
-    <HorizontalLayout style={styles.horLabel}>
+    {/* <HorizontalLayout style={styles.horLabel}>
     <View style={styles.label}>A</View>
     <View style={styles.label}>B</View>
     <View style={styles.label}>C</View>
@@ -77,7 +77,7 @@ const Chessboard = ({boardState}) => {
     <View style={styles.label}>F</View>
     <View style={styles.label}>G</View>
     <View style={styles.label}>H</View>
-  </HorizontalLayout>
+  </HorizontalLayout> */}
   </>
   );
 };

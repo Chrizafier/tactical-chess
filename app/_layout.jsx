@@ -17,8 +17,9 @@ export default function AppLayout() {
   return (
     <NavigationContainer independent={true}>
         <Drawer.Navigator>
+        <Drawer.Screen name="Game" component={GameScreen} />
             <Drawer.Screen name="Home" component={HomeScreen} />
-            <Drawer.Screen name="Game" component={GameScreen} />
+            
             <Drawer.Screen name="User" component={UserScreen} />
             <Drawer.Screen name="Login" component={LoginScreen} />
             <Drawer.Screen name='Sign Up' component={SignUpScreen} />

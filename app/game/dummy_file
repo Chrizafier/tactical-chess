@@ -176,3 +176,45 @@
     // }
     // // UNSURE IF WE NEED THIS, WE WILL CHECK LATER
     // // setCurrBoardState(newBoardState) 
+
+
+
+    
+  const isValidBlackPawnMove = (start, end) => {
+    let delta = [end[0]-start[0], end[1]-start[1]]
+    let possible_dirs = [[1, 0], [2, 0], [1, 1], [1, -1]]
+    //let possible_dirs = [[1, 0], [1, 1], [1, -1]]
+    console.log("this method runs")
+    console.log("start: ", start)
+    console.log("end: ", end)
+    console.log(delta)
+    //check boundary conditions:
+    if (end[0] < 0 || end[0] > 7 || end[1] < 0 || end[1] > 7) {
+      console.log("FALSE RETURNED")
+      return false
+    }
+    let validDirection = false
+    for (let i = 0; i < possible_dirs.length; i++) {
+      if (delta[0] == possible_dirs[i][0] && delta[1] == possible_dirs[i][1]) {
+        validDirection = true
+      }
+    }
+    if (!validDirection) {
+      console.log("FALSE RETURNED")
+      return false
+    }
+    if (start[0] != 1 && (delta[0] == 2)) { //has moved
+      console.log("FALSE RETURNED")
+      return false
+    }
+    if (delta[0] == 1 && delta[1] == 1 && currBoardState[start[0]+1][start[1]+1] === null) {
+      console.log("FALSE RETURNED")
+      return false
+    }
+    if (delta[0] == 1 && delta[1] == -1 && currBoardState[start[0]+1][start[1]-1] === null) {
+      console.log("FALSE RETURNED")
+      return false
+    }
+    console.log("TRUE RETURNED")
+    return true
+  }

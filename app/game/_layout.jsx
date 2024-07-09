@@ -9,7 +9,7 @@ const BISHOP_DIRECTIONS = [[1, 1], [1, -1], [-1, 1], [-1, -1]]
 const ROOK_DIRECTIONS = [[1, 0], [-1, 0], [0, 1], [0, -1]]
 const KNIGHT_DIRECTIONS = [[1, 2], [2, 1], [1, -2], [2, -1], [-1, 2], [-2, 1], [-2, -1], [-1, -2]]
 const PAWN_DIRECTIONS = [[-1, 0], [-2, 0], [-1, 1], [-1, -1]]
-
+var newBoardState = []
 const GameScreen = () => {
   const [whiteKing, setWhiteKing] = useState([7,4])
   const [blackKing, setBlackKing] = useState([0,4])
@@ -29,7 +29,8 @@ const GameScreen = () => {
     ]
   )
 
-  const handleSubmit = () => {
+
+  const handleSubmit = async () => {
     console.log(`Move from ${startPosition} to ${endPosition}`);
     //implement health points logic
     let startPos = convertSymbolToPair(startPosition)
@@ -46,20 +47,21 @@ const GameScreen = () => {
       case 'k': validMove = isValidKingMove(startPos, endPos); break;
       case 'p': validMove = isValidWhitePawnMove(startPos, endPos); break; //may have to redo for black pieces
     }
-    let newBoardState = currBoardState.map(innerBS => [...innerBS])
+    newBoardState = currBoardState.map(innerBS => [...innerBS])
     if (validMove) {
-      newBoardState = playMoves(startPos, endPos)
-      newBoardState = checkForChecks(whiteKing, newBoardState)
-      newBoardState = checkForChecks(blackKing, newBoardState)
+      //console.log("newBoardState: ", newBoardState)
+      playMoves(startPos, endPos)
+      checkForChecks(whiteKing, newBoardState)
+      checkForChecks(blackKing, newBoardState)
       setCurrBoardState(newBoardState)
       if (gameOver()) {
         return;
       }
     }
 
-    newBoardState = makeRandomBlackMoves(newBoardState)
-    newBoardState = checkForChecks(whiteKing, newBoardState)
-    newBoardState = checkForChecks(blackKing, newBoardState)
+    makeRandomBlackMoves(newBoardState)
+    checkForChecks(whiteKing, newBoardState)
+    checkForChecks(blackKing, newBoardState)
     setCurrBoardState(newBoardState)
     if (gameOver()) {
       return;
@@ -78,7 +80,8 @@ const GameScreen = () => {
     return false
   }
 
-  const checkForChecks = (king_pos, newBoardState) => {
+  const checkForChecks = (king_pos) => {
+    console.log("king_pos: ", king_pos)
     let piece = newBoardState[king_pos[0]][king_pos[1]]
     let myColor = piece[0]
     let oppColor = myColor == 'w' ? 'b' : 'w'
@@ -113,21 +116,19 @@ const GameScreen = () => {
         }
       }
     }
-
-    return newBoardState
   }
 
   const isValidWhitePawnMove = (start, end) => {
     let delta = [end[0]-start[0], end[1]-start[1]]
     let possible_dirs = [[-1, 0], [-2, 0], [-1, 1], [-1, -1]]
     //let possible_dirs = [[-1, 0], [-1, 1], [-1, -1]]
-    console.log("this method runs")
-    console.log("start: ", start)
-    console.log("end: ", end)
-    console.log(delta)
+    // console.log("this method runs")
+    // console.log("start: ", start)
+    // console.log("end: ", end)
+    // console.log(delta)
     //check boundary conditions:
     if (end[0] < 0 || end[0] > 7 || end[1] < 0 || end[1] > 7) {
-      console.log("FALSE RETURNED 1")
+      // console.log("FALSE RETURNED 1")
       return false
     }
     let validDirection = false
@@ -137,92 +138,53 @@ const GameScreen = () => {
       }
     }
     if (!validDirection) {
-      console.log("FALSE RETURNED 2")
+      // console.log("FALSE RETURNED 2")
       return false
     }
     if (start[0] != 6 && (delta[0] == -2)) { //has moved
-      console.log("FALSE RETURNED 3")
+      // console.log("FALSE RETURNED 3")
       return false
     }
     if (delta[0] == -1 && delta[1] == 1 && currBoardState[start[0]-1][start[1]+1] === null) {
-      console.log("FALSE RETURNED 4")
+      // console.log("FALSE RETURNED 4")
       return false
     }
     if (delta[0] == -1 && delta[1] == -1 && currBoardState[start[0]-1][start[1]-1] === null) {
-      console.log("FALSE RETURNED 5")
+      // console.log("FALSE RETURNED 5")
       return false
     }
-    console.log("TRUE RETURNED")
-    return true
-  }
-
-  const isValidBlackPawnMove = (start, end) => {
-    let delta = [end[0]-start[0], end[1]-start[1]]
-    let possible_dirs = [[1, 0], [2, 0], [1, 1], [1, -1]]
-    //let possible_dirs = [[1, 0], [1, 1], [1, -1]]
-    console.log("this method runs")
-    console.log("start: ", start)
-    console.log("end: ", end)
-    console.log(delta)
-    //check boundary conditions:
-    if (end[0] < 0 || end[0] > 7 || end[1] < 0 || end[1] > 7) {
-      console.log("FALSE RETURNED")
-      return false
-    }
-    let validDirection = false
-    for (let i = 0; i < possible_dirs.length; i++) {
-      if (delta[0] == possible_dirs[i][0] && delta[1] == possible_dirs[i][1]) {
-        validDirection = true
-      }
-    }
-    if (!validDirection) {
-      console.log("FALSE RETURNED")
-      return false
-    }
-    if (start[0] != 1 && (delta[0] == 2)) { //has moved
-      console.log("FALSE RETURNED")
-      return false
-    }
-    if (delta[0] == 1 && delta[1] == 1 && currBoardState[start[0]+1][start[1]+1] === null) {
-      console.log("FALSE RETURNED")
-      return false
-    }
-    if (delta[0] == 1 && delta[1] == -1 && currBoardState[start[0]+1][start[1]-1] === null) {
-      console.log("FALSE RETURNED")
-      return false
-    }
-    console.log("TRUE RETURNED")
+    // console.log("TRUE RETURNED")
     return true
   }
 
   const isValidKnightMove = (start, end) => {
     let delta = [end[0]-start[0], end[1]-start[1]]
     let possible_dirs = [[1, 2], [2, 1], [1, -2], [2, -1], [-1, 2], [-2, 1], [-2, -1], [-1, -2]]
-    console.log("this method runs")
-    console.log("start: ", start)
-    console.log("end: ", end)
-    console.log(delta)
+    // console.log("this method runs")
+    // console.log("start: ", start)
+    // console.log("end: ", end)
+    // console.log(delta)
     //check boundary conditions:
     if (end[0] < 0 || end[0] > 7 || end[1] < 0 || end[1] > 7) {
-      console.log("FALSE RETURNED")
+      // console.log("FALSE RETURNED")
       return false
     }
     for (let i = 0; i < possible_dirs.length; i++) {
       if (delta[0] == possible_dirs[i][0] && delta[1] == possible_dirs[i][1]) {
-        console.log("TRUE RETURNED")
+        // console.log("TRUE RETURNED")
         return true
       }
     }
-    console.log("FALSE RETURNED")
+    // console.log("FALSE RETURNED")
     return false    
   }
 
   const isValidRookMove = (start, end) => {
     let delta = [end[0]-start[0], end[1]-start[1]]
-    console.log("this method runs")
-    console.log("start: ", start)
-    console.log("end: ", end)
-    console.log(delta)
+    // console.log("this method runs")
+    // console.log("start: ", start)
+    // console.log("end: ", end)
+    // console.log(delta)
     //check boundary conditions:
     if (end[0] < 0 || end[0] > 7 || end[1] < 0 || end[1] > 7) {
       return false
@@ -244,31 +206,30 @@ const GameScreen = () => {
     if (validDirection) {
       while ((new_start[0] != end[0]) || (new_start[1] != end[1])) {
         if (currBoardState[new_start[0]][new_start[1]] !== null) {
-          console.log("FALSE RETURNED")
+          // console.log("FALSE RETURNED")
           return false
         }
         new_start = [new_start[0]+new_delta[0], new_start[1]+new_delta[1]]
       }
-      console.log("TRUE RETURNED")
+      // console.log("TRUE RETURNED")
       return true
     }
-    console.log("FALSE RETURNED")
+    // console.log("FALSE RETURNED")
     return false
   }
 
   const isValidBishopMove = (start, end) => {
     let delta = [end[0]-start[0], end[1]-start[1]]
-    let possible_dirs = [[1, 1], [1, -1], [-1, 1], [-1, -1]]
-    console.log("this method runs")
-    console.log("start: ", start)
-    console.log("end: ", end)
-    console.log(delta)
+    // console.log("this method runs")
+    // console.log("start: ", start)
+    // console.log("end: ", end)
+    // console.log(delta)
     //check boundary conditions:
     if (end[0] < 0 || end[0] > 7 || end[1] < 0 || end[1] > 7) {
       return false
     }
     if (Math.abs(delta[0]) != Math.abs(delta[1])) {
-      console.log("FALSE RETURNED NOT EQUAL")
+      // console.log("FALSE RETURNED NOT EQUAL")
       return false
     }
     let delta_constant = Math.abs(delta[0])
@@ -284,15 +245,15 @@ const GameScreen = () => {
     if (validDirection) {
       while ((new_start[0] != end[0] )|| (new_start[1] != end[1])) {
         if (currBoardState[new_start[0]][new_start[1]] !== null) {
-          console.log("FALSE RETURNED")
+          // console.log("FALSE RETURNED")
           return false
         }
         new_start = [new_start[0]+new_delta[0], new_start[1]+new_delta[1]]
       }
-      console.log("TRUE RETURNED")
+      // console.log("TRUE RETURNED")
       return true
     }
-    console.log("FALSE RETURNED")
+    // console.log("FALSE RETURNED")
     return false
   }
 
@@ -324,34 +285,34 @@ const GameScreen = () => {
     if (validDirection) {
       while ((new_start[0] != end[0]) || (new_start[1] != end[1])) {
         if (currBoardState[new_start[0]][new_start[1]] !== null) {
-          console.log("FALSE RETURNED")
+          // console.log("FALSE RETURNED")
           return false
         }
         new_start = [new_start[0]+new_delta[0], new_start[1]+new_delta[1]]
       }
-      console.log("TRUE RETURNED")
+      // console.log("TRUE RETURNED")
       return true
     }
-    console.log("FALSE RETURNED")
+    // console.log("FALSE RETURNED")
     return false
   }
 
   const isValidKingMove = (start, end) => {
     let delta = [end[0]-start[0], end[1]-start[1]]
-    console.log("this method runs")
-    console.log("start: ", start)
-    console.log("end: ", end)
-    console.log(delta)
+    // console.log("this method runs")
+    // console.log("start: ", start)
+    // console.log("end: ", end)
+    // console.log(delta)
     //check boundary conditions:
     if (end[0] < 0 || end[0] > 7 || end[1] < 0 || end[1] > 7) {
-      console.log("FALSE RETURNED")
+      // console.log("FALSE RETURNED")
       return false
     }
     if (Math.abs(delta[0]) <= 1 && Math.abs(delta[1]) <= 1) {
-      console.log("TRUE RETURNED")
+      // console.log("TRUE RETURNED")
       return true
     }
-    console.log("FALSE RETURNED")
+    // console.log("FALSE RETURNED")
     return false
   }
 
@@ -371,29 +332,40 @@ const GameScreen = () => {
     return [parseInt(val/8),val%8]
   }
 
-  const makeRandomBlackMoves = (newBoardState) => {
-    let locations = listBlackPieceLocations(newBoardState)
-    randomOrderLocations = shuffleArray(locations)
-    for (let i = 0; i < locations.length; i++) {
-      let moves = findPossibleMoves(locations[0], newBoardState)
-      if (moves.length != 0) {
+  const makeRandomBlackMoves = () => {
+    console.log("make random black moves")
+    let locations = listBlackPieceLocations()
+    let randomLocs = shuffleArray(locations)
+    console.log("made list of black piece locations: ", randomLocs)
+    console.log("locations.length: ", randomLocs.length)
+    //for (let i = 0; i < randomLocs.length; i++) {
+    for (rL of randomLocs) {
+      console.log("rL: ", rL)
+      let moves = findPossibleMoves(rL)
+      console.log("moves information: ", moves)
+      if (moves != null) {
         const randomIndex = Math.floor(Math.random() * moves.length);
-        const randomMove = array[randomIndex];
-        playMoves(locations[0], randomMove)
-        return newBoardState;
+        const randomMove = moves[randomIndex];
+        playMoves(rL, randomMove)
+        return;
       }
     }
-    return newBoardState;
   }
 
-  const playMoves = (startPos, endPos, newBoardState) => {
+  const playMoves = (startPos, endPos) => {
+    console.log("startPos: ", startPos)
+    console.log("endPos: ", endPos)
+    let piece = [...currBoardState[startPos[0]][startPos[1]]]
+    console.log("piece: ", piece)
     if (currBoardState[endPos[0]][endPos[1]] === null ) {
+      console.log("goes here")
+      console.log("newBoardState: ", newBoardState)
+      console.log("newBoardState[startPos[0]][startPos[1]]: ", newBoardState[startPos[0]][startPos[1]])
       newBoardState[startPos[0]][startPos[1]] = null
       newBoardState[endPos[0]][endPos[1]] = [...piece]
     }
     else {
       if (currBoardState[endPos[0]][endPos[1]] !== null ) { //there is a piece there
-        let piece = [...currBoardState[startPos[0]][startPos[1]]]
         let finalPiece = [...currBoardState[endPos[0]][endPos[1]]]
         if (finalPiece[0][0] !== piece[0][0]) {
           if (piece[1] >= finalPiece[2]) {
@@ -413,7 +385,6 @@ const GameScreen = () => {
         }
       }
     }
-    return newBoardState
   }
 
   function shuffleArray(array) {
@@ -429,57 +400,62 @@ const GameScreen = () => {
     return shuffledArray;
   }
 
-  const findPossibleMoves = (start, newBoardState) => {
+  const findPossibleMoves = (start) => {
     let piece = newBoardState[start[0]][start[1]] // locations from method above
     let pieceType = piece[0][1]
     let moves = []
     switch (pieceType) {
-      case 'r': moves = findPossibleRookMoves(start, newBoardState); break;
-      case 'n': moves = findPossibleKnightMoves(start, newBoardState); break;
-      case 'b': moves = findPossibleBishopMoves(start, newBoardState); break;
-      case 'q': moves = findPossibleQueenMoves(start, newBoardState); break;
-      case 'k': moves = findPossibleKingMoves(start, newBoardState); break;
-      case 'p': moves = findPossibleBlackPawnMoves(start, newBoardState); break; //may have to redo for black pieces
+      case 'r': moves = findPossibleRookMoves(start); break;
+      case 'n': moves = findPossibleKnightMoves(start); break;
+      case 'b': moves = findPossibleBishopMoves(start); break;
+      case 'q': moves = findPossibleQueenMoves(start); break;
+      case 'k': moves = findPossibleKingMoves(start); break;
+      case 'p': moves = findPossibleBlackPawnMoves(start); break; //may have to redo for black pieces
     }
+    return moves
   }
 
-  const findPossibleBlackPawnMoves = (start, newBoardState) => {
+  function findPossibleBlackPawnMoves(start) {
     let moves = []
     let row = start[0]
     let col = start[1]
 
     if (row == 1 && newBoardState[row+1][col] === null && newBoardState[row+2][col] === null) {
-      moves.concat([row+1, col])
-      moves.concat([row+2, col])
+      console.log("i'm being pushed")
+      moves.push([row+1, col])
+      moves.push([row+2, col])
     }
     else if (row < 7 && newBoardState[row+1][col] === null) {
-      moves.concat([row+1, col])
+      moves.push([row+1, col])
     }
     else {
       if (row < 7 && col > 0 && newBoardState[row+1][col-1] === null && newBoardState[row+1][col-1][0][0] === 'w') {
-        moves.concat([row+1, col-1])
+        moves.push([row+1, col-1])
       }
       else if (row < 7 && col < 7 && newBoardState[row+1][col+1] === null && newBoardState[row+1][col-1][0][0] === 'w') {
-        moves.concat([row+1, col+1])
+        moves.push([row+1, col+1])
       }
     }
+    console.log("i've got some moves: ", moves)
     return moves
   }
 
-  const findPossibleRookMoves = (start, newBoardState) => {
+  function findPossibleRookMoves(start) {
     let moves = []
     let row = start[0]
     let col = start[1]
-
+    console.log("findPossibleRookMoves: ", findPossibleRookMoves)
+    console.log("row: ", row)
+    console.log("col: ", col)
     for (let i = 0; i < ROOK_DIRECTIONS.length; i++) {
       row = row + ROOK_DIRECTIONS[i][0]
       col = col + ROOK_DIRECTIONS[i][1]
       while ( row >= 0) {
         if (currBoardState[row][col] === null) {
-          moves.concat([row, col])
+          moves.push([row, col])
         }
         else if (currBoardState[row][col][0][0] == 'w') {
-          moves.concat([row, col])
+          moves.push([row, col])
           break;
         }
         else {
@@ -490,10 +466,11 @@ const GameScreen = () => {
       }
       row = start[0]
       col = start[1]
-    }    
+    }  
+    return moves  
   }
 
-  const findPossibleKnightMoves = (start, newBoardState) => {
+  const findPossibleKnightMoves = (start) => {
     let moves = []
     let row = start[0]
     let col = start[1]
@@ -501,14 +478,14 @@ const GameScreen = () => {
       let newLoc = [row + KNIGHT_DIRECTIONS[i][0], col + KNIGHT_DIRECTIONS[i][1]]
       if (validLocation(newLoc)) {
         if (newBoardState[newLoc[0]][newLoc[1]] === null || newBoardState[newLoc[0]][newLoc[1]][0][0] === 'w') {
-          moves.concat(newLoc)
+          moves.push(newLoc)
         }
       }
     }
     return moves
   }
 
-  const findPossibleBishopMoves = (start, newBoardState) => {
+  const findPossibleBishopMoves = (start) => {
     let moves = []
     let row = start[0]
     let col = start[1]
@@ -518,10 +495,10 @@ const GameScreen = () => {
       col = col + BISHOP_DIRECTIONS[i][1]
       while ( row >= 0) {
         if (currBoardState[row][col] === null) {
-          moves.concat([row, col])
+          moves.push([row, col])
         }
         else if (currBoardState[row][col][0][0] == 'w') {
-          moves.concat([row, col])
+          moves.push([row, col])
           break;
         }
         else {
@@ -533,9 +510,10 @@ const GameScreen = () => {
       row = start[0]
       col = start[1]
     }
+    return moves
   }
 
-  const findPossibleQueenMoves = (start, newBoardState) => {
+  const findPossibleQueenMoves = (start) => {
     let moves = []
     let row = start[0]
     let col = start[1]
@@ -545,10 +523,10 @@ const GameScreen = () => {
       col = col + QUEEN_DIRECTIONS[i][1]
       while ( row >= 0) {
         if (currBoardState[row][col] === null) {
-          moves.concat([row, col])
+          moves.push([row, col])
         }
         else if (currBoardState[row][col][0][0] == 'w') {
-          moves.concat([row, col])
+          moves.push([row, col])
           break;
         }
         else {
@@ -560,9 +538,10 @@ const GameScreen = () => {
       row = start[0]
       col = start[1]
     }
+    return moves
   }
 
-  const findPossibleKingMoves = (start, newBoardState) => {
+  const findPossibleKingMoves = (start) => {
     let moves = []
     let row = start[0]
     let col = start[1]
@@ -570,7 +549,7 @@ const GameScreen = () => {
       let newLoc = [row + KING_DIRECTIONS[i][0], col + KING_DIRECTIONS[i][1]]
       if (validLocation(newLoc)) {
         if (newBoardState[newLoc[0]][newLoc[1]] === null || newBoardState[newLoc[0]][newLoc[1]][0][0] === 'w') {
-          moves.concat(newLoc)
+          moves.push(newLoc)
         }
       }
     }
@@ -587,15 +566,19 @@ const GameScreen = () => {
   }
 
   const listBlackPieceLocations = () => {
-    let locations = []
-    for (let row = 0; row < 8; i++) {
-      for (let col = 0; col < 8; i++) {
-        if (currBoardState[row][col][0][0] == 'b') {
-          locations.concat([row, col])
+    console.log("reached this list")
+    let locs = []
+    for (let row = 0; row < 8; row++) {
+      for (let col = 0; col < 8; col++) {
+        //console.log("currBoardState[row][col]: ", currBoardState[row][col])
+        if (currBoardState[row][col] !== null && currBoardState[row][col][0][0] == 'b') {
+          console.log("is it ever reaching here??")
+          locs.push([row, col])
         }
       }
     }
-    return locations
+    console.log("locationsssssssssssss: ", locs)
+    return locs
   }
 
   return (
