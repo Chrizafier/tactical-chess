@@ -1,27 +1,27 @@
-import { useRouter } from "expo-router";
-import { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity} from 'react-native';
-import * as React from 'react';
-import { supabase } from "../_layout";
-import { useNavigation } from "@react-navigation/native";
+import { useRouter } from "expo-router"
+import { useState } from 'react'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
+import * as React from 'react'
+import { supabase } from "../_layout"
+import { useNavigation } from "@react-navigation/native"
 
 
-  export default function SignUp(){
-  const navigation = useNavigation();
+export default function SignUp() {
+  const navigation = useNavigation()
 
-  const [formData,setFormData] = useState({
-    username:'',email:'',password:''
+  const [formData, setFormData] = useState({
+    username: '', email: '', password: ''
   })
 
 
   console.log(formData)
 
 
-  function handleChange(event){
-    setFormData((prevFormData)=>{
-      return{
+  function handleChange(event) {
+    setFormData((prevFormData) => {
+      return {
         ...prevFormData,
-        [event.target.name]:event.target.value
+        [event.target.name]: event.target.value
       }
 
 
@@ -31,7 +31,7 @@ import { useNavigation } from "@react-navigation/native";
   }
 
 
-  async function handleSubmit(e){
+  async function handleSubmit(e) {
     e.preventDefault()
 
 
@@ -109,9 +109,9 @@ import { useNavigation } from "@react-navigation/native";
         <Text style={styles.buttonText}>Submit</Text>
       </TouchableOpacity>
       <Text>Already have an account? </Text>
-      <Text style={styles.loginLink} onPress={()=>navigation.navigate("Login")}>Login</Text>
+      <Text style={styles.loginLink} onPress={() => navigation.navigate("Login")}>Login</Text>
     </View>
-  );
+  )
 }
 
 
@@ -163,5 +163,5 @@ const styles = StyleSheet.create({
     color: '#007bff', // Example color for link
     textDecorationLine: 'underline',
   },
-});
+})
 

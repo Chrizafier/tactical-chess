@@ -5,7 +5,7 @@ import { supabase } from '../_layout';
 
 // resource used: https://www.rnexamples.com/react-native-examples/b6/Simple-edit-profile-view
 
-const ProfileSettingsScreen = () => {
+export default ProfileSettingsScreen = () => {
 
   const [username, setUsername] = useState('');
   const [bio, setBio] = useState('');
@@ -131,6 +131,4 @@ const styles = StyleSheet.create({
     color: '#1E90FF',
     fontSize: 18,
   },
-});
-
-export default ProfileSettingsScreen;
+})

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, Text, View, Image, StyleSheet } from 'react-native';
 import { supabase } from "../_layout";
-import { ScrollView } from 'react-native-web';
-import { HorizontalLayout } from 'react-vaadin-components';
+import { ScrollView } from 'react-native';
 
 export default function ActiveStatusBar() {
   const [displayData, setDisplayData] = useState('')
@@ -103,7 +102,13 @@ export default function ActiveStatusBar() {
     <View style={styles.container}>
       <Text style={styles.header}>Active Friends:</Text>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-        <HorizontalLayout>
+        <View style={{
+          flex : 1,
+          flexDirection : 'row',
+          alignItems : 'center',
+          alignContent : 'center',
+          justifyContent : 'center'
+        }}>
           <FlatList
             data={displayData}
             horizontal={true}
@@ -116,7 +121,7 @@ export default function ActiveStatusBar() {
                 <Text style={styles.username}>{item.username}</Text>
               </View>
             )} />
-        </HorizontalLayout>
+        </View>
       </ScrollView>
     </View>
   );

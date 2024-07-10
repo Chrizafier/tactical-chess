@@ -4,9 +4,9 @@ import * as React from 'react';
 import { useState, useEffect } from 'react'
 import { Button } from 'react-native-paper';
 import { supabase } from "../_layout";
-import { ScrollView, TouchableOpacity } from "react-native-web";
+import { ScrollView, TouchableOpacity } from "react-native";
 
-export default function NotificationsScreen() {
+export default function Notifs() {
 
   const [userEmail, setUserEmail] = useState('')
   const [displayData, setDisplayData] = useState([])

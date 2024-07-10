@@ -21,8 +21,8 @@ export default function UploadProfilePic() {
         console.log("user data upload image: ", data)
         setUserEmail(data.user.user_metadata.email)
         setUserID(data.user.id)
-       
-       
+
+
       } catch {
         console.log("oh no!!")
       }
@@ -44,7 +44,7 @@ export default function UploadProfilePic() {
   };
 
 
-  const getUser = async() => {
+  const getUser = async () => {
     try {
       const { data, error } = await supabase.auth.getUser()
       console.log("user data upload image: ", data)
@@ -77,7 +77,7 @@ export default function UploadProfilePic() {
     let _image = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4,3],
+      aspect: [4, 3],
       quality: 1,
       base64: true,
     });
@@ -110,13 +110,13 @@ export default function UploadProfilePic() {
         .getPublicUrl(fileName);
 
 
-      const newData = { profileURL: data.publicUrl};
+      const newData = { profileURL: data.publicUrl };
       await supabase
         .from('user_profiles')
         .update(newData)
         .eq('email', userEmail)
-     
-        setImageURI(data.publicURL);
+
+      setImageURI(data.publicURL);
 
     } catch (error) {
       console.error("Error uploading image:", error.message);
@@ -126,7 +126,6 @@ export default function UploadProfilePic() {
 
 
   return (
-
     <>
       <View style={imageUploaderStyles.container}>
         {imageURI && <Image source={{ uri: imageURI }} style={{ width: 200, height: 200 }} />}
@@ -138,8 +137,8 @@ export default function UploadProfilePic() {
             <AntDesign name="camera" size={20} color="black" />
           </TouchableOpacity>
         </View>
-      </View>  
-      </>
+      </View>
+    </>
   );
 }
 

@@ -2,11 +2,16 @@
 
 # dependencies
 node_modules/
+# it already gets auto generated
+package-lock.json
 
 # Expo
 .expo/
 dist/
 web-build/
+# Expo build related
+# ios
+# android
 
 # Native
 *.orig.*
@@ -29,7 +34,14 @@ yarn-error.*
 *.pem
 
 # local env files
+.env
+*.local
 .env*.local
 
 # typescript
 *.tsbuildinfo
+
+# # local git config's
+.git/
+.gitconfig
+.git-credentials
