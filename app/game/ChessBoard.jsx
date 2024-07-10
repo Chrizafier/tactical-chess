@@ -18,7 +18,7 @@ const Chessboard = ({boardState}) => {
       for (let col = 0; col < 8; col++) {
         const squareColor = (row + col) % 2 === 0 ? LIGHT_SQUARE_COLOR : DARK_SQUARE_COLOR;
         const imageChosen = boardState[row][col]
-        console.log(imageChosen)
+        //console.log(imageChosen)
         let pieceImage = ''
         const imageExists = imageChosen === null ? false : true 
         if (imageExists) {

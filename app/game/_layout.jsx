@@ -35,7 +35,10 @@ const GameScreen = () => {
     //implement health points logic
     let startPos = convertSymbolToPair(startPosition)
     let endPos = convertSymbolToPair(endPosition)
-    let piece = [...currBoardState[startPos[0]][startPos[1]]]
+    let piece = currBoardState[startPos[0]][startPos[1]]
+    if (piece == null ) {
+      return
+    }
     let pieceType = piece[0][1]
     let validMove = false
 
@@ -54,14 +57,14 @@ const GameScreen = () => {
       checkForChecks(whiteKing, newBoardState)
       checkForChecks(blackKing, newBoardState)
       setCurrBoardState(newBoardState)
-      if (gameOver()) {
-        return;
-      }
+      // if (gameOver()) {
+      //   return;
+      // }
     }
 
     makeRandomBlackMoves(newBoardState)
-    checkForChecks(whiteKing, newBoardState)
-    checkForChecks(blackKing, newBoardState)
+    // checkForChecks(whiteKing, newBoardState)
+    // checkForChecks(blackKing, newBoardState)
     setCurrBoardState(newBoardState)
     if (gameOver()) {
       return;
@@ -343,7 +346,7 @@ const GameScreen = () => {
       console.log("rL: ", rL)
       let moves = findPossibleMoves(rL)
       console.log("moves information: ", moves)
-      if (moves != null) {
+      if (moves !== null && moves != [] && moves.length > 0) {
         const randomIndex = Math.floor(Math.random() * moves.length);
         const randomMove = moves[randomIndex];
         playMoves(rL, randomMove)
@@ -444,25 +447,25 @@ const GameScreen = () => {
     let moves = []
     let row = start[0]
     let col = start[1]
-    console.log("findPossibleRookMoves: ", findPossibleRookMoves)
+    console.log("findPossibleRookMoves: ")
     console.log("row: ", row)
     console.log("col: ", col)
-    for (let i = 0; i < ROOK_DIRECTIONS.length; i++) {
-      row = row + ROOK_DIRECTIONS[i][0]
-      col = col + ROOK_DIRECTIONS[i][1]
-      while ( row >= 0) {
+    for (dir of ROOK_DIRECTIONS) {
+      row = row + dir[0]
+      col = col + dir[1]
+      while ( validLocation([row, col])) {
         if (currBoardState[row][col] === null) {
           moves.push([row, col])
         }
         else if (currBoardState[row][col][0][0] == 'w') {
           moves.push([row, col])
-          break;
+          row = 24;
         }
         else {
-          break;
+          row = 24;
         }
-        row = row + ROOK_DIRECTIONS[i][0]
-        col = col + ROOK_DIRECTIONS[i][1]
+        row = row + dir[0]
+        col = col + dir[1]
       }
       row = start[0]
       col = start[1]
@@ -474,8 +477,8 @@ const GameScreen = () => {
     let moves = []
     let row = start[0]
     let col = start[1]
-    for (let i = 0; i < KNIGHT_DIRECTIONS; i++) {
-      let newLoc = [row + KNIGHT_DIRECTIONS[i][0], col + KNIGHT_DIRECTIONS[i][1]]
+    for (dir of KNIGHT_DIRECTIONS) {
+      let newLoc = [row + dir[0], col + dir[1]]
       if (validLocation(newLoc)) {
         if (newBoardState[newLoc[0]][newLoc[1]] === null || newBoardState[newLoc[0]][newLoc[1]][0][0] === 'w') {
           moves.push(newLoc)
@@ -490,22 +493,22 @@ const GameScreen = () => {
     let row = start[0]
     let col = start[1]
 
-    for (let i = 0; i < BISHOP_DIRECTIONS.length; i++) {
-      row = row + BISHOP_DIRECTIONS[i][0]
-      col = col + BISHOP_DIRECTIONS[i][1]
-      while ( row >= 0) {
+    for (dir of BISHOP_DIRECTIONS) {
+      row = row + dir[0]
+      col = col + dir[1]
+      while ( validLocation([row, col])) {
         if (currBoardState[row][col] === null) {
           moves.push([row, col])
         }
         else if (currBoardState[row][col][0][0] == 'w') {
           moves.push([row, col])
-          break;
+          row = 24;
         }
         else {
-          break;
+          row = 24;
         }
-        row = row + BISHOP_DIRECTIONS[i][0]
-        col = col + BISHOP_DIRECTIONS[i][1]
+        row = row + dir[0]
+        col = col + dir[1]
       }
       row = start[0]
       col = start[1]
@@ -518,22 +521,22 @@ const GameScreen = () => {
     let row = start[0]
     let col = start[1]
 
-    for (let i = 0; i < QUEEN_DIRECTIONS.length; i++) {
-      row = row + QUEEN_DIRECTIONS[i][0]
-      col = col + QUEEN_DIRECTIONS[i][1]
-      while ( row >= 0) {
+    for (dir of QUEEN_DIRECTIONS) {
+      row = row + dir[0]
+      col = col + dir[1]
+      while (validLocation([row, col])) {
         if (currBoardState[row][col] === null) {
           moves.push([row, col])
         }
         else if (currBoardState[row][col][0][0] == 'w') {
           moves.push([row, col])
-          break;
+          row = 24;
         }
         else {
-          break;
+          row = 24;
         }
-        row = row + QUEEN_DIRECTIONS[i][0]
-        col = col + QUEEN_DIRECTIONS[i][1]
+        row = row + dir[0]
+        col = col + dir[1]
       }
       row = start[0]
       col = start[1]
@@ -545,8 +548,8 @@ const GameScreen = () => {
     let moves = []
     let row = start[0]
     let col = start[1]
-    for (let i = 0; i < KING_DIRECTIONS; i++) {
-      let newLoc = [row + KING_DIRECTIONS[i][0], col + KING_DIRECTIONS[i][1]]
+    for (dir of KING_DIRECTIONS) {
+      let newLoc = [row + dir[0], col + dir[1]]
       if (validLocation(newLoc)) {
         if (newBoardState[newLoc[0]][newLoc[1]] === null || newBoardState[newLoc[0]][newLoc[1]][0][0] === 'w') {
           moves.push(newLoc)
