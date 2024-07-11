@@ -21,11 +21,11 @@ export default function AppLayout() {
             <Drawer.Screen name="Instructions" component={InstructionsScreen} />
             <Drawer.Screen name="Game" component={GameScreen} />
             <Drawer.Screen name="Login" component={LoginScreen} />
-            <Drawer.Screen name='SignUp' component={SignUpScreen} />
-            <Drawer.Screen name="SearchProfiles" component={SearchProfilesScreen} />
-            <Drawer.Screen name="ProfileSettings" component={ProfileSettingsScreen} />
+            <Drawer.Screen name='Sign Up' component={SignUpScreen} />
+            <Drawer.Screen name="Search Profiles" component={SearchProfilesScreen} />
+            <Drawer.Screen name="Profile Settings" component={ProfileSettingsScreen} />
             <Drawer.Screen name="Notifications" component={NotificationsScreen} />
-            <Drawer.Screen name="SignOut" component={SignOutScreen}/>
+            <Drawer.Screen name="Sign Out" component={SignOutScreen}/>
         </Drawer.Navigator>
     </NavigationContainer>
   );

@@ -74,7 +74,7 @@ const HomeScreen = () => {
       ></CircularButtonFA5>
       <CircularButtonFA5
         key="2"
-        onPress={() => navigation.navigate("SearchProfiles")}
+        onPress={() => navigation.navigate("Search Profiles")}
         iconName="user-friends"
       ></CircularButtonFA5>
       </View>
@@ -86,7 +86,7 @@ const HomeScreen = () => {
       ></CircularButtonFA>
       <CircularButtonII
         key="4"
-        onPress={() => navigation.navigate("ProfileSettings")}
+        onPress={() => navigation.navigate("Profile Settings")}
         iconName="settings"
       ></CircularButtonII>
     </View></>
