@@ -1,10 +1,8 @@
 import * as React from 'react';
-import { createClient } from "@supabase/supabase-js";
 import { DataTable, Card, Button } from 'react-native-paper';
 import { useState, useEffect } from 'react'
 import { SafeAreaView, TextInput, View, StyleSheet, ScrollView, Text, Image, Pressable} from "react-native";
 import filter from "lodash.filter"
-import { HorizontalLayout } from "react-vaadin-components";
 import { supabase } from "../App";
 import { TouchableOpacity } from 'react-native-web';
 
@@ -22,7 +20,6 @@ export default function SearchProfilesScreen() {
     useEffect(() => {
         getUserEmail()
         fetchProfiles()
-        console.log("akdljfskaadasfjdakfjlajflajfljaljdflajlfjalfjlajdlfaljldajfla")
     }, []);
    
     const updateSearch = async (search) => {
@@ -31,7 +28,6 @@ export default function SearchProfilesScreen() {
         console.log("formatted query")
         console.log(formattedQuery)
         const filteredData = filter(profiles, (profile) => {
-            console.log('prathu')
             console.log(profile)
             return contains(profile, formattedQuery);
         });
@@ -101,6 +97,7 @@ const addFriendRequest = async (friend_email) => {
        
 return (
         <><SafeAreaView style={styles.container}>
+        <Text style={styles.textFriends}>Add Friends</Text>
         <TextInput
             placeholder='Search by username...'
             clearButtonMode='always'
@@ -109,7 +106,6 @@ return (
             value={searchQuery}
             onChangeText={(query) => updateSearch(query)}
             style={styles.input} />
-        <Text style={styles.textFriends}>Add Friends</Text>
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
             {displayData.map((item) => (
                 <TouchableOpacity
@@ -122,7 +118,7 @@ return (
                         style={styles.profileImage} />
                     <View style={styles.profileInfo}>
                         <Text style={styles.profileName}>{item.username}</Text>
-                        <Text style={styles.profileRank}>Rank #{item.rank}</Text>
+                        <Text style={styles.profileRank}>Points: {item.points}</Text>
                     </View>
                     <Button
                         onPress={() => addFriendRequest(item.email)}
@@ -150,7 +146,7 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
         borderWidth: 1,
         borderRadius: 8,
-        marginBottom: 10,
+        margin: 10,
     },
     textFriends: {
         fontSize: 20,
@@ -165,7 +161,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 10,
         paddingVertical: 15,
-        backgroundColor: '#e8cdb9',
+        backgroundColor: '#fee6e6',
         borderRadius: 8,
         marginBottom: 10,
         shadowColor: '#000',
@@ -182,7 +178,7 @@ const styles = StyleSheet.create({
         width: 50,
         height: 50,
         borderRadius: 25,
-        borderColor: '#de4e45',
+        borderColor: '#fb5b5a',
         borderWidth: 1
     },
     profileInfo: {
@@ -199,7 +195,7 @@ const styles = StyleSheet.create({
         color: 'grey',
     },
     addButton: {
-        backgroundColor: '#de4e45',
+        backgroundColor: '#fb5b5a',
         borderRadius: 5,
     },
     buttonLabel: {

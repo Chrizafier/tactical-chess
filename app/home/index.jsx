@@ -1,8 +1,10 @@
 // CircularButton.js
-import React from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import React, { useState } from 'react';
+import { Pressable, StyleSheet, View, Text } from 'react-native';
 import { FontAwesome,FontAwesome5, Ionicons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
+import InstructionButton from './InstructionButton';
+import InstructionModal from './InstructionModal';
 
 
 const CircularButtonFA = ({ onPress, iconName }) => {
@@ -56,17 +58,19 @@ const CircularButtonII = ({ onPress, iconName }) => {
   );
 };
 
+
 const HomeScreen = () => {
   const navigation = useNavigation();
 
-  return (
-    
-    <><View style={styles.container}>
-      <CircularButtonFA5
+  return (  
+    <View style={styles.overallContainer}>
+      <InstructionModal />
+      <View style={styles.container}>
+      <CircularButtonFA
         key="0"
-        onPress={() => navigation.navigate("Instructions")}
-        iconName="book"
-      ></CircularButtonFA5>
+        onPress={() => navigation.navigate("Leaderboard")}
+        iconName="trophy"
+      ></CircularButtonFA>
       <CircularButtonFA5
         key="1"
         onPress={() => navigation.navigate("Game")}
@@ -89,12 +93,17 @@ const HomeScreen = () => {
         onPress={() => navigation.navigate("Profile Settings")}
         iconName="settings"
       ></CircularButtonII>
-    </View></>
+    </View></ View>
   );
 };
 
 
 const styles = StyleSheet.create({
+  overallContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: '#ecf0f1',
+  },
   button: {
     width: 64,
     height: 64,
@@ -104,22 +113,41 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 15,
   },
+  instruction_button: {
+    width: 32,
+    height: 32,
+    borderRadius: 16, // half of width and height to make it circular
+    backgroundColor: '#fb5b5a', // customize as needed
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 15,
+  },
+  instruction_container: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    height: "10%",
+    backgroundColor: '#ecf0f1',
+  },
   container: {
-    flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    alignItems: 'flex-end',
     backgroundColor: '#ecf0f1', // background color of the grid
-    paddingBottom: 20
+    height: "45%",
+    paddingBottom: 10,
+    alignItems: 'flex-end'
   },
   container2: {
-    flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    alignItems: 'flex-start',
     backgroundColor: '#ecf0f1', // background color of the grid
+    height: "45%"
+  },
+  modal_container: {
+    backgroundColor: 'white',
+    padding: 20,
+    flex: 1
   },
 });
 

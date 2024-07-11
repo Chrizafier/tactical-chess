@@ -28,15 +28,16 @@ export default function SignOutScreen() {
 
 const styles = StyleSheet.create({
     container: {
-        alignItems: 'center',
-        justifyContent: 'center',
         flex: 1,
+        justifyContent: 'center',
+        alignContent: 'center',
     },
     title: {
         fontWeight: 'bold',
         fontSize: 50,
         color: '#fb5b5a',
         marginBottom: 20,
+        textAlign: 'center'
     },
 })
 

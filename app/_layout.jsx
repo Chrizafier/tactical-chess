@@ -9,7 +9,7 @@ import SearchProfilesScreen from './profile_search/_layout';
 import ProfileSettingsScreen from './user_settings/_layout';
 import NotificationsScreen from './working_notifications/_layout';
 import SignOutScreen from './signout/_layout';
-import InstructionsScreen from './home/instructions';
+import LeaderboardScreen from './leaderboard/_layout';
 
 const Drawer = createDrawerNavigator();
 
@@ -17,8 +17,8 @@ export default function AppLayout() {
   return (
     <NavigationContainer independent={true}>
         <Drawer.Navigator>
-            <Drawer.Screen name="Home" component={HomeScreen} />
-            <Drawer.Screen name="Instructions" component={InstructionsScreen} />
+        <Drawer.Screen name="Home" component={HomeScreen} />
+            <Drawer.Screen name="Leaderboard" component={LeaderboardScreen} />
             <Drawer.Screen name="Game" component={GameScreen} />
             <Drawer.Screen name="Login" component={LoginScreen} />
             <Drawer.Screen name='Sign Up' component={SignUpScreen} />

@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, TextInput, Text } from 'react-native';
 import Chessboard from './ChessBoard';
 import { useState, useEffect } from 'react'
+import InstructionModal from '../home/InstructionModal';
 
 const KING_DIRECTIONS = [[1, 1], [1, 0], [1, -1], [0, 1], [0, -1], [-1, 1], [-1, 0], [-1, -1]]
 const QUEEN_DIRECTIONS = [[1, 1], [1, 0], [1, -1], [0, 1], [0, -1], [-1, 1], [-1, 0], [-1, -1]]
@@ -586,8 +587,10 @@ const GameScreen = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.modal}>
+        <InstructionModal />
+      </View>
       <Chessboard boardState={currBoardState}/>
-
       <View style={styles.inputContainer}>
         <Text>Start Position:</Text>
         <TextInput
@@ -610,11 +613,17 @@ const GameScreen = () => {
   );
 };
 const styles = StyleSheet.create({
+  modal: {
+    flexDirection: 'row',
+    alignContent: 'flex-start',
+    alignItems: 'flex-start',
+    alignSelf: 'flex-start'
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#ecf0f1',
   },
   inputContainer: {
     marginTop: 20,
