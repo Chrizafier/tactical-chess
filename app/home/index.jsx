@@ -2,6 +2,8 @@
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { FontAwesome,FontAwesome5, Ionicons } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
+
 
 const CircularButtonFA = ({ onPress, iconName }) => {
   return (
@@ -55,34 +57,36 @@ const CircularButtonII = ({ onPress, iconName }) => {
 };
 
 const HomeScreen = () => {
+  const navigation = useNavigation();
 
   return (
+    
     <><View style={styles.container}>
       <CircularButtonFA5
         key="0"
-        onPress={handleInstructions}
+        onPress={() => navigation.navigate("Instructions")}
         iconName="book"
       ></CircularButtonFA5>
       <CircularButtonFA5
         key="1"
-        onPress={handleGame}
+        onPress={() => navigation.navigate("Game")}
         iconName="chess-bishop"
       ></CircularButtonFA5>
       <CircularButtonFA5
         key="2"
-        onPress={handleFriends}
+        onPress={() => navigation.navigate("SearchProfiles")}
         iconName="user-friends"
       ></CircularButtonFA5>
       </View>
       <View style={styles.container2}>
       <CircularButtonFA
         key="3"
-        onPress={handleNotifs}
+        onPress={() => navigation.navigate("Notifications")}
         iconName="bell"
       ></CircularButtonFA>
       <CircularButtonII
         key="4"
-        onPress={handleSettings}
+        onPress={() => navigation.navigate("ProfileSettings")}
         iconName="settings"
       ></CircularButtonII>
     </View></>

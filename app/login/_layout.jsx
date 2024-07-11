@@ -57,9 +57,6 @@ import { useNavigation } from "@react-navigation/native";
       }
     }
 
-
-
-
     const getUserEmail = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser()
@@ -82,7 +79,7 @@ import { useNavigation } from "@react-navigation/native";
       <View style={styles.inputView}>
         <TextInput
           style={styles.input}
-          placeholder='Email'
+          placeholder='Email...'
           //name='email'
           onChangeText={(text) => handleChange('email', text)}
           value={formData.email}
@@ -91,7 +88,7 @@ import { useNavigation } from "@react-navigation/native";
       <View style={styles.inputView}>
         <TextInput
           style={styles.input}
-          placeholder='Password'
+          placeholder='Password...'
           //name='password'
           onChangeText={(text) => handleChange('password', text)}
           value={formData.password}
@@ -111,9 +108,9 @@ import { useNavigation } from "@react-navigation/native";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff', // Example background color
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     fontWeight: 'bold',
@@ -122,28 +119,45 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   inputView: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 4,
-    backgroundColor: '#ffffff',
-    width: '100%',
-    height: 30,
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    // borderRadius: 4,
+    // backgroundColor: '#ffffff',
+    // width: '100%',
+    // height: 30,
+    // marginBottom: 20,
+    backgroundColor: "#FFC9CB",
+    borderRadius: 30,
+    width: "60%",
+    height: 45,
     marginBottom: 20,
+    alignItems: "left",
   },
   input: {
-    width: '100%',
-    height: '100%',
-    paddingHorizontal: 10,
-    color: '#fb5b5a',
+    // width: '100%',
+    // height: '100%',
+    // paddingHorizontal: 10,
+    // color: '#fb5b5a',
+    height: 50,
+    padding: 10,
+    borderRadius: 30,
   },
   button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 4,
-    backgroundColor: '#fb5b5a',
-    width: '100%',
-    height: 30,
-    marginBottom: 20,
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    // borderRadius: 4,
+    // backgroundColor: '#fb5b5a',
+    // width: '100%',
+    // height: 30,
+    // marginBottom: 20,
+    width:"70%",
+    borderRadius:25,
+    height:50,
+    alignItems:"center",
+    justifyContent:"center",
+    marginTop:40,
+    marginBottom:20,
+    backgroundColor:"#fb5b5a",
   },
   buttonText: {
     color: '#fff',

@@ -12,7 +12,7 @@ const theme = {
   },
 };
 
-export default function HomeScreen() {
+export default function InstructionsScreen() {
   return (
     <><ScrollView independent={true} contentContainerStyle={styles.container} style={{ flex: 1 }}>
           <Text style={styles.largeText}>Welcome to Tactical Chess!</Text>

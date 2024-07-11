@@ -14,7 +14,7 @@ const ProfileSettingsScreen = () => {
   useEffect(() => {
     getProfile()
     getProfileInformation()
-  }, [username, bio, userEmail]);
+  }, [userEmail]);
 
   async function getProfile() {
     try {
@@ -44,8 +44,8 @@ const ProfileSettingsScreen = () => {
     try {
       const newData = { username: username, bio: bio};
 
-      await supabase
-        .from('active_statuses')
+      const { data, error } = await supabase
+        .from('user_profiles')
         .update(newData)
         .eq('email', userEmail)
 
@@ -61,26 +61,27 @@ const ProfileSettingsScreen = () => {
       <View style={styles.avatarContainer}>
       <UploadProfilePic />
       </View>
-      <View style={styles.form}>
-        <Text style={styles.label}>Username</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter username..."
-          value={username}
-          onChangeText={setUsername}
-        />
-        <Text style={styles.label}>Bio</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter bio..."
-          value={bio}
-          onChangeText={setBio}
-        />
+        {/* <Text style={styles.label}>Username</Text> */}
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.input}
+            placeholder="Set/Change username..."
+            value={username}
+            onChangeText={setUsername}
+          />
+        </ View>
+        {/* <Text style={styles.label}>Bio</Text> */}
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.input}
+            placeholder="Set/Change bio..."
+            value={bio}
+            onChangeText={setBio}
+          />
+        </View>
         <TouchableOpacity style={styles.button} onPress={() => handleSubmit({username, bio})}>
           <Text style={styles.buttonText}>Submit</Text>
         </TouchableOpacity>
-      </View>
-
     </View>
   );
 };
@@ -91,29 +92,37 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  form: {
-    width: '80%',
-  },
   label: {
     marginTop: 20,
   },
   input: {
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 5,
+    // borderColor: '#ccc',
+    // borderWidth: 1,
+    // borderRadius: 5,
+    // padding: 10,
+    // fontSize: 18,
+    height: 35,
     padding: 10,
-    fontSize: 18,
+    borderRadius: 30,
   },
   button: {
-    marginTop: 20,
-    backgroundColor: '#de4e45',
-    borderRadius: 5,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    // marginTop: 20,
+    // backgroundColor: '#de4e45',
+    // borderRadius: 5,
+    // paddingVertical: 10,
+    // paddingHorizontal: 20,
+    width:"60%",
+    borderRadius:25,
+    height:40,
+    alignItems:"center",
+    justifyContent:"center",
+    marginTop:20,
+    marginBottom:20,
+    backgroundColor:"#fb5b5a",
   },
   buttonText: {
     color: '#fff',
-    fontSize: 18,
+    fontWeight: 'bold',
   },
   avatarContainer: {
     marginTop: 20,
@@ -130,6 +139,14 @@ const styles = StyleSheet.create({
   changeAvatarButtonText: {
     color: '#1E90FF',
     fontSize: 18,
+  },
+  inputView: {
+    backgroundColor: "#FFC9CB",
+    borderRadius: 30,
+    width: "60%",
+    height: 35,
+    marginBottom: 20,
+    alignItems: "left",
   },
 });
 
