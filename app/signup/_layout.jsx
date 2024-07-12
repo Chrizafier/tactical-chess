@@ -1,37 +1,26 @@
-import { useRouter } from "expo-router"
-import { useState } from 'react'
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
-import * as React from 'react'
-import { supabase } from "../_layout"
-import { useNavigation } from "@react-navigation/native"
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity} from 'react-native';
+import { supabase } from '../_layout';
+import { useNavigation } from "@react-navigation/native";
 
 
-export default function SignUp() {
-  const navigation = useNavigation()
+  export default function SignUp(){
+  const navigation = useNavigation();
 
-  const [formData, setFormData] = useState({
-    username: '', email: '', password: ''
+  const [formData,setFormData] = useState({
+    username:'',email:'',password:''
   })
 
 
   console.log(formData)
 
 
-  function handleChange(event) {
-    setFormData((prevFormData) => {
-      return {
-        ...prevFormData,
-        [event.target.name]: event.target.value
-      }
+  const handleChange = (name, value) => {
+    setFormData({ ...formData, [name]: value });
+  };
 
 
-    })
-
-
-  }
-
-
-  async function handleSubmit(e) {
+  async function handleSubmit(e){
     e.preventDefault()
 
 
@@ -81,7 +70,7 @@ export default function SignUp() {
         <TextInput
           style={styles.input}
           placeholder='Username'
-          name='username'
+          //name='username'
           onChangeText={(text) => handleChange('username', text)}
           value={formData.username}
         />
@@ -90,7 +79,7 @@ export default function SignUp() {
         <TextInput
           style={styles.input}
           placeholder='Email'
-          name='email'
+          //name='email'
           onChangeText={(text) => handleChange('email', text)}
           value={formData.email}
         />
@@ -99,7 +88,7 @@ export default function SignUp() {
         <TextInput
           style={styles.input}
           placeholder='Password'
-          name='password'
+          //name='password'
           onChangeText={(text) => handleChange('password', text)}
           value={formData.password}
           secureTextEntry
@@ -109,18 +98,18 @@ export default function SignUp() {
         <Text style={styles.buttonText}>Submit</Text>
       </TouchableOpacity>
       <Text>Already have an account? </Text>
-      <Text style={styles.loginLink} onPress={() => navigation.navigate("Login")}>Login</Text>
+      <Text style={styles.loginLink} onPress={()=>navigation.navigate("Login")}>Login</Text>
     </View>
-  )
+  );
 }
 
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff', // Example background color
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     fontWeight: 'bold',
@@ -129,31 +118,27 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   inputView: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 4,
-    backgroundColor: '#ffffff',
-    color: '#fb5b5a',
-    height: 30,
-    width: '100%',
+    backgroundColor: "#FFC9CB",
+    borderRadius: 30,
+    width: "60%",
+    height: 45,
     marginBottom: 20,
+    alignItems: "left",
   },
   input: {
-    width: '100%',
-    height: '100%',
-    paddingHorizontal: 10,
-    color: '#fb5b5a',
+    height: 50,
+    padding: 10,
+    borderRadius: 30,
   },
   button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 4,
-    backgroundColor: '#fb5b5a',
-    color: '#fff',
-    height: 30,
-    width: '104%',
-    border: 'none',
-    marginBottom: 20,
+    width:"70%",
+    borderRadius:25,
+    height:50,
+    alignItems:"center",
+    justifyContent:"center",
+    marginTop:40,
+    marginBottom:20,
+    backgroundColor:"#fb5b5a",
   },
   buttonText: {
     color: '#fff',
@@ -163,5 +148,4 @@ const styles = StyleSheet.create({
     color: '#007bff', // Example color for link
     textDecorationLine: 'underline',
   },
-})
-
+});

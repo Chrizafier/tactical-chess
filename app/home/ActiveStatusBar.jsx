@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, Text, View, Image, StyleSheet } from 'react-native';
-import { supabase } from "../_layout";
-import { ScrollView } from 'react-native';
+import { FlatList, Text, View, Image, StyleSheet, ScrollView } from 'react-native';
+import { supabase } from '../_layout';
+import { HorizontalLayout } from 'react-vaadin-components';
 
 export default function ActiveStatusBar() {
   const [displayData, setDisplayData] = useState('')
@@ -14,7 +14,9 @@ export default function ActiveStatusBar() {
         const { data, error } = await supabase.auth.getUser()
         console.log("user data: ", data)
         setUserEmail(data.user.user_metadata.email)
-      } catch {error}
+      } catch (error) {
+        
+      }
     }
     getProfile()
     findActiveFriends()
@@ -102,13 +104,7 @@ export default function ActiveStatusBar() {
     <View style={styles.container}>
       <Text style={styles.header}>Active Friends:</Text>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-        <View style={{
-          flex : 1,
-          flexDirection : 'row',
-          alignItems : 'center',
-          alignContent : 'center',
-          justifyContent : 'center'
-        }}>
+        <HorizontalLayout>
           <FlatList
             data={displayData}
             horizontal={true}
@@ -121,7 +117,7 @@ export default function ActiveStatusBar() {
                 <Text style={styles.username}>{item.username}</Text>
               </View>
             )} />
-        </View>
+        </HorizontalLayout>
       </ScrollView>
     </View>
   );
@@ -163,4 +159,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-

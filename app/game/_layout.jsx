@@ -1,7 +1,7 @@
-import React from 'react';
 import { View, StyleSheet, TextInput, Text } from 'react-native';
 import Chessboard from './ChessBoard';
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
+import InstructionModal from '../home/InstructionModal';
 
 const KING_DIRECTIONS = [[1, 1], [1, 0], [1, -1], [0, 1], [0, -1], [-1, 1], [-1, 0], [-1, -1]]
 const QUEEN_DIRECTIONS = [[1, 1], [1, 0], [1, -1], [0, 1], [0, -1], [-1, 1], [-1, 0], [-1, -1]]
@@ -586,8 +586,12 @@ const GameScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Chessboard boardState={currBoardState}/>
-
+      <View style={styles.modal}>
+        <InstructionModal />
+      </View>
+      <View style={styles.chessboard}>
+        <Chessboard boardState={currBoardState}/>
+      </View>
       <View style={styles.inputContainer}>
         <Text>Start Position:</Text>
         <TextInput
@@ -605,20 +609,30 @@ const GameScreen = () => {
         />
         <Text onPress={() => handleSubmit({startPosition, endPosition})} style={styles.submitButton}>Submit Move</Text>
       </View>
-
     </View>
   );
 };
 const styles = StyleSheet.create({
+  modal: {
+    backgroundColor: '#ffffff',
+    height: '10%',
+  },
   container: {
-    flex: 1,
+    backgroundColor: '#ecf0f1',
+    flexDirection: 'column',
+    flex:3,
+  },
+  chessboard: {
+    backgroundColor: '#ecf0f1',
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
+    alignSelf: 'center',
+    height: '50%'
   },
   inputContainer: {
-    marginTop: 20,
     width: '80%',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    height: '35%',
   },
   input: {
     height: 40,

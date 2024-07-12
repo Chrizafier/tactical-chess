@@ -1,12 +1,9 @@
-import { useNavigation } from '@react-navigation/native'; // Assuming you're using react-navigation
-import { View, Text, StyleSheet, Image, SafeAreaView } from "react-native";
-import * as React from 'react';
-import { useState, useEffect } from 'react'
+import { View, Text, StyleSheet, Image, SafeAreaView, ScrollView, TouchableOpacity} from "react-native";
+import React, { useState, useEffect } from 'react'
 import { Button } from 'react-native-paper';
-import { supabase } from "../_layout";
-import { ScrollView, TouchableOpacity } from "react-native";
+import { supabase } from '../_layout';
 
-export default function Notifs() {
+export default function NotificationsScreen() {
 
   const [userEmail, setUserEmail] = useState('')
   const [displayData, setDisplayData] = useState([])
@@ -23,7 +20,7 @@ export default function Notifs() {
     getProfile()
     console.log("user email: ", userEmail)
     changeDisplay()
-  }, [userEmail, displayData])
+  }, [])
 
 
   const fetchRequests = async(email) => {
@@ -137,40 +134,39 @@ export default function Notifs() {
 
 
   return (
-    <SafeAreaView style={styles.container}>
-    <Text style={styles.textFriends}>Notifications</Text>
-    <ScrollView contentContainerStyle={styles.scrollViewContent}>
-    {displayData.map((item) => (
-      <TouchableOpacity
-        key={item.id}
-        style={styles.profileContainer}
-        activeOpacity={0.7}
-      >
-        <Image
-          source={{ uri: item.profileURL }}
-          style={styles.profileImage}
-        />
-        <View style={styles.profileInfo}>
-          <Text style={styles.profileRank}>You have a friend request from {item.username}</Text>
-        </View>
-        <Button
-          onPress={() => acceptFriendRequest(item.email)}
-          style={styles.addButton}
-          labelStyle={styles.buttonLabel}
-        >
-          Accept
-        </Button>
-        <Button
-          onPress={() => declineFriendRequest(item.email)}
-          style={styles.addButton}
-          labelStyle={styles.buttonLabel}
-        >
-          Decline
-        </Button>
-      </TouchableOpacity>
-    ))}
-    </ScrollView>
-    </SafeAreaView>
+    <><SafeAreaView style={styles.container}>
+      <Text style={styles.textFriends}>Notifications</Text>
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        {displayData.map((item) => (
+          <TouchableOpacity
+            key={item.id}
+            style={styles.profileContainer}
+            activeOpacity={0.7}
+          >
+            <Image
+              source={{ uri: item.profileURL }}
+              style={styles.profileImage} />
+            <View style={styles.profileInfo}>
+              <Text style={styles.profileRank}>You have a friend request from {item.username}</Text>
+            </View>
+            <Button
+              onPress={() => acceptFriendRequest(item.email)}
+              style={styles.addButton}
+              labelStyle={styles.buttonLabel}
+            >
+              Accept
+            </Button>
+            <Button
+              onPress={() => declineFriendRequest(item.email)}
+              style={styles.addButton}
+              labelStyle={styles.buttonLabel}
+            >
+              Decline
+            </Button>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+    </SafeAreaView></>
   );
 }
 
@@ -201,7 +197,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       paddingHorizontal: 10,
       paddingVertical: 15,
-      backgroundColor: '#e8cdb9',
+      backgroundColor: '#fee6e6',
       borderRadius: 8,
       marginBottom: 10,
       shadowColor: '#000',
@@ -218,7 +214,7 @@ const styles = StyleSheet.create({
       width: 50,
       height: 50,
       borderRadius: 25,
-      borderColor: '#de4e45',
+      borderColor: '#fb5b5a',
       borderWidth: 1
   },
   profileInfo: {
@@ -235,7 +231,7 @@ const styles = StyleSheet.create({
       color: 'grey',
   },
   addButton: {
-      backgroundColor: '#de4e45',
+      backgroundColor: '#fb5b5a',
       borderRadius: 5,
       marginLeft: 10
   },
@@ -243,4 +239,3 @@ const styles = StyleSheet.create({
       color: '#fff',
   },
 });
-

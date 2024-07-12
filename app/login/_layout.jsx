@@ -1,88 +1,85 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, AppState } from 'react-native'
-import * as React from 'react'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, AppState} from 'react-native';
+import * as React from 'react';
 import { useState, useEffect } from 'react'
-import { supabase } from "../_layout"
-import { useNavigation } from "@react-navigation/native"
-
-export default function Login() {
-  const navigation = useNavigation()
-
-  const [formData, setFormData] = useState({
-    email: '', password: ''
-  })
-
-  console.log(formData)
-
-
-  const handleChange = (name, value) => {
-    setFormData({ ...formData, [name]: value })
-  }
+import { useNavigation } from "@react-navigation/native";
+import { supabase } from '../_layout';
+ 
+  export default function Login(){
+    const navigation = useNavigation();
+ 
+    const [formData,setFormData] = useState({
+          email:'',password:''
+    })
+ 
+    console.log(formData)
 
 
-  async function handleSubmit(e) {
-    e.preventDefault()
-
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: formData.email,
-        password: formData.password,
-      })
-
-      if (error) throw error
-      console.log("here is the data!!!!!!!!!!!!!!!!!!!!!", data)
-      getUserEmail()
-      updateActiveStatus()
-
-      navigation.navigate("Home")
-
-    } catch (error) {
-      alert(error)
-    }
-  }
+    const handleChange = (name, value) => {
+      setFormData({ ...formData, [name]: value });
+    };
 
 
-  async function updateActiveStatus() {
-    try {
-      const newData = { active: true }
+    async function handleSubmit(e){
+      e.preventDefault()
+ 
+      try {
+          const { data, error } = await supabase.auth.signInWithPassword({
+              email: formData.email,
+              password: formData.password,
+            })
+           
+        if (error) throw error
+        console.log("here is the data!!!!!!!!!!!!!!!!!!!!!", data)
+        getUserEmail()
+        updateActiveStatus()
 
-      const { data, error } = await supabase
-        .from('active_statuses')
-        .update(newData)
-        .eq('email', formData.email)
-
-
-      if (error) throw error
-    } catch (error) {
-      alert(error)
-    }
-  }
-
-
-
-
-  const getUserEmail = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        console.log("gets user email")
-        console.log(user.email)
-        //setUserEmail(user.email)
+        navigation.navigate("Home");
+       
+      } catch (error) {
+        alert(error)
       }
-      else {
-        console.log("doesn't get user")
-      }
-    } catch (error) {
-      console.error('Error fetching user email:', error.message)
     }
-  }
 
+
+    async function updateActiveStatus() {
+      try {
+        const newData = { active: true};
+ 
+        const {data, error} = await supabase
+          .from('active_statuses')
+          .update(newData)
+          .eq('email', formData.email)
+
+
+        if (error) throw error
+      } catch (error) {
+        alert(error)
+      }
+    }
+
+    const getUserEmail = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
+          console.log("gets user email")
+          console.log(user.email)
+          //setUserEmail(user.email);
+        }
+        else {
+          console.log("doesn't get user")
+        }
+      } catch (error) {
+        console.error('Error fetching user email:', error.message);
+      }
+    };
+ 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
       <View style={styles.inputView}>
         <TextInput
           style={styles.input}
-          placeholder='Email'
+          placeholder='Email...'
           //name='email'
           onChangeText={(text) => handleChange('email', text)}
           value={formData.email}
@@ -91,7 +88,7 @@ export default function Login() {
       <View style={styles.inputView}>
         <TextInput
           style={styles.input}
-          placeholder='Password'
+          placeholder='Password...'
           //name='password'
           onChangeText={(text) => handleChange('password', text)}
           value={formData.password}
@@ -102,18 +99,18 @@ export default function Login() {
         <Text style={styles.buttonText}>Sign In</Text>
       </TouchableOpacity>
       <Text>Don't have an account? </Text>
-      <Text style={styles.signupLink} onPress={() => navigation.navigate("SignUp")}>Sign Up</Text>
+      <Text style={styles.signupLink} onPress={()=>navigation.navigate("SignUp")}>Sign Up</Text>
     </View>
-  )
+  );
 }
 
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff', // Example background color
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     fontWeight: 'bold',
@@ -122,28 +119,45 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   inputView: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 4,
-    backgroundColor: '#ffffff',
-    width: '100%',
-    height: 30,
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    // borderRadius: 4,
+    // backgroundColor: '#ffffff',
+    // width: '100%',
+    // height: 30,
+    // marginBottom: 20,
+    backgroundColor: "#FFC9CB",
+    borderRadius: 30,
+    width: "60%",
+    height: 45,
     marginBottom: 20,
+    alignItems: "left",
   },
   input: {
-    width: '100%',
-    height: '100%',
-    paddingHorizontal: 10,
-    color: '#fb5b5a',
+    // width: '100%',
+    // height: '100%',
+    // paddingHorizontal: 10,
+    // color: '#fb5b5a',
+    height: 50,
+    padding: 10,
+    borderRadius: 30,
   },
   button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 4,
-    backgroundColor: '#fb5b5a',
-    width: '100%',
-    height: 30,
-    marginBottom: 20,
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    // borderRadius: 4,
+    // backgroundColor: '#fb5b5a',
+    // width: '100%',
+    // height: 30,
+    // marginBottom: 20,
+    width:"70%",
+    borderRadius:25,
+    height:50,
+    alignItems:"center",
+    justifyContent:"center",
+    marginTop:40,
+    marginBottom:20,
+    backgroundColor:"#fb5b5a",
   },
   buttonText: {
     color: '#fff',
@@ -153,5 +167,4 @@ const styles = StyleSheet.create({
     color: '#007bff', // Example color for link
     textDecorationLine: 'underline',
   },
-})
-
+});

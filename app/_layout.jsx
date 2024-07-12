@@ -11,6 +11,7 @@ import SearchProfilesScreen from './profile_search/_layout'
 import ProfileSettingsScreen from './user_settings/_layout'
 import NotificationsScreen from './working_notifications/_layout'
 import SignOutScreen from './signout/_layout'
+import LeaderboardScreen from './leaderboard/_layout'
 
 import { ThemeSupa } from '@supabase/auth-ui-shared'
 import { Auth, Form } from '@supabase/auth-ui-react'
@@ -30,6 +31,7 @@ export default function AppLayout() {
             <Drawer.Screen name="Game" component={GameScreen} />
             <Drawer.Screen name="User" component={UserScreen} />
             <Drawer.Screen name="Login" component={LoginScreen} />
+            <Drawer.Screen name="Leaderboard" component={LeaderboardScreen} />
             <Drawer.Screen name='Sign Up' component={SignUpScreen} />
             <Drawer.Screen name="Search Profiles" component={SearchProfilesScreen} />
             <Drawer.Screen name="Profile Settings" component={ProfileSettingsScreen} />
