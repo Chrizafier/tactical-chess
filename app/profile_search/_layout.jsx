@@ -18,7 +18,7 @@ export default function SearchProfilesScreen() {
     useEffect(() => {
         getUserEmail()
         fetchProfiles()
-    }, []);
+    }, [searchQuery]);
    
     const updateSearch = async (search) => {
         setSearchQuery(search)

@@ -99,7 +99,7 @@ import { supabase } from '../_layout';
         <Text style={styles.buttonText}>Sign In</Text>
       </TouchableOpacity>
       <Text>Don't have an account? </Text>
-      <Text style={styles.signupLink} onPress={()=>navigation.navigate("SignUp")}>Sign Up</Text>
+      <Text style={styles.signupLink} onPress={()=>navigation.navigate("Sign Up")}>Sign Up</Text>
     </View>
   );
 }

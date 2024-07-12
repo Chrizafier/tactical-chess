@@ -4,7 +4,6 @@ import { NavigationContainer } from '@react-navigation/native'
 
 import HomeScreen from './home/index'
 import GameScreen from './game/_layout'
-import UserScreen from './user_settings/_layout'
 import LoginScreen from './login/_layout'
 import SignUpScreen from './signup/_layout'
 import SearchProfilesScreen from './profile_search/_layout'
@@ -29,7 +28,6 @@ export default function AppLayout() {
         <Drawer.Navigator>
             <Drawer.Screen name="Home" component={HomeScreen} />
             <Drawer.Screen name="Game" component={GameScreen} />
-            <Drawer.Screen name="User" component={UserScreen} />
             <Drawer.Screen name="Login" component={LoginScreen} />
             <Drawer.Screen name="Leaderboard" component={LeaderboardScreen} />
             <Drawer.Screen name='Sign Up' component={SignUpScreen} />
