@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
 import { supabase } from '../_layout';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 export default function NotificationsScreen() {
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
   const [userEmail, setUserEmail] = useState('');
-  const [displayData, setDisplayDsata] = useState([]);
+  const [displayData, setDisplayData] = useState([]);
 
   // useEffect(() => {
   //   async function getProfile() {
@@ -44,22 +44,41 @@ export default function NotificationsScreen() {
   //   }, [])
   // );
 
-  useEffect(() => {
-    const unsubscribeFocus = navigation.addListener('focus', async () => {
-      try {
-        const { data, error } = await supabase.auth.getUser();
-        if (data) {
-          setUserEmail(data.user.user_metadata.email);
-        }
-        changeDisplay()
-      } catch (error) {
-        console.error('Error fetching user:', error.message);
-      }
-    });
+  // useEffect(() => {
+  //   const unsubscribeFocus = navigation.addListener('focus', async () => {
+  //     try {
+  //       const { data, error } = await supabase.auth.getUser();
+  //       if (data) {
+  //         setUserEmail(data.user.user_metadata.email);
+  //       }
+  //       changeDisplay()
+  //     } catch (error) {
+  //       console.error('Error fetching user:', error.message);
+  //     }
+  //   });
 
-    // Cleanup function for removing listener
-    return unsubscribeFocus;
-  }, [navigation]);
+  //   // Cleanup function for removing listener
+  //   return unsubscribeFocus;
+  // }, [navigation]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getProfile()
+      changeDisplay()
+    }, [userEmail])
+  );
+
+        async function getProfile() {
+        try {
+          const { data, error } = await supabase.auth.getUser();
+          if (data) {
+            setUserEmail(data.user.user_metadata.email);
+          }
+        } catch (error) {
+          console.error('Error fetching user:', error.message);
+        }
+      }
+
 
   const fetchRequests = async (email) => {
     try {

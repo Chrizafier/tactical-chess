@@ -10,11 +10,12 @@ const ProfileSettingsScreen = () => {
   const [username, setUsername] = useState('');
   const [bio, setBio] = useState('');
   const [userEmail, setUserEmail] = useState('');
+  const [profileURL, setProfileURL] = useState('');
 
   useEffect(() => {
     getProfile()
     getProfileInformation()
-  }, [userEmail]);
+  }, [username, userEmail, bio, profileURL]);
 
   async function getProfile() {
     try {
@@ -35,6 +36,7 @@ const ProfileSettingsScreen = () => {
       console.log("getProfileInformation DATA: ", data)
       setBio(data[0].bio)
       setUsername(data[0].username)
+      setProfileURL(data[0].profileURL)
     } catch {
       console.log("oh no!!")
     }

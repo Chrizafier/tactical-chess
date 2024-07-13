@@ -71,7 +71,7 @@ const HomeScreen = () => {
     <View style={styles.overallContainer}>
       <View style={styles.modal_container}>
         <InstructionModal />
-        <Pressable
+        {/* <Pressable
           style={({ pressed }) => [
             styles.instruction_button,
             {
@@ -82,7 +82,7 @@ const HomeScreen = () => {
             {({ pressed }) => (
               <Ionicons name="log-out-outline" size={16} color={pressed ? '#fb5b5a' : 'white'} />
             )}
-        </Pressable>
+        </Pressable> */}
       </View>
       <View style={styles.icons}>
         <View style={styles.container}>

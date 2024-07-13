@@ -4,6 +4,7 @@ import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { decode } from 'base64-arraybuffer';
 import { supabase } from '../_layout';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 
 export default function UploadProfilePic() {
@@ -28,10 +29,30 @@ export default function UploadProfilePic() {
       }
     }
     getProfile()
-    getUser()
     checkForCameraRollPermission();
     getMedia();
   }, []);
+
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     console.log("hello")
+  //     async function getProfile() {
+  //       try {
+  //         const { data, error } = await supabase.auth.getUser()
+  //         console.log("user data upload image: ", data)
+  //         setUserEmail(data.user.user_metadata.email)
+  //         setUserID(data.user.id)
+         
+         
+  //       } catch {
+  //         console.log("oh no!!")
+  //       }s
+  //     }
+  //     getProfile()
+  //     checkForCameraRollPermission();
+  //     getMedia();
+  //   }, [userEmail])
+  // );
 
 
   const checkForCameraRollPermission = async () => {
