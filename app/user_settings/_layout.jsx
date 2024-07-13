@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import UploadProfilePic from './ProfilePic';
 import { supabase } from '../_layout';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+
 
 // resource used: https://www.rnexamples.com/react-native-examples/b6/Simple-edit-profile-view
 
@@ -12,10 +14,10 @@ const ProfileSettingsScreen = () => {
   const [userEmail, setUserEmail] = useState('');
   const [profileURL, setProfileURL] = useState('');
 
-  useEffect(() => {
-    getProfile()
-    getProfileInformation()
-  }, [username, userEmail, bio, profileURL]);
+  // useEffect(() => {
+  //   getProfile()
+  //   getProfileInformation()
+  // }, [username, userEmail, bio, profileURL]);
 
   async function getProfile() {
     try {
@@ -26,6 +28,14 @@ const ProfileSettingsScreen = () => {
       console.log("oh no!!")
     }
   }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getProfile()
+      getProfileInformation()
+    }, [username, userEmail, bio, profileURL])
+  );
+
   async function getProfileInformation() {
     console.log("user emaillllll: ", userEmail)
     try {

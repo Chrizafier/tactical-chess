@@ -15,44 +15,44 @@ export default function UploadProfilePic() {
 
 
   useEffect(() => {
-    console.log("hello")
-    async function getProfile() {
-      try {
-        const { data, error } = await supabase.auth.getUser()
-        console.log("user data upload image: ", data)
-        setUserEmail(data.user.user_metadata.email)
-        setUserID(data.user.id)
+    // console.log("hello")
+    // async function getProfile() {
+    //   try {
+    //     const { data, error } = await supabase.auth.getUser()
+    //     console.log("user data upload image: ", data)
+    //     setUserEmail(data.user.user_metadata.email)
+    //     setUserID(data.user.id)
        
        
-      } catch {
-        console.log("oh no!!")
-      }
-    }
-    getProfile()
+    //   } catch {
+    //     console.log("oh no!!")
+    //   }
+    // }
+    // getProfile()
     checkForCameraRollPermission();
-    getMedia();
+    // getMedia();
   }, []);
 
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     console.log("hello")
-  //     async function getProfile() {
-  //       try {
-  //         const { data, error } = await supabase.auth.getUser()
-  //         console.log("user data upload image: ", data)
-  //         setUserEmail(data.user.user_metadata.email)
-  //         setUserID(data.user.id)
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log("hello")
+      async function getProfile() {
+        try {
+          const { data, error } = await supabase.auth.getUser()
+          console.log("user data upload image: ", data)
+          setUserEmail(data.user.user_metadata.email)
+          setUserID(data.user.id)
          
          
-  //       } catch {
-  //         console.log("oh no!!")
-  //       }s
-  //     }
-  //     getProfile()
-  //     checkForCameraRollPermission();
-  //     getMedia();
-  //   }, [userEmail])
-  // );
+        } catch {
+          console.log("oh no!!")
+        }
+      }
+      getProfile()
+      // checkForCameraRollPermission();
+      getMedia();
+    }, [userEmail])
+  );
 
 
   const checkForCameraRollPermission = async () => {
