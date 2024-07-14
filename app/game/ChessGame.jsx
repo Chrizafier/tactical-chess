@@ -26,18 +26,18 @@ const ChessGame = () => {
     const [positionA, setPositionA] = useState('');
     const [positionB, setPositionB] = useState('');
     const [winner, setWinner] = useState('');
-    const [currBoardState, setCurrBoardState] = useState(
-        [
-            [['br', 7, 7], ['bn', 5, 5], ['bb', 5, 5], ['bq', 9, 9], ['bk', 4, 11], ['bb', 5, 5], ['bn', 5, 5], ['br', 7, 7]],
-            [['bp', 2, 2], ['bp', 2, 2], ['bp', 2, 2], ['bp', 2, 2], ['bp', 2, 2], ['bp', 2, 2], ['bp', 2, 2], ['bp', 2, 2]],
-            [null, null, null, null, null, null, null, null],
-            [null, null, null, null, null, null, null, null],
-            [null, null, null, null, null, null, null, null],
-            [null, null, null, null, null, null, null, null],
-            [['wp', 2, 2], ['wp', 2, 2], ['wp', 2, 2], ['wp', 2, 2], ['wp', 2, 2], ['wp', 2, 2], ['wp', 2, 2], ['wp', 2, 2]],
-            [['wr', 7, 7], ['wn', 5, 5], ['wb', 5, 5], ['wq', 9, 9], ['wk', 4, 11], ['wb', 5, 5], ['wn', 5, 5], ['wr', 7, 7]]
-        ]
-    )
+    const default_board_state = [
+        [['br', 7, 7], ['bn', 5, 5], ['bb', 5, 5], ['bq', 9, 9], ['bk', 4, 11], ['bb', 5, 5], ['bn', 5, 5], ['br', 7, 7]],
+        [['bp', 2, 2], ['bp', 2, 2], ['bp', 2, 2], ['bp', 2, 2], ['bp', 2, 2], ['bp', 2, 2], ['bp', 2, 2], ['bp', 2, 2]],
+        [null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null],
+        [['wp', 2, 2], ['wp', 2, 2], ['wp', 2, 2], ['wp', 2, 2], ['wp', 2, 2], ['wp', 2, 2], ['wp', 2, 2], ['wp', 2, 2]],
+        [['wr', 7, 7], ['wn', 5, 5], ['wb', 5, 5], ['wq', 9, 9], ['wk', 4, 11], ['wb', 5, 5], ['wn', 5, 5], ['wr', 7, 7]]
+    ]
+
+    const [currBoardState, setCurrBoardState] = useState(default_board_state)
 
     const [clicks, set_clicks] = useState(0)
     // const [Clear, set_clear] = useState(false)
@@ -715,6 +715,14 @@ const ChessGame = () => {
                     onPress={() => handleClick('clear')}
                     style={styles.submitButton} >
                         Clear Input
+                </Text>
+                <Text
+                    onPress={() => {
+                        setCurrBoardState(default_board_state)
+                        handleClick('clear')
+                    }}
+                    style={[styles.submitButton, {backgroundColor:'red'}]} >
+                        Reset Game
                 </Text>
             </View>
 
