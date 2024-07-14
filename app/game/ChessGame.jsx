@@ -40,20 +40,28 @@ const ChessGame = () => {
     )
 
     const [clicks, set_clicks] = useState(0)
+    // const [Clear, set_clear] = useState(false)
     const handleClick = (square) => {
+        if (square === 'clear') {
+            set_clicks(0)
+            setPositionA('')
+            setPositionB('')
+            return
+        }
+
         let increment = clicks + 1
         set_clicks(increment)
         let is_odd = clicks & 1
-        console.log({ clicks, positionA, positionB, square })
+        
+        // console.log({ clicks, positionA, positionB, square })
+
         if (clicks === 0 || !is_odd ) {
             setPositionA(square)
-        }
-        else if (is_odd) {
+        } else {
             setPositionB(square)
         }
-        else {
-            //
-        }
+        
+        console.log({ clicks, positionA, positionB, square })
     }
 
     const handleSubmit = async () => {
@@ -83,6 +91,7 @@ const ChessGame = () => {
             checkForChecks(whiteKing, newBoardState)
             checkForChecks(blackKing, newBoardState)
             setCurrBoardState(newBoardState)
+            handleClick('clear')
             // if (gameOver()) {
             //   return;
             // }
@@ -697,7 +706,16 @@ const ChessGame = () => {
                     value={positionB}
                     placeholder="e.g., e4"
                 />
-                <Text onPress={() => handleSubmit({ startPosition: positionA, endPosition: positionB })} style={styles.submitButton}>Submit Move</Text>
+                <Text
+                    onPress={() => handleSubmit({ startPosition: positionA, endPosition: positionB })}
+                    style={styles.submitButton} >
+                        Submit Move
+                </Text>
+                <Text
+                    onPress={() => handleClick('clear')}
+                    style={styles.submitButton} >
+                        Clear Input
+                </Text>
             </View>
 
         </View>
