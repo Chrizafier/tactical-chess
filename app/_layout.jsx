@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { NavigationContainer } from '@react-navigation/native'
-
+import { LogBox } from 'react-native';
 import HomeScreen from './home/index'
 import GameScreen from './game/_layout'
 import LoginScreen from './login/_layout'
@@ -21,6 +21,7 @@ export const supabaseKey = process.env.EXPO_PUBLIC_SUPABASE_KEY
 export const supabase = createClient(supabaseUrl, supabaseKey)
 // const Stack = createStackNavigator()
 const Drawer = createDrawerNavigator()
+LogBox.ignoreAllLogs(); // Ignore all log notifications
 
 export default function AppLayout() {
   return (
