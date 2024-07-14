@@ -1,28 +1,31 @@
 {
   "expo": {
     "name": "tactical-chess",
-    "slug" : "expo-router",
+    "slug": "tactical-chess",
+    "scheme": "eschec",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "scheme": "tacticalchess",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "ios": {
-      "supportsTablet": true
-    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.expo.cac4dv.tactical.chess"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6da44f19-59e1-41ae-a1af-cd01974dab74"
+      }
     }
   }
 }
